@@ -1,0 +1,39 @@
+{
+  "name": "@maria-ms/components-web",
+  "version": "1.0.0",
+  "description": "Maria's Web Components.",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maria-ms/components-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maria-ms/components-web/issues"
+  },
+  "homepage": "https://github.com/maria-ms/components-web#readme",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./avatar": "./src/components/avatar/avatar.mjs",
+    "./dropdown": "./src/components/dropdown/dropdown.mjs",
+    "./input-number": "./src/components/input-number/input-number.mjs",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": true,
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "check": "node --check src/index.mjs && node --check src/components/avatar/avatar.mjs && node --check src/components/dropdown/dropdown.mjs && node --check src/components/input-number/input-number.mjs",
+    "prepack": "npm run check",
+    "pack:dry-run": "npm pack --dry-run"
+  },
+  "peerDependencies": {
+    "@maria-ms/tokens": "1.0.0"
+  }
+}
