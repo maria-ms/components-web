@@ -2,7 +2,6 @@ const tagName = "ds-button";
 
 const observedAttributes = [
   "aria-label",
-  "button-type",
   "disabled",
   "download",
   "href",
@@ -13,6 +12,7 @@ const observedAttributes = [
   "tone",
   "type",
   "value",
+  "variant",
 ];
 
 const template = document.createElement("template");
@@ -73,21 +73,21 @@ template.innerHTML = `
       --button-line-height: var(--ds-semantic-typography-body-base-line-height);
     }
 
-    :host([type="secondary"]) {
+    :host([variant="secondary"]) {
       --button-background: var(--ds-component-button-color-background-secondary);
       --button-background-hover: var(--ds-component-button-color-background-hover-muted);
       --button-foreground: var(--ds-component-button-color-foreground-primary);
     }
 
-    :host([type="outline"]) {
+    :host([variant="outline"]) {
       --button-background: var(--ds-component-button-color-background-tertiary);
       --button-background-hover: var(--ds-component-button-color-background-hover-muted);
       --button-border: var(--ds-component-button-color-border-primary);
       --button-foreground: var(--ds-component-button-color-foreground-primary);
     }
 
-    :host([type="link"]),
-    :host([type="link-muted"]) {
+    :host([variant="link"]),
+    :host([variant="link-muted"]) {
       --button-background: transparent;
       --button-background-hover: transparent;
       --button-border: transparent;
@@ -96,15 +96,15 @@ template.innerHTML = `
       --button-padding-inline: 0px;
     }
 
-    :host([type="link"]) {
+    :host([variant="link"]) {
       --button-foreground: var(--ds-component-button-color-foreground-primary);
     }
 
-    :host([type="link-muted"]) {
+    :host([variant="link-muted"]) {
       --button-foreground: var(--ds-component-button-color-foreground-secondary);
     }
 
-    :host([type="ghost"]) {
+    :host([variant="ghost"]) {
       --button-background: transparent;
       --button-background-hover: var(--ds-component-button-color-background-hover-muted);
       --button-border: transparent;
@@ -112,15 +112,15 @@ template.innerHTML = `
       --button-font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
     }
 
-    :host([type="link"][size="x-small"]),
-    :host([type="link-muted"][size="x-small"]),
-    :host([type="link"][size="small"]),
-    :host([type="link-muted"][size="small"]) {
+    :host([variant="link"][size="x-small"]),
+    :host([variant="link-muted"][size="x-small"]),
+    :host([variant="link"][size="small"]),
+    :host([variant="link-muted"][size="small"]) {
       --button-min-height: 20px;
     }
 
-    :host([type="link"][size="large"]),
-    :host([type="link-muted"][size="large"]) {
+    :host([variant="link"][size="large"]),
+    :host([variant="link-muted"][size="large"]) {
       --button-min-height: 28px;
     }
 
@@ -130,28 +130,28 @@ template.innerHTML = `
       --button-foreground: var(--ds-component-button-color-foreground-destructive-secondary);
     }
 
-    :host([tone="destructive"][type="secondary"]) {
+    :host([tone="destructive"][variant="secondary"]) {
       --button-background: var(--ds-component-button-color-background-destructive-muted);
       --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
       --button-foreground: var(--ds-component-button-color-foreground-destructive-primary);
     }
 
-    :host([tone="destructive"][type="outline"]) {
+    :host([tone="destructive"][variant="outline"]) {
       --button-background: var(--ds-component-button-color-background-tertiary);
       --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
       --button-border: var(--ds-component-button-color-border-destructive-elevated);
       --button-foreground: var(--ds-component-button-color-foreground-destructive-primary);
     }
 
-    :host([tone="destructive"][type="link"]),
-    :host([tone="destructive"][type="link-muted"]) {
+    :host([tone="destructive"][variant="link"]),
+    :host([tone="destructive"][variant="link-muted"]) {
       --button-background: transparent;
       --button-background-hover: transparent;
       --button-border: transparent;
       --button-foreground: var(--ds-component-button-color-foreground-destructive-tertiary);
     }
 
-    :host([tone="destructive"][type="ghost"]) {
+    :host([tone="destructive"][variant="ghost"]) {
       --button-background: transparent;
       --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
       --button-border: transparent;
@@ -162,17 +162,17 @@ template.innerHTML = `
       cursor: not-allowed;
     }
 
-    :host([disabled]:not([tone="destructive"]):not([type="secondary"]):not([type="outline"]):not([type="link"]):not([type="link-muted"]):not([type="ghost"])) {
+    :host([disabled]:not([tone="destructive"]):not([variant="secondary"]):not([variant="outline"]):not([variant="link"]):not([variant="link-muted"]):not([variant="ghost"])) {
       --button-background: var(--ds-component-button-color-background-disabled);
       --button-foreground: var(--ds-component-button-color-foreground-disabled);
     }
 
-    :host([disabled]:not([tone="destructive"])[type="link"]),
-    :host([disabled]:not([tone="destructive"])[type="link-muted"]) {
+    :host([disabled]:not([tone="destructive"])[variant="link"]),
+    :host([disabled]:not([tone="destructive"])[variant="link-muted"]) {
       --button-foreground: var(--ds-component-button-color-foreground-disabled);
     }
 
-    :host([disabled]:not([tone="destructive"])[type="ghost"]) {
+    :host([disabled]:not([tone="destructive"])[variant="ghost"]) {
       --button-foreground: var(--ds-component-button-color-foreground-disabled);
     }
 
@@ -224,8 +224,8 @@ template.innerHTML = `
       background: var(--button-background-hover);
     }
 
-    :host(:not([disabled])[type="link"]) .control:hover,
-    :host(:not([disabled])[type="link-muted"]) .control:hover {
+    :host(:not([disabled])[variant="link"]) .control:hover,
+    :host(:not([disabled])[variant="link-muted"]) .control:hover {
       text-decoration: underline;
       text-underline-offset: var(--button-text-underline-offset);
     }
@@ -328,7 +328,12 @@ const setOptionalAttribute = (element, name, value) =>
 
 const isLink = (host) => host.hasAttribute("href");
 
-const buttonType = (host) => host.getAttribute("button-type") || "button";
+const buttonTypes = ["button", "submit", "reset"];
+
+const buttonType = (host) =>
+  buttonTypes.includes(host.getAttribute("type"))
+    ? host.getAttribute("type")
+    : "button";
 
 const createControl = (host) => {
   const control = document.createElement(isLink(host) ? "a" : "button");
@@ -428,12 +433,12 @@ const mount = (host) => {
  * Token-driven button control.
  *
  * @tag ds-button
- * @attr {"primary"|"secondary"|"outline"|"link"|"link-muted"|"ghost"} type - Visual button type.
+ * @attr {"primary"|"secondary"|"outline"|"link"|"link-muted"|"ghost"} variant - Visual button variant.
  * @attr {"x-small"|"small"|"medium"|"large"} size - Button size.
  * @attr {"default"|"destructive"} tone - Button intent tone.
  * @attr {boolean} disabled - Disables the control.
  * @attr {string} href - Renders the control as a link.
- * @attr {string} button-type - Native button type: button, submit, or reset.
+ * @attr {"button"|"submit"|"reset"} type - Native button type.
  * @attr {string} aria-label - Accessible label for icon-only buttons.
  * @slot media - Leading icon or media.
  * @slot label - Button label.

@@ -150,8 +150,7 @@ template.innerHTML = `
       stroke: currentColor;
     }
 
-    slot[name="header"]::slotted(*),
-    slot[name="title"]::slotted(*) {
+    slot[name="header"]::slotted(*) {
       display: block;
       min-width: 0;
       color: inherit;
@@ -175,7 +174,6 @@ template.innerHTML = `
     <button part="trigger" class="trigger" type="button">
       <span part="title" class="title">
         <slot name="header"></slot>
-        <slot name="title"></slot>
       </span>
       <span part="icon" class="icon" aria-hidden="true">
         <svg class="icon-down" viewBox="0 0 24 24" fill="none" data-icon="chevron-down" data-figma-node-id="40012621:9281">
@@ -188,7 +186,6 @@ template.innerHTML = `
     </button>
     <div part="content" class="content">
       <slot name="content"></slot>
-      <slot></slot>
     </div>
   </div>
 `;
@@ -329,10 +326,8 @@ const mount = (host) => {
  * @attr {boolean} expanded - Shows the panel content.
  * @attr {boolean} disabled - Prevents the panel from being toggled.
  * @attr {string} aria-label - Accessible label for icon-only or custom title usage.
- * @slot header - Accordion header text.
- * @slot title - Legacy alias for the header slot.
- * @slot content - Accordion panel content.
- * @slot - Legacy alias for panel content.
+ * @slot header - Accordion header content. Use accordion-header for default markup.
+ * @slot content - Accordion panel content. Use accordion-content for default markup.
  * @fires beforetoggle - Cancelable event fired before expanded changes.
  * @fires toggle - Fired after expanded changes.
  */

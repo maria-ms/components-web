@@ -1,6 +1,6 @@
 const tagName = "ds-alert";
 
-const observedAttributes = ["size", "type"];
+const observedAttributes = ["size", "tone"];
 
 const template = document.createElement("template");
 
@@ -45,20 +45,20 @@ template.innerHTML = `
       --alert-title-line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
-    :host([size="small"][type="success"]),
-    :host([size="small"][type="info"]) {
+    :host([size="small"][tone="success"]),
+    :host([size="small"][tone="info"]) {
       --alert-icon-size: 20px;
     }
 
-    :host([type="info"]) {
+    :host([tone="info"]) {
       --alert-icon-color: var(--ds-semantic-color-foreground-primary-elevated);
     }
 
-    :host([type="warning"]) {
+    :host([tone="warning"]) {
       --alert-icon-color: var(--ds-semantic-color-foreground-warning-elevated);
     }
 
-    :host([type="error"]) {
+    :host([tone="error"]) {
       --alert-icon-color: var(--ds-semantic-color-foreground-destructive-elevated);
     }
 
@@ -228,14 +228,14 @@ const hasAssignedContent = (slot) =>
       node.nodeType === Node.TEXT_NODE ? node.textContent.trim() : true,
     );
 
-const alertType = (host) => {
-  const type = host.getAttribute("type");
+const alertTone = (host) => {
+  const tone = host.getAttribute("tone");
 
-  return ["error", "info", "success", "warning"].includes(type) ? type : "success";
+  return ["error", "info", "success", "warning"].includes(tone) ? tone : "success";
 };
 
 const iconMarkup = (host) => {
-  const icon = icons[alertType(host)];
+  const icon = icons[alertTone(host)];
 
   return host.getAttribute("size") === "small" && icon.small
     ? icon.small
@@ -250,7 +250,7 @@ const syncIcon = (host) => {
 
 const syncRole = (host) => {
   const state = instances.get(host);
-  const role = ["error", "warning"].includes(alertType(host)) ? "alert" : "status";
+  const role = ["error", "warning"].includes(alertTone(host)) ? "alert" : "status";
 
   if (!host.hasAttribute("role") || host.getAttribute("role") === state.defaultRole) {
     host.setAttribute("role", role);
@@ -293,7 +293,7 @@ const mount = (host) => {
  * Token-driven alert message with intrinsic status icon and composable action slot.
  *
  * @tag ds-alert
- * @attr {"success"|"info"|"warning"|"error"} type - Alert status intent.
+ * @attr {"success"|"info"|"warning"|"error"} tone - Alert status intent.
  * @attr {"large"|"medium"|"small"} size - Alert size and layout.
  * @slot title - Alert title.
  * @slot description - Supporting alert message.
