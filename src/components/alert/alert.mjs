@@ -14,8 +14,9 @@ template.innerHTML = `
       --alert-gap: var(--ds-primitive-space-04);
       --alert-icon-size: 24px;
       --alert-text-align: left;
-      --alert-title-font-size: var(--ds-primitive-font-size-base);
-      --alert-title-line-height: var(--ds-primitive-font-line-height-base);
+      --alert-title-font-size: var(--ds-semantic-typography-body-base-font-size);
+      --alert-title-font-weight: var(--ds-semantic-typography-body-base-font-weight-medium);
+      --alert-title-line-height: var(--ds-semantic-typography-body-base-line-height);
       --alert-icon-color: var(--ds-semantic-color-foreground-success-elevated);
 
       box-sizing: border-box;
@@ -23,7 +24,7 @@ template.innerHTML = `
       width: var(--alert-width);
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
+      font-family: inherit;
       vertical-align: middle;
     }
 
@@ -39,8 +40,9 @@ template.innerHTML = `
       --alert-gap: var(--ds-primitive-space-03);
       --alert-icon-size: 24px;
       --alert-text-align: center;
-      --alert-title-font-size: var(--ds-primitive-font-size-small);
-      --alert-title-line-height: var(--ds-primitive-font-line-height-small);
+      --alert-title-font-size: var(--ds-semantic-typography-body-small-font-size);
+      --alert-title-font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      --alert-title-line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     :host([size="small"][type="success"]),
@@ -123,7 +125,7 @@ template.innerHTML = `
     .description {
       width: 100%;
       margin: 0;
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
+      font-family: inherit;
       letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
@@ -132,15 +134,15 @@ template.innerHTML = `
     .title {
       color: var(--ds-semantic-color-foreground-default);
       font-size: var(--alert-title-font-size);
-      font-weight: var(--ds-primitive-font-weight-medium);
+      font-weight: var(--alert-title-font-weight);
       line-height: var(--alert-title-line-height);
     }
 
     .description {
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     :host(:not([size="small"])) .title,

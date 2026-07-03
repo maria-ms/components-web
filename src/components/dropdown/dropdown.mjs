@@ -25,9 +25,9 @@ templates.dropdown.innerHTML = `
       box-sizing: border-box;
       display: inline-block;
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-small);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     *,
@@ -111,7 +111,7 @@ templates.header.innerHTML = `
       align-items: flex-start;
       padding: var(--ds-primitive-space-04) var(--ds-primitive-space-05);
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
+      font-family: inherit;
     }
 
     *,
@@ -135,9 +135,9 @@ templates.header.innerHTML = `
       flex: 0 0 auto;
       place-items: center;
       color: var(--ds-semantic-color-foreground-primary-elevated);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
       letter-spacing: 0;
     }
 
@@ -175,16 +175,16 @@ templates.header.innerHTML = `
 
     .title {
       color: var(--ds-semantic-color-foreground-default);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-semibold);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-semibold);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     .description {
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
   </style>
 
@@ -221,10 +221,10 @@ templates.group.innerHTML = `
       padding: var(--ds-primitive-space-03) var(--ds-primitive-space-05)
         var(--ds-primitive-space-02);
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-x-small);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-x-small);
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-medium);
+      line-height: var(--ds-semantic-typography-body-x-small-line-height);
       letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
@@ -245,9 +245,9 @@ templates.item.innerHTML = `
       box-sizing: border-box;
       display: block;
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-small);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     *,
@@ -382,24 +382,24 @@ templates.item.innerHTML = `
 
     .label {
       color: currentColor;
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     .description {
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-primitive-font-size-x-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-x-small);
+      font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-x-small-line-height);
     }
 
     .end {
       flex: 0 0 auto;
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-primitive-font-size-x-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-x-small);
+      font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-x-small-line-height);
       letter-spacing: 0;
       white-space: nowrap;
       font-kerning: none;

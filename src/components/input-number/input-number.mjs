@@ -34,9 +34,9 @@ template.innerHTML = `
       width: var(--input-number-width);
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-small);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     :host([size="small"]) {
@@ -104,9 +104,9 @@ template.innerHTML = `
 
     .label {
       color: var(--ds-semantic-color-foreground-default);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     :host([label-position="start"]) .label {
@@ -203,9 +203,9 @@ template.innerHTML = `
       background: transparent;
       color: var(--ds-semantic-color-foreground-muted-1);
       font: inherit;
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
       letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
@@ -323,9 +323,9 @@ template.innerHTML = `
 
     .description {
       color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-primitive-font-size-x-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-x-small);
+      font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-x-small-line-height);
     }
   </style>
 

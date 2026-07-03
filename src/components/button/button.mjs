@@ -31,16 +31,16 @@ template.innerHTML = `
       --button-border: transparent;
       --button-border-hover: var(--button-border);
       --button-foreground: var(--ds-component-button-color-foreground-default);
-      --button-font-size: var(--ds-primitive-font-size-small);
-      --button-font-weight: var(--ds-primitive-font-weight-medium);
-      --button-line-height: var(--ds-primitive-font-line-height-small);
+      --button-font-size: var(--ds-semantic-typography-body-small-font-size);
+      --button-font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      --button-line-height: var(--ds-semantic-typography-body-small-line-height);
       --button-text-underline-offset: 25%;
 
       box-sizing: border-box;
       display: inline-flex;
       max-width: 100%;
       color: var(--button-foreground);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
+      font-family: inherit;
       vertical-align: middle;
     }
 
@@ -51,6 +51,8 @@ template.innerHTML = `
       --button-padding-inline: var(--ds-primitive-space-03);
       --button-radius: var(--ds-primitive-radius-03);
       --button-gap: var(--ds-primitive-space-02);
+      --button-font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      --button-line-height: var(--ds-semantic-typography-body-x-small-line-height);
     }
 
     :host([size="small"]) {
@@ -67,8 +69,8 @@ template.innerHTML = `
       --button-padding-block: var(--ds-primitive-space-04);
       --button-padding-inline: var(--ds-primitive-space-05);
       --button-radius: var(--ds-primitive-radius-05);
-      --button-font-size: var(--ds-primitive-font-size-base);
-      --button-line-height: var(--ds-primitive-font-line-height-base);
+      --button-font-size: var(--ds-semantic-typography-body-base-font-size);
+      --button-line-height: var(--ds-semantic-typography-body-base-line-height);
     }
 
     :host([type="secondary"]) {
@@ -89,7 +91,7 @@ template.innerHTML = `
       --button-background: transparent;
       --button-background-hover: transparent;
       --button-border: transparent;
-      --button-font-weight: var(--ds-primitive-font-weight-medium);
+      --button-font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
       --button-padding-block: var(--ds-primitive-space-01);
       --button-padding-inline: 0px;
     }
@@ -107,7 +109,7 @@ template.innerHTML = `
       --button-background-hover: var(--ds-component-button-color-background-hover-muted);
       --button-border: transparent;
       --button-foreground: var(--ds-component-button-color-foreground-primary);
-      --button-font-weight: var(--ds-primitive-font-weight-regular);
+      --button-font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
     }
 
     :host([type="link"][size="x-small"]),

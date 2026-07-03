@@ -17,11 +17,11 @@ template.innerHTML = `
       height: var(--user-avatar-size);
       overflow: visible;
       color: var(--ds-semantic-color-foreground-primary-elevated);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-base);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-base);
-      letter-spacing: 0.02em;
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-base-font-size);
+      font-weight: var(--ds-semantic-typography-body-base-font-weight-semibold);
+      line-height: var(--ds-semantic-typography-body-base-line-height);
+      letter-spacing: var(--ds-semantic-typography-body-base-letter-spacing);
       vertical-align: middle;
     }
 
@@ -31,8 +31,9 @@ template.innerHTML = `
       --user-avatar-badge-size: 10px;
       --user-avatar-icon-size: 16px;
 
-      font-size: var(--ds-primitive-font-size-x-small);
-      line-height: var(--ds-primitive-font-line-height-x-small);
+      font-size: var(--ds-semantic-typography-body-x-small-font-size);
+      line-height: var(--ds-semantic-typography-body-x-small-line-height);
+      letter-spacing: var(--ds-semantic-typography-body-x-small-letter-spacing);
     }
 
     :host([size="sm"]) {
@@ -41,8 +42,9 @@ template.innerHTML = `
       --user-avatar-badge-size: 12px;
       --user-avatar-icon-size: 20px;
 
-      font-size: var(--ds-primitive-font-size-small);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
+      letter-spacing: var(--ds-semantic-typography-body-small-letter-spacing);
     }
 
     :host([size="lg"]) {
@@ -58,9 +60,10 @@ template.innerHTML = `
       --user-avatar-badge-size: 18px;
       --user-avatar-icon-size: 32px;
 
-      font-family: var(--ds-primitive-font-family-heading), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-large);
-      line-height: var(--ds-primitive-font-line-height-large);
+      font-size: var(--ds-semantic-typography-heading-6-font-size);
+      font-weight: var(--ds-semantic-typography-heading-6-font-weight-root);
+      line-height: var(--ds-semantic-typography-heading-6-line-height);
+      letter-spacing: var(--ds-semantic-typography-heading-6-letter-spacing);
     }
 
     :host([size="2xl"]) {
@@ -69,9 +72,10 @@ template.innerHTML = `
       --user-avatar-badge-size: 20px;
       --user-avatar-icon-size: 32px;
 
-      font-family: var(--ds-primitive-font-family-heading), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-large);
-      line-height: var(--ds-primitive-font-line-height-large);
+      font-size: var(--ds-semantic-typography-heading-6-font-size);
+      font-weight: var(--ds-semantic-typography-heading-6-font-weight-root);
+      line-height: var(--ds-semantic-typography-heading-6-line-height);
+      letter-spacing: var(--ds-semantic-typography-heading-6-letter-spacing);
     }
 
     *,

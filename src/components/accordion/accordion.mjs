@@ -22,9 +22,9 @@ template.innerHTML = `
       width: var(--accordion-width);
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
-      font-size: var(--ds-primitive-font-size-small);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-family: inherit;
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     *,
@@ -90,9 +90,9 @@ template.innerHTML = `
     .title {
       flex: 1 1 auto;
       color: var(--ds-semantic-color-foreground-default);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-medium);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     .icon {
@@ -115,9 +115,9 @@ template.innerHTML = `
       width: 100%;
       flex-direction: column;
       color: var(--ds-semantic-color-foreground-muted-2);
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-regular);
-      line-height: var(--ds-primitive-font-line-height-small);
+      font-size: var(--ds-semantic-typography-body-small-font-size);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+      line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 
     .content[hidden] {
@@ -226,7 +226,7 @@ cardTemplate.innerHTML = `
           var(--ds-semantic-shadow-sm-1-spread)
           var(--ds-semantic-shadow-sm-1-color);
       color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body), Inter, sans-serif;
+      font-family: inherit;
     }
 
     *,
