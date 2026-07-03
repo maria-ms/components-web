@@ -50,28 +50,35 @@ control width.
 
 ## Avatar
 
-`user-avatar` provides the circular frame, initials fallback, and optional status
-dot. Slotted media wins over `initials`, so consumers can pass a plain image, an
-image with `srcset`, or a `picture` element.
+`user-avatar` provides the circular frame, photo slot, initials fallback,
+placeholder state, and optional badge/status. Slotted media wins over
+`initials`; no media and no initials renders the placeholder icon.
 
 ```html
-<user-avatar initials="IN" status="online"></user-avatar>
+<user-avatar size="md" initials="IN" status="online"></user-avatar>
 
-<user-avatar status="online">
+<user-avatar size="md" status="online">
   <img src="/avatar.jpg" alt="Isabel Navarro" />
 </user-avatar>
 
-<user-avatar initials="IN" status="online">
+<user-avatar size="md" initials="IN" status="online">
   <img src="/avatar.jpg" alt="Isabel Navarro" />
 </user-avatar>
 
-<user-avatar initials="IN">
+<user-avatar size="md">
+  <img src="/avatar.jpg" alt="Isabel Navarro" />
+  <img slot="badge" src="/company.jpg" alt="Acme" />
+</user-avatar>
+
+<user-avatar size="md" initials="IN">
   <picture>
     <source srcset="/avatar.avif" type="image/avif" />
     <source srcset="/avatar.webp" type="image/webp" />
     <img src="/avatar.jpg" alt="Isabel Navarro" />
   </picture>
 </user-avatar>
+
+<user-avatar size="md"></user-avatar>
 ```
 
 Set `aria-label` on `user-avatar` when initials are meaningful on their own.
@@ -84,10 +91,14 @@ trigger button; consumers provide trigger content and menu rows.
 
 ```html
 <drop-down aria-label="Account menu" align="end">
-  <user-avatar slot="trigger" initials="IN" status="online"></user-avatar>
+  <user-avatar slot="trigger" size="md" initials="IN" status="online">
+    <img src="/avatar.jpg" alt="Isabel Navarro" />
+  </user-avatar>
 
   <drop-down-header>
-    <user-avatar slot="media" initials="IN" status="online"></user-avatar>
+    <user-avatar slot="media" size="md" initials="IN" status="online">
+      <img src="/avatar.jpg" alt="Isabel Navarro" />
+    </user-avatar>
     <span slot="title">Isabel Navarro</span>
     <span slot="description">isabel.navarro@gmail.com</span>
   </drop-down-header>
