@@ -86,14 +86,16 @@ Set `aria-hidden="true"` when the avatar is decorative beside visible text.
 
 ## Dropdown
 
-`drop-down` is a menu button for actions and settings. The component owns the
-trigger button; consumers provide trigger content and menu rows.
+`drop-down` is a menu shell for actions and settings. The component owns menu
+behavior; consumers provide the trigger element and menu rows.
 
 ```html
 <drop-down aria-label="Account menu" align="end">
-  <user-avatar slot="trigger" size="md" initials="IN" status="online">
-    <img src="/avatar.jpg" alt="Isabel Navarro" />
-  </user-avatar>
+  <button slot="trigger" type="button">
+    <user-avatar size="md" initials="IN" status="online">
+      <img src="/avatar.jpg" alt="Isabel Navarro" />
+    </user-avatar>
+  </button>
 
   <drop-down-header>
     <user-avatar slot="media" size="md" initials="IN" status="online">
@@ -116,13 +118,15 @@ trigger button; consumers provide trigger content and menu rows.
 </drop-down>
 ```
 
-Use text, SVG, images, custom elements, or regular HTML in `slot="trigger"`.
+Use `slot="trigger"` for the button or interactive element that opens the menu.
+A trigger element is required. The trigger can contain text, SVG, images,
+custom elements, or regular HTML.
 Use `slot="media"`, `slot="label"`, `slot="description"`, and `slot="end"` to
 compose row content without creating new row components.
 
 Set `align="start|end"` for menu placement. Override `--dropdown-menu-width` for
-product-specific menu sizes. Override `--dropdown-trigger-*` variables or style
-`::part(trigger)` for product-specific trigger chrome.
+product-specific menu sizes. Style the slotted trigger in product code or use a
+shared button component.
 
 ## Development
 

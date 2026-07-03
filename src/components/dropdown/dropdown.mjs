@@ -1,8 +1,3 @@
-const chevronPaths = {
-  down: "M4 6L8 10L12 6",
-  up: "M4 10L8 6L12 10",
-};
-
 const tags = {
   dropdown: "drop-down",
   group: "drop-down-group",
@@ -25,20 +20,6 @@ templates.dropdown.innerHTML = `
     :host {
       --dropdown-menu-offset: var(--ds-primitive-space-03);
       --dropdown-menu-width: 240px;
-      --dropdown-trigger-background: var(
-        --ds-component-button-color-background-tertiary
-      );
-      --dropdown-trigger-border: 1px solid
-        var(--ds-component-button-color-border-primary);
-      --dropdown-trigger-border-radius: var(--ds-primitive-radius-04);
-      --dropdown-trigger-color: var(
-        --ds-component-button-color-foreground-primary
-      );
-      --dropdown-trigger-gap: var(--ds-primitive-space-02);
-      --dropdown-trigger-icon-size: var(--ds-primitive-space-05);
-      --dropdown-trigger-min-height: 28px;
-      --dropdown-trigger-padding: var(--ds-primitive-space-02)
-        var(--ds-primitive-space-03);
 
       position: relative;
       box-sizing: border-box;
@@ -56,9 +37,6 @@ templates.dropdown.innerHTML = `
     }
 
     .root,
-    .trigger,
-    .trigger-content,
-    .trigger-icon,
     .menu {
       display: flex;
     }
@@ -69,66 +47,8 @@ templates.dropdown.innerHTML = `
       width: max-content;
     }
 
-    .trigger {
-      box-sizing: border-box;
-      display: flex;
-      min-height: var(--dropdown-trigger-min-height);
-      align-items: center;
-      justify-content: center;
-      gap: var(--dropdown-trigger-gap);
-      border: var(--dropdown-trigger-border);
-      border-radius: var(--dropdown-trigger-border-radius);
-      padding: var(--dropdown-trigger-padding);
-      appearance: none;
-      background: var(--dropdown-trigger-background);
-      color: var(--dropdown-trigger-color);
-      font: inherit;
-      font-size: var(--ds-primitive-font-size-small);
-      font-weight: var(--ds-primitive-font-weight-semibold);
-      line-height: var(--ds-primitive-font-line-height-small);
-      letter-spacing: 0;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    :host([disabled]) .trigger {
-      color: var(--ds-component-button-color-foreground-disabled);
-      cursor: not-allowed;
-    }
-
-    :host([open]) .trigger,
-    .trigger:focus-visible {
-      outline: 0;
-      box-shadow:
-        var(--ds-semantic-shadow-xs-offset-x)
-          var(--ds-semantic-shadow-xs-offset-y)
-          var(--ds-semantic-shadow-xs-blur)
-          var(--ds-semantic-shadow-xs-spread)
-          var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-shadow-focused-4px-offset-x)
-          var(--ds-semantic-shadow-focused-4px-offset-y)
-          var(--ds-semantic-shadow-focused-4px-blur)
-          var(--ds-semantic-shadow-focused-4px-spread)
-          var(--ds-semantic-shadow-focused-4px-color);
-    }
-
-    .trigger-content,
-    .trigger-icon {
-      align-items: center;
-      justify-content: center;
-    }
-
-    .trigger-icon {
-      width: var(--dropdown-trigger-icon-size);
-      height: var(--dropdown-trigger-icon-size);
-      flex: 0 0 auto;
-      color: currentColor;
-    }
-
-    slot::slotted(svg) {
-      width: var(--dropdown-trigger-icon-size);
-      height: var(--dropdown-trigger-icon-size);
-      stroke: currentColor;
+    .trigger-slot {
+      display: inline-flex;
     }
 
     .menu {
@@ -174,12 +94,7 @@ templates.dropdown.innerHTML = `
   </style>
 
   <div part="root" class="root">
-    <button part="trigger" class="trigger" type="button" aria-haspopup="menu">
-      <span part="trigger-content" class="trigger-content">
-        <slot class="trigger-slot" name="trigger">Account</slot>
-      </span>
-      <span part="trigger-icon" class="trigger-icon"></span>
-    </button>
+    <slot class="trigger-slot" name="trigger"></slot>
     <div part="menu" class="menu" role="menu">
       <slot></slot>
     </div>
@@ -571,44 +486,39 @@ const hasHref = (host) => host.hasAttribute("href");
 
 const hasSlot = (host, name) => Boolean(host.querySelector(`[slot='${name}']`));
 
-const chevronIcon = (open) => {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  const shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
-
-  svg.setAttribute("viewBox", "0 0 16 16");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("aria-hidden", "true");
-  shape.setAttribute("d", chevronPaths[open ? "up" : "down"]);
-  shape.setAttribute("stroke", "currentColor");
-  shape.setAttribute("stroke-width", "1.5");
-  shape.setAttribute("stroke-linecap", "round");
-  shape.setAttribute("stroke-linejoin", "round");
-  svg.append(shape);
-
-  return svg;
-};
-
 const setOpen = (host, open) =>
   host.disabled
     ? host.removeAttribute("open")
     : host.toggleAttribute("open", open);
 
+const triggerElement = (state) =>
+  state.triggerSlot.assignedElements({ flatten: true })[0];
+
+const removeTriggerListeners = (state) => {
+  state.trigger?.removeEventListener("click", state.onToggle);
+  state.trigger?.removeEventListener("keydown", state.onTriggerKeyDown);
+};
+
 const setTrigger = (host) => {
   const state = instances.get(host);
+  const trigger = triggerElement(state);
 
-  if (state.trigger) return state.trigger;
-  state.trigger = state.fallbackTrigger;
+  if (state.trigger === trigger) return trigger;
+  removeTriggerListeners(state);
+  state.trigger = trigger;
+  if (!trigger) return undefined;
   state.trigger.addEventListener("click", state.onToggle);
   state.trigger.addEventListener("keydown", state.onTriggerKeyDown);
   return state.trigger;
 };
 
 const syncDropdown = (host) => {
-  const { chevron, id, menu } = instances.get(host);
+  const { id, menu } = instances.get(host);
   const trigger = setTrigger(host);
 
   if (host.disabled) host.removeAttribute("open");
   menu.id = `${id}-menu`;
+  if (!trigger) return;
   if (trigger instanceof HTMLButtonElement && !trigger.hasAttribute("type")) {
     trigger.type = "button";
   }
@@ -622,7 +532,6 @@ const syncDropdown = (host) => {
   ariaLabel
     ? trigger.setAttribute("aria-label", ariaLabel)
     : trigger.removeAttribute("aria-label");
-  chevron.replaceChildren(chevronIcon(host.open));
 };
 
 const selectedItemText = (item) => {
@@ -689,6 +598,7 @@ const selectItem = (host, item) => {
 
 const dropdownConnected = (host) => {
   const state = instances.get(host);
+  state.triggerSlot.addEventListener("slotchange", state.onTriggerSlotChange);
   host.addEventListener("drop-down-item-select", state.onItemSelect);
   host.addEventListener("keydown", state.onMenuKeyDown);
   document.addEventListener("pointerdown", state.onPointerDown);
@@ -697,8 +607,8 @@ const dropdownConnected = (host) => {
 
 const dropdownDisconnected = (host) => {
   const state = instances.get(host);
-  state.trigger?.removeEventListener("click", state.onToggle);
-  state.trigger?.removeEventListener("keydown", state.onTriggerKeyDown);
+  state.triggerSlot.removeEventListener("slotchange", state.onTriggerSlotChange);
+  removeTriggerListeners(state);
   state.trigger = undefined;
   host.removeEventListener("drop-down-item-select", state.onItemSelect);
   host.removeEventListener("keydown", state.onMenuKeyDown);
@@ -710,11 +620,10 @@ const mountDropdown = (host) => {
   shadow.append(templates.dropdown.content.cloneNode(true));
 
   instances.set(host, {
-    chevron: shadow.querySelector(".trigger-icon"),
-    fallbackTrigger: shadow.querySelector(".trigger"),
     id: nextDropdownId(),
     menu: shadow.querySelector(".menu"),
     trigger: undefined,
+    triggerSlot: shadow.querySelector(".trigger-slot"),
     onItemSelect: (event) => {
       event.stopPropagation();
       selectItem(host, event.detail.item);
@@ -759,6 +668,7 @@ const mountDropdown = (host) => {
       if (event.key === "ArrowDown")
         requestAnimationFrame(() => focusItem(host, 0));
     },
+    onTriggerSlotChange: () => syncDropdown(host),
   });
 };
 
@@ -892,7 +802,7 @@ const mountItem = (host) => {
  * @attr {boolean} open - Shows the menu surface.
  * @attr {boolean} disabled - Disables the trigger.
  * @attr {string} aria-label - Trigger accessible name.
- * @slot trigger - Trigger content.
+ * @slot trigger - Trigger element, usually a button.
  * @slot - Dropdown menu content: header, items, and separators.
  * @fires beforeselect - Cancelable event fired before an item is selected or toggled.
  * @fires select - Fired after an item is selected or toggled. Checkbox and radio rows update checked by default.
