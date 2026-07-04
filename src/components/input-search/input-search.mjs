@@ -15,7 +15,7 @@ const searchIcon = `
 /**
  * Form-associated search input.
  *
- * @tag input-search
+ * @tag ds-input-search
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial value used by form reset.
  * @attr {string} placeholder - Placeholder text shown when the input is empty.
@@ -33,7 +33,7 @@ const searchIcon = `
  * @fires change - Fired when the value is committed.
  */
 export const InputSearch = defineTextField({
-  tagName: "input-search",
+  tagName: "ds-input-search",
   defaultType: "search",
   prefixFallback: searchIcon,
   prefixHasFallback: true,

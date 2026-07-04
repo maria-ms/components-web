@@ -1,9 +1,9 @@
 const tags = {
-  dropdown: "drop-down",
-  group: "drop-down-group",
-  header: "drop-down-header",
-  item: "drop-down-item",
-  separator: "drop-down-separator",
+  dropdown: "ds-dropdown",
+  group: "ds-dropdown-group",
+  header: "ds-dropdown-header",
+  item: "ds-dropdown-item",
+  separator: "ds-dropdown-separator",
 };
 
 const templates = {
@@ -18,8 +18,8 @@ const templates = {
 templates.dropdown.innerHTML = `
   <style>
     :host {
-      --dropdown-menu-offset: var(--ds-primitive-space-03);
-      --dropdown-menu-width: 240px;
+      --ds-dropdown-menu-offset: var(--ds-primitive-space-03);
+      --ds-dropdown-menu-width: 240px;
 
       position: relative;
       box-sizing: border-box;
@@ -54,10 +54,10 @@ templates.dropdown.innerHTML = `
     .menu {
       position: absolute;
       z-index: 1;
-      top: calc(100% + var(--dropdown-menu-offset));
+      top: calc(100% + var(--ds-dropdown-menu-offset));
       right: 0;
       display: none;
-      width: var(--dropdown-menu-width);
+      width: var(--ds-dropdown-menu-width);
       flex-direction: column;
       align-items: stretch;
       overflow: hidden;
@@ -130,8 +130,8 @@ templates.header.innerHTML = `
 
     .media {
       display: grid;
-      width: var(--dropdown-header-media-size, 40px);
-      height: var(--dropdown-header-media-size, 40px);
+      width: var(--ds-dropdown-header-media-size, 40px);
+      height: var(--ds-dropdown-header-media-size, 40px);
       flex: 0 0 auto;
       place-items: center;
       color: var(--ds-semantic-color-foreground-primary-elevated);
@@ -596,7 +596,7 @@ const selectItem = (host, item) => {
 const dropdownConnected = (host) => {
   const state = instances.get(host);
   state.triggerSlot.addEventListener("slotchange", state.onTriggerSlotChange);
-  host.addEventListener("drop-down-item-select", state.onItemSelect);
+  host.addEventListener("ds-dropdown-item-select", state.onItemSelect);
   host.addEventListener("keydown", state.onMenuKeyDown);
   document.addEventListener("pointerdown", state.onPointerDown);
   syncDropdown(host);
@@ -607,7 +607,7 @@ const dropdownDisconnected = (host) => {
   state.triggerSlot.removeEventListener("slotchange", state.onTriggerSlotChange);
   removeTriggerListeners(state);
   state.trigger = undefined;
-  host.removeEventListener("drop-down-item-select", state.onItemSelect);
+  host.removeEventListener("ds-dropdown-item-select", state.onItemSelect);
   host.removeEventListener("keydown", state.onMenuKeyDown);
   document.removeEventListener("pointerdown", state.onPointerDown);
 };
@@ -779,7 +779,7 @@ const mountItem = (host) => {
       }
       if (isChoice(host)) event.preventDefault();
       host.dispatchEvent(
-        new CustomEvent("drop-down-item-select", {
+        new CustomEvent("ds-dropdown-item-select", {
           bubbles: true,
           composed: true,
           detail: { item: host },
@@ -794,9 +794,9 @@ const mountItem = (host) => {
 /**
  * Token-driven action menu button shell.
  * This component implements the WAI-ARIA menu button pattern for commands,
- * links, and checkable menu rows. Use input-select for form value selection.
+ * links, and checkable menu rows. Use ds-input-select for form value selection.
  *
- * @tag drop-down
+ * @tag ds-dropdown
  * @attr {"start"|"end"} align - Menu alignment relative to the trigger. Defaults to end.
  * @attr {boolean} open - Shows the menu surface.
  * @attr {boolean} disabled - Disables the trigger.
@@ -846,7 +846,7 @@ export class Dropdown extends HTMLElement {
 /**
  * Branded action menu header.
  *
- * @tag drop-down-header
+ * @tag ds-dropdown-header
  * @slot media - Leading media content.
  * @slot title - Primary header text.
  * @slot description - Supporting header text.
@@ -873,7 +873,7 @@ const syncGroup = (host) => {
 /**
  * Action menu row group.
  *
- * @tag drop-down-group
+ * @tag ds-dropdown-group
  * @attr {string} label - Optional accessible and visible group label.
  * @slot - Grouped dropdown items.
  */
@@ -901,7 +901,7 @@ export class DropdownGroup extends HTMLElement {
 /**
  * Branded action menu row.
  *
- * @tag drop-down-item
+ * @tag ds-dropdown-item
  * @attr {"item"|"checkbox"|"radio"} type - Row behavior.
  * @attr {string} value - Value emitted in select events.
  * @attr {string} name - Radio group name.
@@ -985,7 +985,7 @@ export class DropdownItem extends HTMLElement {
 /**
  * Dropdown separator.
  *
- * @tag drop-down-separator
+ * @tag ds-dropdown-separator
  */
 export class DropdownSeparator extends HTMLElement {
   constructor() {

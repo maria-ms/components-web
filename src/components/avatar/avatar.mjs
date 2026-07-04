@@ -1,20 +1,20 @@
-const tagName = "user-avatar";
+const tagName = "ds-avatar";
 
 const template = document.createElement("template");
 
 template.innerHTML = `
   <style>
     :host {
-      --user-avatar-size: 40px;
-      --user-avatar-status-size: 10px;
-      --user-avatar-badge-size: 14px;
-      --user-avatar-icon-size: 24px;
+      --ds-avatar-size: 40px;
+      --ds-avatar-status-size: 10px;
+      --ds-avatar-badge-size: 14px;
+      --ds-avatar-icon-size: 24px;
 
       position: relative;
       box-sizing: border-box;
       display: inline-grid;
-      width: var(--user-avatar-size);
-      height: var(--user-avatar-size);
+      width: var(--ds-avatar-size);
+      height: var(--ds-avatar-size);
       overflow: visible;
       color: var(--ds-semantic-color-foreground-primary-elevated);
       font-family: inherit;
@@ -26,10 +26,10 @@ template.innerHTML = `
     }
 
     :host([size="xs"]) {
-      --user-avatar-size: 24px;
-      --user-avatar-status-size: 6px;
-      --user-avatar-badge-size: 10px;
-      --user-avatar-icon-size: 16px;
+      --ds-avatar-size: 24px;
+      --ds-avatar-status-size: 6px;
+      --ds-avatar-badge-size: 10px;
+      --ds-avatar-icon-size: 16px;
 
       font-size: var(--ds-semantic-typography-body-x-small-font-size);
       line-height: var(--ds-semantic-typography-body-x-small-line-height);
@@ -37,10 +37,10 @@ template.innerHTML = `
     }
 
     :host([size="sm"]) {
-      --user-avatar-size: 32px;
-      --user-avatar-status-size: 8px;
-      --user-avatar-badge-size: 12px;
-      --user-avatar-icon-size: 20px;
+      --ds-avatar-size: 32px;
+      --ds-avatar-status-size: 8px;
+      --ds-avatar-badge-size: 12px;
+      --ds-avatar-icon-size: 20px;
 
       font-size: var(--ds-semantic-typography-body-small-font-size);
       line-height: var(--ds-semantic-typography-body-small-line-height);
@@ -48,17 +48,17 @@ template.innerHTML = `
     }
 
     :host([size="lg"]) {
-      --user-avatar-size: 48px;
-      --user-avatar-status-size: 12px;
-      --user-avatar-badge-size: 16px;
-      --user-avatar-icon-size: 28px;
+      --ds-avatar-size: 48px;
+      --ds-avatar-status-size: 12px;
+      --ds-avatar-badge-size: 16px;
+      --ds-avatar-icon-size: 28px;
     }
 
     :host([size="xl"]) {
-      --user-avatar-size: 56px;
-      --user-avatar-status-size: 14px;
-      --user-avatar-badge-size: 18px;
-      --user-avatar-icon-size: 32px;
+      --ds-avatar-size: 56px;
+      --ds-avatar-status-size: 14px;
+      --ds-avatar-badge-size: 18px;
+      --ds-avatar-icon-size: 32px;
 
       font-size: var(--ds-semantic-typography-heading-6-font-size);
       font-weight: var(--ds-semantic-typography-heading-6-font-weight-root);
@@ -67,10 +67,10 @@ template.innerHTML = `
     }
 
     :host([size="2xl"]) {
-      --user-avatar-size: 64px;
-      --user-avatar-status-size: 16px;
-      --user-avatar-badge-size: 20px;
-      --user-avatar-icon-size: 32px;
+      --ds-avatar-size: 64px;
+      --ds-avatar-status-size: 16px;
+      --ds-avatar-badge-size: 20px;
+      --ds-avatar-icon-size: 32px;
 
       font-size: var(--ds-semantic-typography-heading-6-font-size);
       font-weight: var(--ds-semantic-typography-heading-6-font-weight-root);
@@ -169,8 +169,8 @@ template.innerHTML = `
     }
 
     .placeholder {
-      width: var(--user-avatar-icon-size);
-      height: var(--user-avatar-icon-size);
+      width: var(--ds-avatar-icon-size);
+      height: var(--ds-avatar-icon-size);
       place-items: center;
     }
 
@@ -203,8 +203,8 @@ template.innerHTML = `
       right: 0;
       bottom: 0;
       display: none;
-      width: var(--user-avatar-status-size);
-      height: var(--user-avatar-status-size);
+      width: var(--ds-avatar-status-size);
+      height: var(--ds-avatar-status-size);
       align-items: center;
       justify-content: center;
       overflow: hidden;
@@ -226,8 +226,8 @@ template.innerHTML = `
     }
 
     :host([data-has-badge]) .badge {
-      width: var(--user-avatar-badge-size);
-      height: var(--user-avatar-badge-size);
+      width: var(--ds-avatar-badge-size);
+      height: var(--ds-avatar-badge-size);
       background: var(--ds-semantic-color-surface-default);
     }
 
@@ -321,7 +321,7 @@ const mountAvatar = (host) => {
 /**
  * Circular avatar frame with photo, initials, placeholder, and badge support.
  *
- * @tag user-avatar
+ * @tag ds-avatar
  * @attr {"xs"|"sm"|"md"|"lg"|"xl"|"2xl"} size - Avatar size. Defaults to md.
  * @attr {string} initials - Fallback initials shown when no media is slotted.
  * @attr {"online"|"offline"} status - Optional built-in status dot.

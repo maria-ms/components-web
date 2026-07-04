@@ -3,7 +3,7 @@ import { defineTextField } from "../input/text-field.mjs";
 /**
  * Form-associated text input.
  *
- * @tag input-text
+ * @tag ds-input-text
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial value used by form reset.
  * @attr {string} type - Native text input type. Defaults to text.
@@ -28,6 +28,6 @@ import { defineTextField } from "../input/text-field.mjs";
  * @fires change - Fired when the value is committed.
  */
 export const InputText = defineTextField({
-  tagName: "input-text",
+  tagName: "ds-input-text",
   defaultType: "text",
 });

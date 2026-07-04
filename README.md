@@ -19,10 +19,10 @@ import "@maria-ms/components-web/dropdown";
 ```
 
 ```html
-<input-number name="amount" value="1" min="0" max="10" step="1">
+<ds-input-number name="amount" value="1" min="0" max="10" step="1">
   <span slot="label">Amount</span>
   <span slot="description">Whole numbers only</span>
-</input-number>
+</ds-input-number>
 ```
 
 Set `data-theme="light"` or `data-theme="dark"` on your document root to switch token themes.
@@ -30,14 +30,14 @@ Set `data-theme="light"` or `data-theme="dark"` on your document root to switch 
 ## Input Number
 
 ```html
-<input-number value="1" min="0" max="10" step="1"></input-number>
-<input-number size="small"></input-number>
-<input-number label-position="start"></input-number>
-<input-number aria-invalid="true" value="1"></input-number>
-<input-number disabled value="1"></input-number>
-<input-number controls="none" value="1">
+<ds-input-number value="1" min="0" max="10" step="1"></ds-input-number>
+<ds-input-number size="small"></ds-input-number>
+<ds-input-number label-position="start"></ds-input-number>
+<ds-input-number aria-invalid="true" value="1"></ds-input-number>
+<ds-input-number disabled value="1"></ds-input-number>
+<ds-input-number controls="none" value="1">
   <svg slot="suffix" aria-hidden="true"></svg>
-</input-number>
+</ds-input-number>
 ```
 
 Events:
@@ -45,77 +45,77 @@ Events:
 - `input` fires when the value changes.
 - `change` fires when the value is committed.
 
-Override `--input-number-width` or style the host for form layouts that need to
+Override `--ds-input-number-width` or style the host for form layouts that need to
 control width.
 
 ## Avatar
 
-`user-avatar` provides the circular frame, photo slot, initials fallback,
+`ds-avatar` provides the circular frame, photo slot, initials fallback,
 placeholder state, and optional badge/status. Slotted media wins over
 `initials`; no media and no initials renders the placeholder icon.
 
 ```html
-<user-avatar size="md" initials="IN" status="online"></user-avatar>
+<ds-avatar size="md" initials="IN" status="online"></ds-avatar>
 
-<user-avatar size="md" status="online">
+<ds-avatar size="md" status="online">
   <img src="/avatar.jpg" alt="Isabel Navarro" />
-</user-avatar>
+</ds-avatar>
 
-<user-avatar size="md" initials="IN" status="online">
+<ds-avatar size="md" initials="IN" status="online">
   <img src="/avatar.jpg" alt="Isabel Navarro" />
-</user-avatar>
+</ds-avatar>
 
-<user-avatar size="md">
+<ds-avatar size="md">
   <img src="/avatar.jpg" alt="Isabel Navarro" />
   <img slot="badge" src="/company.jpg" alt="Acme" />
-</user-avatar>
+</ds-avatar>
 
-<user-avatar size="md" initials="IN">
+<ds-avatar size="md" initials="IN">
   <picture>
     <source srcset="/avatar.avif" type="image/avif" />
     <source srcset="/avatar.webp" type="image/webp" />
     <img src="/avatar.jpg" alt="Isabel Navarro" />
   </picture>
-</user-avatar>
+</ds-avatar>
 
-<user-avatar size="md"></user-avatar>
+<ds-avatar size="md"></ds-avatar>
 ```
 
-Set `aria-label` on `user-avatar` when initials are meaningful on their own.
+Set `aria-label` on `ds-avatar` when initials are meaningful on their own.
 Set `aria-hidden="true"` when the avatar is decorative beside visible text.
 
 ## Dropdown
 
-`drop-down` is a menu shell for actions and settings. The component owns menu
+`ds-dropdown` is a menu shell for actions and settings. The component owns menu
 behavior; consumers provide the trigger element and menu rows.
 
 ```html
-<drop-down aria-label="Account menu" align="end">
+<ds-dropdown aria-label="Account menu" align="end">
   <button slot="trigger" type="button">
-    <user-avatar size="md" initials="IN" status="online">
+    <ds-avatar size="md" initials="IN" status="online">
       <img src="/avatar.jpg" alt="Isabel Navarro" />
-    </user-avatar>
+    </ds-avatar>
   </button>
 
-  <drop-down-header>
-    <user-avatar slot="media" size="md" initials="IN" status="online">
+  <ds-dropdown-header>
+    <ds-avatar slot="media" size="md" initials="IN" status="online">
       <img src="/avatar.jpg" alt="Isabel Navarro" />
-    </user-avatar>
+    </ds-avatar>
     <span slot="title">Isabel Navarro</span>
     <span slot="description">isabel.navarro@gmail.com</span>
-  </drop-down-header>
+  </ds-dropdown-header>
 
-  <drop-down-separator></drop-down-separator>
+  <ds-dropdown-separator></ds-dropdown-separator>
 
-  <drop-down-group>
-    <drop-down-item value="profile">
+  <ds-dropdown-group>
+    <ds-dropdown-item value="profile">
       <svg slot="media" aria-hidden="true"></svg>
       <span slot="label">View profile</span>
       <span slot="description">Account settings and preferences</span>
-    </drop-down-item>
-    <drop-down-item value="settings">Settings</drop-down-item>
-  </drop-down-group>
-</drop-down>
+    </ds-dropdown-item>
+    <ds-dropdown-item value="settings">Settings</ds-dropdown-item>
+  </ds-dropdown-group>
+</ds-dropdown>
 ```
 
 Use `slot="trigger"` for the button or interactive element that opens the menu.
@@ -124,7 +124,7 @@ custom elements, or regular HTML.
 Use `slot="media"`, `slot="label"`, `slot="description"`, and `slot="end"` to
 compose row content without creating new row components.
 
-Set `align="start|end"` for menu placement. Override `--dropdown-menu-width` for
+Set `align="start|end"` for menu placement. Override `--ds-dropdown-menu-width` for
 product-specific menu sizes. Style the slotted trigger in product code or use a
 shared button component.
 

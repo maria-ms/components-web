@@ -5,7 +5,7 @@ import {
   setOptionalAttribute,
 } from "../input/field-shell.mjs";
 
-const tagName = "input-otp";
+const tagName = "ds-input-otp";
 
 const observedAttributes = [
   "aria-describedby",
@@ -29,8 +29,8 @@ const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --input-otp-cell-size: 48px;
-      --input-otp-gap: var(--ds-primitive-space-05);
+      --ds-input-otp-cell-size: 48px;
+      --ds-input-otp-gap: var(--ds-primitive-space-05);
 
       box-sizing: border-box;
       display: inline-block;
@@ -67,7 +67,7 @@ template.innerHTML = `
     }
 
     .fields {
-      gap: var(--input-otp-gap);
+      gap: var(--ds-input-otp-gap);
       max-width: 100%;
     }
 
@@ -95,8 +95,8 @@ template.innerHTML = `
     }
 
     .cell {
-      width: var(--input-otp-cell-size);
-      height: var(--input-otp-cell-size);
+      width: var(--ds-input-otp-cell-size);
+      height: var(--ds-input-otp-cell-size);
       border: 1px solid var(--ds-component-input-color-border-default);
       border-radius: var(--ds-primitive-radius-04);
       padding: 0;
@@ -433,7 +433,7 @@ const mount = (host) => {
 /**
  * Form-associated one-time passcode input.
  *
- * @tag input-otp
+ * @tag ds-input-otp
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial value used by form reset.
  * @attr {number} length - Number of visible code fields. Defaults to 6.

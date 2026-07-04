@@ -1,9 +1,9 @@
 const tags = {
-  card: "accordion-card",
-  content: "accordion-content",
-  header: "accordion-header",
-  item: "accordion-item",
-  panel: "accordion-panel",
+  card: "ds-accordion",
+  content: "ds-accordion-content",
+  header: "ds-accordion-header",
+  item: "ds-accordion-item",
+  panel: "ds-accordion-panel",
 };
 
 const observedAttributes = ["aria-label", "disabled", "expanded"];
@@ -14,12 +14,12 @@ const cardTemplate = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --accordion-width: 353px;
-      --accordion-icon-size: 20px;
+      --ds-accordion-width: 353px;
+      --ds-accordion-icon-size: 20px;
 
       box-sizing: border-box;
       display: block;
-      width: var(--accordion-width);
+      width: var(--ds-accordion-width);
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
       font-family: inherit;
@@ -95,8 +95,8 @@ template.innerHTML = `
     }
 
     .icon {
-      width: var(--accordion-icon-size);
-      height: var(--accordion-icon-size);
+      width: var(--ds-accordion-icon-size);
+      height: var(--ds-accordion-icon-size);
       flex: 0 0 auto;
       color: var(--ds-semantic-color-foreground-default);
     }
@@ -196,11 +196,11 @@ const nextAccordionId = (() => {
 cardTemplate.innerHTML = `
   <style>
     :host {
-      --accordion-card-width: 440px;
+      --ds-accordion-width: 440px;
 
       box-sizing: border-box;
       display: flex;
-      width: var(--accordion-card-width);
+      width: var(--ds-accordion-width);
       max-width: 100%;
       flex-direction: column;
       align-items: stretch;
@@ -229,15 +229,15 @@ cardTemplate.innerHTML = `
       box-sizing: border-box;
     }
 
-    ::slotted(accordion-item),
-    ::slotted(accordion-panel) {
-      --accordion-width: 100%;
+    ::slotted(ds-accordion-item),
+    ::slotted(ds-accordion-panel) {
+      --ds-accordion-width: 100%;
 
       flex: 0 0 auto;
     }
 
-    ::slotted(accordion-item:not(:first-child)),
-    ::slotted(accordion-panel:not(:first-child)) {
+    ::slotted(ds-accordion-item:not(:first-child)),
+    ::slotted(ds-accordion-panel:not(:first-child)) {
       border-top: 1px solid var(--ds-semantic-color-border-default);
       margin-top: var(--ds-primitive-space-04);
       padding-top: var(--ds-primitive-space-04);
@@ -319,12 +319,12 @@ const mount = (host) => {
 /**
  * Token-driven accordion disclosure.
  *
- * @tag accordion-item
+ * @tag ds-accordion-item
  * @attr {boolean} expanded - Shows the panel content.
  * @attr {boolean} disabled - Prevents the panel from being toggled.
  * @attr {string} aria-label - Accessible label for icon-only or custom title usage.
- * @slot header - Accordion header content. Use accordion-header for default markup.
- * @slot content - Accordion panel content. Use accordion-content for default markup.
+ * @slot header - Accordion header content. Use ds-accordion-header for default markup.
+ * @slot content - Accordion panel content. Use ds-accordion-content for default markup.
  * @fires beforetoggle - Cancelable event fired before expanded changes.
  * @fires toggle - Fired after expanded changes.
  */
@@ -385,7 +385,7 @@ const syncCard = (host) => {
 /**
  * Token-driven accordion card.
  *
- * @tag accordion-card
+ * @tag ds-accordion
  * @attr {boolean} multiple - Allows more than one direct child panel to be open.
  * @slot - Accordion items.
  */
@@ -429,7 +429,7 @@ const setDefaultSlot = (host, name) => {
 /**
  * Accordion item header.
  *
- * @tag accordion-header
+ * @tag ds-accordion-header
  * @slot - Header text.
  */
 export class AccordionHeader extends HTMLElement {
@@ -441,7 +441,7 @@ export class AccordionHeader extends HTMLElement {
 /**
  * Accordion item content.
  *
- * @tag accordion-content
+ * @tag ds-accordion-content
  * @slot - Panel content.
  */
 export class AccordionContent extends HTMLElement {

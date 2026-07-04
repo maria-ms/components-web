@@ -10,14 +10,14 @@ export const fieldObservedAttributes = [
 
 export const fieldStyles = `
   :host {
-    --input-inline-small-width: 193px;
-    --input-inline-width: 276px;
-    --input-small-width: 140px;
-    --input-width: 276px;
+    --ds-input-inline-small-width: 193px;
+    --ds-input-inline-width: 276px;
+    --ds-input-small-width: 140px;
+    --ds-input-width: 276px;
 
     box-sizing: border-box;
     display: inline-block;
-    width: var(--input-width);
+    width: var(--ds-input-width);
     max-width: 100%;
     color: var(--ds-semantic-color-foreground-default);
     font-family: inherit;
@@ -27,16 +27,16 @@ export const fieldStyles = `
 
   :host([size="small"]),
   :host([size="sm"]) {
-    width: var(--input-small-width);
+    width: var(--ds-input-small-width);
   }
 
   :host([label-position="start"]) {
-    width: var(--input-inline-width);
+    width: var(--ds-input-inline-width);
   }
 
   :host([label-position="start"][size="small"]),
   :host([label-position="start"][size="sm"]) {
-    width: var(--input-inline-small-width);
+    width: var(--ds-input-inline-small-width);
   }
 
   *,
@@ -117,7 +117,7 @@ export const fieldStyles = `
 
   :host([size="small"]) .field,
   :host([size="sm"]) .field {
-    width: var(--input-small-field-width, 140px);
+    width: var(--ds-input-small-field-width, 140px);
     padding: var(--ds-primitive-space-02);
   }
 

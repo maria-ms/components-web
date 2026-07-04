@@ -10,7 +10,7 @@ import {
   validityFlags,
 } from "../input/field-shell.mjs";
 
-const tagName = "input-select";
+const tagName = "ds-input-select";
 
 const observedAttributes = [
   ...fieldObservedAttributes,
@@ -398,7 +398,7 @@ const mount = (host) => {
 /**
  * Form-associated select input.
  *
- * @tag input-select
+ * @tag ds-input-select
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial selected value used by form reset.
  * @attr {boolean} disabled - Disables the select.

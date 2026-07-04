@@ -1,4 +1,4 @@
-const tagName = "input-number";
+const tagName = "ds-input-number";
 
 const observedAttributes = [
   "aria-describedby",
@@ -24,14 +24,14 @@ const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --input-number-inline-small-width: 193px;
-      --input-number-inline-width: 276px;
-      --input-number-small-width: 140px;
-      --input-number-width: 276px;
+      --ds-input-number-inline-small-width: 193px;
+      --ds-input-number-inline-width: 276px;
+      --ds-input-number-small-width: 140px;
+      --ds-input-number-width: 276px;
 
       box-sizing: border-box;
       display: inline-block;
-      width: var(--input-number-width);
+      width: var(--ds-input-number-width);
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
       font-family: inherit;
@@ -40,15 +40,15 @@ template.innerHTML = `
     }
 
     :host([size="small"]) {
-      width: var(--input-number-small-width);
+      width: var(--ds-input-number-small-width);
     }
 
     :host([label-position="start"]) {
-      width: var(--input-number-inline-width);
+      width: var(--ds-input-number-inline-width);
     }
 
     :host([label-position="start"][size="small"]) {
-      width: var(--input-number-inline-small-width);
+      width: var(--ds-input-number-inline-small-width);
     }
 
     *,
@@ -132,7 +132,7 @@ template.innerHTML = `
     }
 
     :host([size="small"]) .field {
-      width: var(--input-number-small-field-width, 140px);
+      width: var(--ds-input-number-small-field-width, 140px);
       padding: var(--ds-primitive-space-02);
     }
 
@@ -638,7 +638,7 @@ const mount = (host) => {
 /**
  * Form-associated number input.
  *
- * @tag input-number
+ * @tag ds-input-number
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial value used by form reset.
  * @attr {string} min - Native minimum value.
