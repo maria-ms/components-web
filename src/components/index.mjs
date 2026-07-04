@@ -16,6 +16,7 @@ export {
   DropdownItem,
   DropdownSeparator,
 } from "./dropdown/dropdown.mjs";
+export { Field, FieldGroup } from "./field/field.mjs";
 export { InputNumber } from "./input-number/input-number.mjs";
 export { InputOtp } from "./input-otp/input-otp.mjs";
 export { InputSearch } from "./input-search/input-search.mjs";
