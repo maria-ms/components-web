@@ -126,7 +126,6 @@ template.innerHTML = `
       width: 100%;
       margin: 0;
       font-family: inherit;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
@@ -180,7 +179,6 @@ template.innerHTML = `
     slot[name="description"]::slotted(*) {
       color: inherit;
       font: inherit;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }

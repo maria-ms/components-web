@@ -138,7 +138,6 @@ templates.header.innerHTML = `
       font-size: var(--ds-semantic-typography-body-small-font-size);
       font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
       line-height: var(--ds-semantic-typography-body-small-line-height);
-      letter-spacing: 0;
     }
 
     slot[name="media"]::slotted(*) {
@@ -166,7 +165,6 @@ templates.header.innerHTML = `
       max-width: 100%;
       margin: 0;
       overflow: hidden;
-      letter-spacing: 0;
       text-overflow: ellipsis;
       white-space: nowrap;
       font-kerning: none;
@@ -225,7 +223,6 @@ templates.group.innerHTML = `
       font-size: var(--ds-semantic-typography-body-x-small-font-size);
       font-weight: var(--ds-semantic-typography-body-x-small-font-weight-medium);
       line-height: var(--ds-semantic-typography-body-x-small-line-height);
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
@@ -373,7 +370,6 @@ templates.item.innerHTML = `
     .description {
       min-width: 0;
       overflow: hidden;
-      letter-spacing: 0;
       text-overflow: ellipsis;
       white-space: nowrap;
       font-kerning: none;
@@ -400,7 +396,6 @@ templates.item.innerHTML = `
       font-size: var(--ds-semantic-typography-body-x-small-font-size);
       font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
       line-height: var(--ds-semantic-typography-body-x-small-line-height);
-      letter-spacing: 0;
       white-space: nowrap;
       font-kerning: none;
       font-variant-ligatures: none;

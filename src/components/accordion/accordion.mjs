@@ -82,7 +82,6 @@ template.innerHTML = `
     .content {
       min-width: 0;
       word-break: break-word;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
@@ -155,7 +154,6 @@ template.innerHTML = `
       min-width: 0;
       color: inherit;
       font: inherit;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
@@ -164,7 +162,6 @@ template.innerHTML = `
       display: block;
       color: inherit;
       font: inherit;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }

@@ -207,7 +207,6 @@ template.innerHTML = `
       font-size: var(--button-font-size);
       font-weight: var(--button-font-weight);
       line-height: var(--button-line-height);
-      letter-spacing: 0;
       text-align: center;
       text-decoration: none;
       transition:
@@ -301,7 +300,6 @@ template.innerHTML = `
     slot:not([name])::slotted(*) {
       color: inherit;
       font: inherit;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }

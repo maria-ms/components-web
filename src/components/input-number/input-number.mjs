@@ -97,7 +97,6 @@ template.innerHTML = `
       display: block;
       width: 100%;
       margin: 0;
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
@@ -206,7 +205,6 @@ template.innerHTML = `
       font-size: var(--ds-semantic-typography-body-small-font-size);
       font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
       line-height: var(--ds-semantic-typography-body-small-line-height);
-      letter-spacing: 0;
       font-kerning: none;
       font-variant-ligatures: none;
     }
