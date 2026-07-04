@@ -423,6 +423,8 @@ const disabled = (host) => {
   return host.disabled || Boolean(state?.formDisabled);
 };
 
+const readonly = (host) => host.hasAttribute("readonly");
+
 const emit = (host, type) => {
   const { input } = instances.get(host);
 
@@ -537,15 +539,17 @@ const sync = (host) => {
   syncAria(host);
   prefix.classList.toggle("has-content", hasSlotContent(prefixSlot));
   suffix.classList.toggle("has-content", hasSlotContent(suffixSlot));
-  decrement.disabled = disabled(host);
-  increment.disabled = disabled(host);
+  decrement.disabled = disabled(host) || readonly(host);
+  increment.disabled = disabled(host) || readonly(host);
   syncFormValue(host);
 };
 
 const step = (host, direction) => {
   const { input } = instances.get(host);
 
-  if (disabled(host) || host.getAttribute("controls") === "none") return;
+  if (disabled(host) || readonly(host) || host.getAttribute("controls") === "none") {
+    return;
+  }
   direction < 0 ? input.stepDown() : input.stepUp();
   setValue(host, input.value);
   emit(host, "input");

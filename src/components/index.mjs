@@ -17,3 +17,7 @@ export {
   DropdownSeparator,
 } from "./dropdown/dropdown.mjs";
 export { InputNumber } from "./input-number/input-number.mjs";
+export { InputOtp } from "./input-otp/input-otp.mjs";
+export { InputSearch } from "./input-search/input-search.mjs";
+export { InputSelect } from "./input-select/input-select.mjs";
+export { InputText } from "./input-text/input-text.mjs";

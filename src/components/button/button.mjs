@@ -2,8 +2,15 @@ const tagName = "ds-button";
 
 const observedAttributes = [
   "aria-label",
+  "autofocus",
   "disabled",
   "download",
+  "form",
+  "formaction",
+  "formenctype",
+  "formmethod",
+  "formnovalidate",
+  "formtarget",
   "href",
   "name",
   "rel",
@@ -319,19 +326,62 @@ const hasAssignedContent = (slot) =>
       node.nodeType === Node.TEXT_NODE ? node.textContent.trim() : true,
     );
 
-const setOptionalAttribute = (element, name, value) =>
-  value == null || value === ""
+const setAttribute = (element, name, value) =>
+  value == null
     ? element.removeAttribute(name)
     : element.setAttribute(name, value);
 
-const isLink = (host) => host.hasAttribute("href");
+const setBooleanAttribute = (element, name, value) =>
+  element.toggleAttribute(name, Boolean(value));
 
 const buttonTypes = ["button", "submit", "reset"];
+
+const linkAttributes = ["download", "href", "rel", "target"];
+const formAttributes = [
+  "formaction",
+  "formenctype",
+  "formmethod",
+  "formtarget",
+  "name",
+  "value",
+];
+
+const copyAttributes = (target, host, attributes) =>
+  attributes.forEach((name) => setAttribute(target, name, host.getAttribute(name)));
+
+const isLink = (host) => host.hasAttribute("href");
+
+const formOwner = (host) => {
+  const id = host.getAttribute("form");
+  const form = id ? host.ownerDocument.getElementById(id) : host.closest("form");
+
+  return form instanceof HTMLFormElement ? form : null;
+};
 
 const buttonType = (host) =>
   buttonTypes.includes(host.getAttribute("type"))
     ? host.getAttribute("type")
-    : "button";
+    : formOwner(host)
+      ? "submit"
+      : "button";
+
+const activateForm = (host) => {
+  const type = buttonType(host);
+  const form = !isLink(host) && !host.disabled && type !== "button" && formOwner(host);
+
+  if (!form) return;
+
+  const submitter = document.createElement("button");
+
+  submitter.type = type;
+  submitter.hidden = true;
+  submitter.tabIndex = -1;
+  copyAttributes(submitter, host, formAttributes);
+  setBooleanAttribute(submitter, "formnovalidate", host.hasAttribute("formnovalidate"));
+  form.append(submitter);
+  submitter.click();
+  submitter.remove();
+};
 
 const createControl = (host) => {
   const control = document.createElement(isLink(host) ? "a" : "button");
@@ -339,7 +389,7 @@ const createControl = (host) => {
   control.setAttribute("part", "control");
   control.className = "control";
   control.append(template.content.cloneNode(true));
-  if (control instanceof HTMLButtonElement) control.type = buttonType(host);
+  if (control instanceof HTMLButtonElement) control.type = "button";
 
   return control;
 };
@@ -354,26 +404,22 @@ const syncSlots = (host) => {
 const syncControl = (host) => {
   const state = instances.get(host);
   const { control } = state;
-  const disabled = host.disabled;
 
   if (control instanceof HTMLAnchorElement) {
-    setOptionalAttribute(control, "href", disabled ? undefined : host.getAttribute("href"));
-    setOptionalAttribute(control, "target", host.getAttribute("target"));
-    setOptionalAttribute(control, "rel", host.getAttribute("rel"));
-    setOptionalAttribute(control, "download", host.getAttribute("download"));
-    control.toggleAttribute("aria-disabled", disabled);
-    if (disabled) control.tabIndex = -1;
+    copyAttributes(control, host, linkAttributes);
+    if (host.disabled) control.removeAttribute("href");
+    setBooleanAttribute(control, "aria-disabled", host.disabled);
+    if (host.disabled) control.tabIndex = -1;
     else control.removeAttribute("tabindex");
   }
 
   if (control instanceof HTMLButtonElement) {
-    control.disabled = disabled;
-    control.type = buttonType(host);
-    setOptionalAttribute(control, "name", host.getAttribute("name"));
-    setOptionalAttribute(control, "value", host.getAttribute("value"));
+    control.disabled = host.disabled;
+    setBooleanAttribute(control, "autofocus", host.hasAttribute("autofocus"));
+    copyAttributes(control, host, ["name", "value"]);
   }
 
-  setOptionalAttribute(control, "aria-label", host.getAttribute("aria-label"));
+  setAttribute(control, "aria-label", host.getAttribute("aria-label"));
 };
 
 const replaceControl = (host) => {
@@ -395,15 +441,29 @@ const replaceControl = (host) => {
   syncSlots(host);
 };
 
-const sync = (host, name) => {
+const sync = (host, attribute) => {
   const state = instances.get(host);
+  const changedControlType =
+    attribute === "href" && isLink(host) !== (state?.control instanceof HTMLAnchorElement);
 
   if (!state) return;
-  if (name === "href" && isLink(host) !== (state.control instanceof HTMLAnchorElement)) {
+  if (changedControlType) {
     replaceControl(host);
     return;
   }
   syncControl(host);
+};
+
+const onClick = (host, event) => {
+  if (host.disabled) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return;
+  }
+
+  queueMicrotask(() => {
+    if (!event.defaultPrevented) activateForm(host);
+  });
 };
 
 const mount = (host) => {
@@ -417,11 +477,7 @@ const mount = (host) => {
     endSlot: control.querySelector("slot[name='end']"),
     media: control.querySelector(".media"),
     mediaSlot: control.querySelector("slot[name='media']"),
-    onClick: (event) => {
-      if (!host.disabled) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    },
+    onClick: (event) => onClick(host, event),
     onSlotChange: () => syncSlots(host),
     slots: [...control.querySelectorAll("slot")],
   });
@@ -436,7 +492,19 @@ const mount = (host) => {
  * @attr {"default"|"destructive"} tone - Button intent tone.
  * @attr {boolean} disabled - Disables the control.
  * @attr {string} href - Renders the control as a link.
+ * @attr {string} target - Link target when href is present.
+ * @attr {string} rel - Link relationship when href is present.
+ * @attr {string} download - Link download hint when href is present.
  * @attr {"button"|"submit"|"reset"} type - Native button type.
+ * @attr {boolean} autofocus - Requests focus when the page loads.
+ * @attr {string} name - Submitted button name when used as a submitter.
+ * @attr {string} value - Submitted button value when used as a submitter.
+ * @attr {string} form - Associated form ID.
+ * @attr {string} formaction - Submit action override.
+ * @attr {"application/x-www-form-urlencoded"|"multipart/form-data"|"text/plain"} formenctype - Submit encoding override.
+ * @attr {"get"|"post"|"dialog"} formmethod - Submit method override.
+ * @attr {boolean} formnovalidate - Skips form validation when submitting.
+ * @attr {string} formtarget - Submit target override.
  * @attr {string} aria-label - Accessible label for icon-only buttons.
  * @slot media - Leading icon or media.
  * @slot label - Button label.

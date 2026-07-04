@@ -1,6 +1,6 @@
 const tagName = "ds-alert";
 
-const observedAttributes = ["size", "tone"];
+const observedAttributes = ["live", "size", "tone"];
 
 const template = document.createElement("template");
 
@@ -246,14 +246,18 @@ const syncIcon = (host) => {
   state.icon.innerHTML = iconMarkup(host);
 };
 
+const liveRole = (host) =>
+  host.getAttribute("live") === "assertive" ? "alert" : "status";
+
 const syncRole = (host) => {
   const state = instances.get(host);
-  const role = ["error", "warning"].includes(alertTone(host)) ? "alert" : "status";
 
-  if (!host.hasAttribute("role") || host.getAttribute("role") === state.defaultRole) {
-    host.setAttribute("role", role);
-    state.defaultRole = role;
+  if (host.hasAttribute("role") && host.getAttribute("role") !== state.defaultRole) {
+    return;
   }
+
+  state.defaultRole = liveRole(host);
+  host.setAttribute("role", state.defaultRole);
 };
 
 const syncSlots = (host) => {
@@ -289,10 +293,13 @@ const mount = (host) => {
 
 /**
  * Token-driven alert message with intrinsic status icon and composable action slot.
+ * Defaults to passive status semantics. Use live="assertive" or role="alert" only
+ * for urgent dynamic messages that should interrupt assistive technology output.
  *
  * @tag ds-alert
  * @attr {"success"|"info"|"warning"|"error"} tone - Alert status intent.
  * @attr {"large"|"medium"|"small"} size - Alert size and layout.
+ * @attr {"polite"|"assertive"} live - Announcement urgency. Defaults to polite status semantics.
  * @slot title - Alert title.
  * @slot description - Supporting alert message.
  * @slot action - Alert action, commonly a ds-button.

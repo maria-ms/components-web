@@ -792,7 +792,9 @@ const mountItem = (host) => {
 };
 
 /**
- * Token-driven dropdown shell.
+ * Token-driven action menu button shell.
+ * This component implements the WAI-ARIA menu button pattern for commands,
+ * links, and checkable menu rows. Use input-select for form value selection.
  *
  * @tag drop-down
  * @attr {"start"|"end"} align - Menu alignment relative to the trigger. Defaults to end.
@@ -800,7 +802,7 @@ const mountItem = (host) => {
  * @attr {boolean} disabled - Disables the trigger.
  * @attr {string} aria-label - Trigger accessible name.
  * @slot trigger - Trigger element, usually a button.
- * @slot - Dropdown menu content: header, items, and separators.
+ * @slot - Action menu content: header, items, and separators.
  * @fires beforeselect - Cancelable event fired before an item is selected or toggled.
  * @fires select - Fired after an item is selected or toggled. Checkbox and radio rows update checked by default.
  */
@@ -842,7 +844,7 @@ export class Dropdown extends HTMLElement {
 }
 
 /**
- * Branded dropdown header.
+ * Branded action menu header.
  *
  * @tag drop-down-header
  * @slot media - Leading media content.
@@ -869,7 +871,7 @@ const syncGroup = (host) => {
 };
 
 /**
- * Dropdown row group.
+ * Action menu row group.
  *
  * @tag drop-down-group
  * @attr {string} label - Optional accessible and visible group label.
@@ -897,7 +899,7 @@ export class DropdownGroup extends HTMLElement {
 }
 
 /**
- * Branded dropdown row.
+ * Branded action menu row.
  *
  * @tag drop-down-item
  * @attr {"item"|"checkbox"|"radio"} type - Row behavior.
