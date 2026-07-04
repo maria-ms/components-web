@@ -30,6 +30,18 @@ const inputObservedAttributes = [
 
 const valueAttribute = (host) => host.getAttribute("value") ?? "";
 
+const syncSuffixFallback = (host, state) => {
+  const canClear = Boolean(
+    state.clearButton &&
+      host.value !== "" &&
+      !disabled(host, state) &&
+      !host.hasAttribute("readonly"),
+  );
+
+  if (state.clearButton) state.clearButton.hidden = !canClear;
+  state.suffixHasFallback = state.baseSuffixHasFallback || canClear;
+};
+
 const emit = (host, type) => {
   host.dispatchEvent(
     new CustomEvent(type, {
@@ -48,6 +60,8 @@ const setValue = (host, value, { dirty = false } = {}) => {
   state.valueDirty ||= dirty;
   host.toggleAttribute("data-has-value", nextValue !== "");
   if (state.control.value !== nextValue) state.control.value = nextValue;
+  syncSuffixFallback(host, state);
+  syncFieldChrome(host, state);
   syncFormValue(host);
 };
 
@@ -108,6 +122,7 @@ const sync = (host, defaultType) => {
   if (state.control.value !== host.value) state.control.value = host.value;
   host.toggleAttribute("data-has-value", host.value !== "");
   syncNativeAttributes(host, defaultType);
+  syncSuffixFallback(host, state);
   syncFieldChrome(host, state);
   syncFormValue(host);
 };
@@ -137,9 +152,13 @@ const disconnect = (host) => {
 
 export const defineTextField = ({
   tagName,
+  clearable = false,
   defaultType = "text",
+  extraStyles = "",
   prefixFallback = "",
   prefixHasFallback = false,
+  suffixFallback = "",
+  suffixHasFallback = false,
   typeAttribute = true,
 }) => {
   const template = document.createElement("template");
@@ -150,7 +169,7 @@ export const defineTextField = ({
 
   template.innerHTML = fieldTemplate(
     `<input part="input" class="control" />`,
-    { prefixFallback },
+    { extraStyles, prefixFallback, suffixFallback },
   );
 
   class TextField extends HTMLElement {
@@ -165,7 +184,9 @@ export const defineTextField = ({
       shadow.append(template.content.cloneNode(true));
 
       const state = {
+        clearButton: shadow.querySelector("[data-clear]"),
         control: shadow.querySelector("input"),
+        baseSuffixHasFallback: suffixHasFallback,
         customErrorMessage: "",
         defaultValue: "",
         description: shadow.querySelector(".description"),
@@ -189,6 +210,9 @@ export const defineTextField = ({
       state.listeners = [
         [state.control, "input", this.#onInput],
         [state.control, "change", this.#onChange],
+        ...(clearable && state.clearButton
+          ? [[state.clearButton, "click", this.#onClear]]
+          : []),
         [state.label, "click", this.#onLabelClick],
         [state.labelSlot, "slotchange", this.#onContentSlotChange],
         [state.descriptionSlot, "slotchange", this.#onContentSlotChange],
@@ -345,6 +369,24 @@ export const defineTextField = ({
     };
 
     #onContentSlotChange = () => sync(this, defaultType);
+
+    #onClear = () => {
+      const state = hostState.get(this);
+
+      if (
+        !state ||
+        disabled(this, state) ||
+        this.hasAttribute("readonly") ||
+        this.value === ""
+      ) {
+        return;
+      }
+
+      setValue(this, "", { dirty: true });
+      emit(this, "input");
+      emit(this, "change");
+      state.control.focus();
+    };
 
     #onInput = (event) => {
       event.stopPropagation();
