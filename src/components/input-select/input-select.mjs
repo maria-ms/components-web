@@ -26,6 +26,22 @@ template.innerHTML = fieldTemplate(
   `<select part="select" class="control">
     <button>
       <selectedcontent></selectedcontent>
+      <svg
+        class="picker-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+        data-icon="chevrons-up-down"
+        data-figma-node-id="40020640:9296"
+      >
+        <path
+          d="M7 9L12 4L17 9M7 15L12 20L17 15"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </button>
   </select>`,
   {
@@ -89,15 +105,17 @@ template.innerHTML = fieldTemplate(
       }
 
       .control::picker-icon {
+        display: none;
+      }
+
+      .picker-icon {
+        width: var(--ds-primitive-space-04);
+        height: var(--ds-primitive-space-04);
+        flex: 0 0 auto;
         color: var(--ds-semantic-color-foreground-muted-1);
-        transition: rotate 120ms ease;
       }
 
-      .control:open::picker-icon {
-        rotate: 180deg;
-      }
-
-      :host([data-has-suffix]) .control::picker-icon {
+      :host([data-has-suffix]) .picker-icon {
         display: none;
       }
 
@@ -200,7 +218,7 @@ template.innerHTML = fieldTemplate(
         border-color: var(--ds-semantic-color-border-destructive-elevated);
       }
 
-      :host([disabled]) .control::picker-icon {
+      :host([disabled]) .picker-icon {
         color: var(--ds-semantic-color-foreground-disabled-elevated);
       }
 
