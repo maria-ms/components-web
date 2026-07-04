@@ -104,13 +104,19 @@ template.innerHTML = fieldTemplate(
         display: none;
       }
 
+      .control option svg {
+        width: var(--ds-input-icon-size);
+        height: var(--ds-input-icon-size);
+        flex: 0 0 auto;
+      }
+
       .control::picker-icon {
         display: none;
       }
 
       .picker-icon {
-        width: var(--ds-primitive-space-04);
-        height: var(--ds-primitive-space-04);
+        width: var(--ds-input-icon-size);
+        height: var(--ds-input-icon-size);
         flex: 0 0 auto;
         color: var(--ds-semantic-color-foreground-muted-1);
       }
@@ -188,15 +194,21 @@ template.innerHTML = fieldTemplate(
       }
 
       .control option::checkmark {
-        width: 6px;
-        height: 10px;
+        width: var(--ds-input-icon-size);
+        height: var(--ds-input-icon-size);
+        flex: 0 0 var(--ds-input-icon-size);
         order: 1;
-        margin-left: auto;
-        border: solid currentColor;
-        border-width: 0 1.5px 1.5px 0;
+        margin-inline-start: auto;
+        background: currentColor;
         content: "";
-        rotate: 45deg;
-        transform: translateY(-1px);
+        -webkit-mask:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.333 4L6 11.333L2.667 8' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+          center / var(--ds-input-icon-size) var(--ds-input-icon-size)
+          no-repeat;
+        mask:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.333 4L6 11.333L2.667 8' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+          center / var(--ds-input-icon-size) var(--ds-input-icon-size)
+          no-repeat;
       }
 
       .control optgroup {

@@ -10,6 +10,7 @@ export const fieldObservedAttributes = [
 
 export const fieldStyles = `
   :host {
+    --ds-input-icon-size: var(--ds-primitive-space-04);
     --ds-input-inline-small-width: 193px;
     --ds-input-inline-width: 276px;
     --ds-input-small-width: 140px;
@@ -228,6 +229,8 @@ export const fieldStyles = `
   .prefix slot::slotted(svg),
   .suffix slot::slotted(svg) {
     display: block;
+    width: var(--ds-input-icon-size);
+    height: var(--ds-input-icon-size);
   }
 
   .description {

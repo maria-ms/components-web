@@ -24,6 +24,7 @@ const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
+      --ds-input-icon-size: var(--ds-primitive-space-04);
       --ds-input-number-inline-small-width: 193px;
       --ds-input-number-inline-width: 276px;
       --ds-input-number-small-width: 140px;
@@ -263,6 +264,8 @@ template.innerHTML = `
     .prefix slot::slotted(svg),
     .suffix slot::slotted(svg) {
       display: block;
+      width: var(--ds-input-icon-size);
+      height: var(--ds-input-icon-size);
     }
 
     .actions {
