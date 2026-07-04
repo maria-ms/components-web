@@ -1,435 +1,199 @@
+import {
+  createInternals,
+  disabled as fieldDisabled,
+  fieldObservedAttributes,
+  fieldTemplate,
+  nextId,
+  setOptionalAttribute,
+  syncFieldChrome,
+  validityFlags,
+} from "../input/field-shell.mjs";
+
 const tagName = "ds-input-number";
 
 const observedAttributes = [
-  "aria-describedby",
-  "aria-invalid",
-  "aria-label",
-  "aria-labelledby",
+  ...fieldObservedAttributes,
   "controls",
-  "disabled",
-  "label-position",
   "max",
   "min",
   "name",
   "placeholder",
   "readonly",
   "required",
-  "size",
   "step",
   "value",
 ];
 
-const template = document.createElement("template");
-
-template.innerHTML = `
-  <style>
-    :host {
-      --ds-input-icon-size: var(--ds-primitive-space-04);
-      --ds-input-number-inline-small-width: 193px;
-      --ds-input-number-inline-width: 276px;
-      --ds-input-number-small-width: 140px;
-      --ds-input-number-width: 276px;
-
-      box-sizing: border-box;
-      display: inline-block;
-      width: var(--ds-input-number-width);
-      max-width: 100%;
-      color: var(--ds-semantic-color-foreground-default);
-      font-family: inherit;
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    :host([size="small"]) {
-      width: var(--ds-input-number-small-width);
-    }
-
-    :host([label-position="start"]) {
-      width: var(--ds-input-number-inline-width);
-    }
-
-    :host([label-position="start"][size="small"]) {
-      width: var(--ds-input-number-inline-small-width);
-    }
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
-    .root,
-    .stack,
-    .field,
-    .actions,
-    .step-button,
-    .prefix,
-    .suffix {
-      display: flex;
-    }
-
-    .root,
-    .stack {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-    }
-
-    .root,
-    .stack,
-    .field,
-    .actions {
-      gap: var(--ds-primitive-space-03);
-    }
-
-    :host([label-position="start"]) .root {
-      flex-direction: row;
-      gap: var(--ds-primitive-space-05);
-    }
-
-    :host([label-position="start"]) .stack {
-      flex: 1 1 auto;
-      width: auto;
-      min-width: 0;
-    }
-
-    .label,
-    .description {
-      display: block;
-      width: 100%;
-      margin: 0;
-      font-kerning: none;
-      font-variant-ligatures: none;
-    }
-
-    .label {
-      color: var(--ds-semantic-color-foreground-default);
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    :host([label-position="start"]) .label {
-      width: auto;
-      flex: 0 0 auto;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .field {
-      width: 100%;
-      min-height: var(--ds-primitive-space-07);
-      align-items: center;
-      overflow: hidden;
-      padding: var(--ds-primitive-space-02) var(--ds-primitive-space-02)
-        var(--ds-primitive-space-02) var(--ds-primitive-space-03);
-      border: 1px solid var(--ds-component-input-color-border-default);
-      border-radius: var(--ds-primitive-radius-04);
-      background: var(--ds-component-input-color-background-default);
-      transition:
-        background-color 120ms ease,
-        border-color 120ms ease,
-        box-shadow 120ms ease;
-    }
-
-    :host([size="small"]) .field {
-      width: var(--ds-input-number-small-field-width, 140px);
-      padding: var(--ds-primitive-space-02);
-    }
-
-    :host(:not([disabled]):not([aria-invalid="true"]):hover) .field {
-      background: var(--ds-component-input-color-background-hover);
-    }
-
-    :host(:not([disabled]):not([aria-invalid="true"]):focus-within) .field {
-      border-color: var(--ds-semantic-color-border-focus);
-      background: var(--ds-component-input-color-background-default);
-      box-shadow:
-        var(--ds-semantic-shadow-xs-offset-x)
-          var(--ds-semantic-shadow-xs-offset-y)
-          var(--ds-semantic-shadow-xs-blur)
-          var(--ds-semantic-shadow-xs-spread)
-          var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-shadow-focused-4px-offset-x)
-          var(--ds-semantic-shadow-focused-4px-offset-y)
-          var(--ds-semantic-shadow-focused-4px-blur)
-          var(--ds-semantic-shadow-focused-4px-spread)
-          var(--ds-semantic-shadow-focused-4px-color);
-    }
-
-    :host([aria-invalid="true"]) .label,
-    :host([aria-invalid="true"]) .description {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
-    :host([aria-invalid="true"]) .field {
-      border-color: var(--ds-semantic-color-border-destructive-elevated);
-      background: var(--ds-semantic-color-background-destructive-subtle);
-      box-shadow:
-        var(--ds-semantic-shadow-xs-offset-x)
-          var(--ds-semantic-shadow-xs-offset-y)
-          var(--ds-semantic-shadow-xs-blur)
-          var(--ds-semantic-shadow-xs-spread)
-          var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-shadow-focused-4px-destructive-offset-x)
-          var(--ds-semantic-shadow-focused-4px-destructive-offset-y)
-          var(--ds-semantic-shadow-focused-4px-destructive-blur)
-          var(--ds-semantic-shadow-focused-4px-destructive-spread)
-          var(--ds-semantic-shadow-focused-4px-destructive-color);
-    }
-
-    :host([disabled]) {
-      cursor: not-allowed;
-    }
-
-    :host([disabled]) .label,
-    :host([disabled]) .description {
-      color: var(--ds-semantic-color-foreground-disabled-elevated);
-    }
-
-    :host([disabled]) .field {
-      border-color: var(--ds-component-input-color-border-disabled);
-      background: var(--ds-component-input-color-background-disabled);
-    }
-
-    input {
-      order: 2;
-      min-width: 40px;
-      flex: 1 1 auto;
-      border: 0;
-      outline: 0;
-      padding: 0;
-      appearance: textfield;
-      background: transparent;
-      color: var(--ds-semantic-color-foreground-muted-1);
-      font: inherit;
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-      font-kerning: none;
-      font-variant-ligatures: none;
-    }
-
-    input::placeholder {
-      color: var(--ds-semantic-color-foreground-muted-1);
-      opacity: 1;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      appearance: none;
-      margin: 0;
-    }
-
-    :host([data-has-value]) input {
-      color: var(--ds-semantic-color-foreground-default);
-    }
-
-    :host([aria-invalid="true"]) input {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
-    :host([disabled]) input {
-      color: var(--ds-semantic-color-foreground-disabled-elevated);
-      cursor: not-allowed;
-    }
-
-    :host([size="small"]) input {
-      text-align: center;
-    }
-
-    .prefix,
-    .suffix {
-      display: none;
-      flex: 0 0 auto;
-      align-items: center;
-      justify-content: center;
-      color: var(--ds-semantic-color-foreground-muted-1);
-      line-height: 0;
-    }
-
-    .prefix {
-      order: 1;
-    }
-
-    .suffix {
-      order: 3;
-    }
-
-    .prefix.has-content,
-    .suffix.has-content {
-      display: flex;
-    }
-
-    .prefix slot::slotted(svg),
-    .suffix slot::slotted(svg) {
-      display: block;
-      width: var(--ds-input-icon-size);
-      height: var(--ds-input-icon-size);
-    }
-
-    .actions {
-      order: 4;
-      align-items: center;
-      flex: 0 0 auto;
-    }
-
-    :host([size="small"]) .actions {
-      display: contents;
-    }
-
-    :host([controls="none"]) .actions {
-      display: none;
-    }
-
-    .step-button {
-      width: 24px;
-      height: 24px;
-      flex: 0 0 auto;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      border-radius: var(--ds-primitive-radius-03);
-      padding: 0;
-      background: transparent;
-      color: var(--ds-component-button-color-foreground-secondary);
-      cursor: pointer;
-    }
-
-    .step-button:hover:not(:disabled) {
-      background: var(--ds-component-button-color-background-secondary);
-    }
-
-    :host([aria-invalid="true"]) .step-button {
-      color: var(--ds-component-button-color-foreground-destructive-primary);
-    }
-
-    :host([disabled]) .step-button {
-      color: var(--ds-component-button-color-foreground-disabled);
-      cursor: not-allowed;
-    }
-
-    .decrement {
-      order: 1;
-    }
-
-    .increment {
-      order: 3;
-    }
-
-    .step-button svg {
-      width: var(--ds-primitive-space-05);
-      height: var(--ds-primitive-space-05);
-    }
-
-    .description {
-      color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-semantic-typography-body-x-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-x-small-line-height);
-    }
-  </style>
-
-  <div part="root" class="root">
-    <label part="label" class="label">
-      <slot name="label"></slot>
-    </label>
-    <div part="stack" class="stack">
-      <div part="field" class="field">
-        <span part="prefix" class="prefix">
-          <slot name="prefix"></slot>
-        </span>
-        <input part="input" type="number" inputmode="decimal" />
-        <span part="suffix" class="suffix">
-          <slot name="suffix"></slot>
-        </span>
-        <div part="actions" class="actions">
-          <button part="decrement-button" class="step-button decrement" type="button" data-step="-1" aria-label="Decrease value">
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3.5 8H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </button>
-          <button part="increment-button" class="step-button increment" type="button" data-step="1" aria-label="Increase value">
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <p part="description" class="description">
-        <slot name="description"></slot>
-      </p>
-    </div>
+const stepper = `
+  <div part="actions" class="actions">
+    <button
+      part="decrement-button"
+      class="step-button decrement"
+      type="button"
+      data-step="-1"
+      aria-label="Decrease value"
+    >
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M3.5 8H12.5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+    <button
+      part="increment-button"
+      class="step-button increment"
+      type="button"
+      data-step="1"
+      aria-label="Increase value"
+    >
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M8 3.5V12.5M3.5 8H12.5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
   </div>
 `;
 
-const instances = new WeakMap();
-const nextInputId = (() => {
-  let id = 0;
-  return () => `${tagName}-${id++}`;
-})();
+const template = document.createElement("template");
 
-const setOptionalAttribute = (element, name, value) =>
-  value == null || value === ""
-    ? element.removeAttribute(name)
-    : element.setAttribute(name, value);
+template.innerHTML = fieldTemplate(
+  `<input part="input" class="control" type="number" inputmode="decimal" />`,
+  {
+    afterSuffix: stepper,
+    extraStyles: `
+      :host {
+        --ds-input-number-inline-small-width: 193px;
+        --ds-input-number-inline-width: 276px;
+        --ds-input-number-small-width: 140px;
+        --ds-input-number-width: 276px;
+        --ds-input-inline-small-width: var(--ds-input-number-inline-small-width);
+        --ds-input-inline-width: var(--ds-input-number-inline-width);
+        --ds-input-small-width: var(--ds-input-number-small-width);
+        --ds-input-width: var(--ds-input-number-width);
+        --ds-input-small-field-width: var(
+          --ds-input-number-small-field-width,
+          140px
+        );
+      }
+
+      .field {
+        padding: var(--ds-primitive-space-02) var(--ds-primitive-space-02)
+          var(--ds-primitive-space-02) var(--ds-primitive-space-03);
+      }
+
+      :host([size="small"]) .field,
+      :host([size="sm"]) .field {
+        padding: var(--ds-primitive-space-02);
+      }
+
+      .control {
+        order: 2;
+        appearance: textfield;
+      }
+
+      .control::-webkit-outer-spin-button,
+      .control::-webkit-inner-spin-button {
+        appearance: none;
+        margin: 0;
+      }
+
+      :host([size="small"]) .control,
+      :host([size="sm"]) .control {
+        text-align: center;
+      }
+
+      .prefix {
+        order: 1;
+      }
+
+      .suffix {
+        order: 3;
+      }
+
+      .actions,
+      .step-button {
+        display: flex;
+      }
+
+      .actions {
+        order: 4;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: var(--ds-primitive-space-03);
+      }
+
+      :host([size="small"]) .actions,
+      :host([size="sm"]) .actions {
+        display: contents;
+      }
+
+      :host([controls="none"]) .actions {
+        display: none;
+      }
+
+      .step-button {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: var(--ds-primitive-radius-03);
+        padding: 0;
+        background: transparent;
+        color: var(--ds-component-button-color-foreground-secondary);
+        cursor: pointer;
+      }
+
+      .step-button:hover:not(:disabled) {
+        background: var(--ds-component-button-color-background-secondary);
+      }
+
+      :host([aria-invalid="true"]) .step-button {
+        color: var(--ds-component-button-color-foreground-destructive-primary);
+      }
+
+      :host([disabled]) .step-button {
+        color: var(--ds-component-button-color-foreground-disabled);
+        cursor: not-allowed;
+      }
+
+      .decrement {
+        order: 1;
+      }
+
+      .increment {
+        order: 3;
+      }
+
+      .step-button svg {
+        width: var(--ds-primitive-space-05);
+        height: var(--ds-primitive-space-05);
+      }
+    `,
+  },
+);
+
+const instances = new WeakMap();
+const nextInputId = nextId(tagName);
 
 const valueAttribute = (host) => host.getAttribute("value") ?? "";
 
-const setValue = (host, value, { dirty = false } = {}) => {
-  const state = instances.get(host);
-  const nextValue = value == null ? "" : String(value);
+const stateOf = (host) => instances.get(host);
 
-  state.value = nextValue;
-  state.valueDirty ||= dirty;
-  host.toggleAttribute("data-has-value", nextValue !== "");
-  if (state.input.value !== nextValue) state.input.value = nextValue;
-  syncFormValue(host);
-};
+const isDisabled = (host) => fieldDisabled(host, stateOf(host));
 
-const hasSlotContent = (slot) =>
-  slot
-    .assignedNodes({ flatten: true })
-    .some(
-      (node) => node.nodeType === 1 || (node.textContent ?? "").trim() !== "",
-    );
-
-const createInternals = (host) => {
-  try {
-    return typeof host.attachInternals === "function"
-      ? host.attachInternals()
-      : null;
-  } catch {
-    return null;
-  }
-};
-
-const validityFlags = (validity) =>
-  [
-    "badInput",
-    "customError",
-    "patternMismatch",
-    "rangeOverflow",
-    "rangeUnderflow",
-    "stepMismatch",
-    "tooLong",
-    "tooShort",
-    "typeMismatch",
-    "valueMissing",
-  ].reduce(
-    (flags, name) => (validity[name] ? { ...flags, [name]: true } : flags),
-    {},
-  );
-
-const disabled = (host) => {
-  const state = instances.get(host);
-  return host.disabled || Boolean(state?.formDisabled);
-};
-
-const readonly = (host) => host.hasAttribute("readonly");
+const isReadonly = (host) => host.hasAttribute("readonly");
 
 const emit = (host, type) => {
-  const { input } = instances.get(host);
+  const { input } = stateOf(host);
 
   host.dispatchEvent(
     new CustomEvent(type, {
@@ -443,116 +207,69 @@ const emit = (host, type) => {
   );
 };
 
-const syncNativeAttributes = (host) => {
-  const { input } = instances.get(host);
-
-  ["min", "max", "step"].forEach((name) =>
-    setOptionalAttribute(input, name, host.getAttribute(name)),
-  );
-  input.disabled = disabled(host);
-  input.readOnly = host.hasAttribute("readonly");
-  input.required = host.hasAttribute("required");
-  input.placeholder = host.getAttribute("placeholder") ?? "";
-};
-
-const syncAria = (host) => {
-  const { description, descriptionSlot, id, input, label, labelSlot } =
-    instances.get(host);
-  const labelIsVisible = hasSlotContent(labelSlot);
-  const descriptionIsVisible = hasSlotContent(descriptionSlot);
-  const ariaLabel = host.getAttribute("aria-label");
-  const ariaLabelledBy = host.getAttribute("aria-labelledby");
-  const ariaDescribedBy = host.getAttribute("aria-describedby");
-  const ariaInvalid = host.getAttribute("aria-invalid");
-
-  label.id = `${id}-label`;
-  label.htmlFor = id;
-  label.hidden = !labelIsVisible;
-  description.id = `${id}-description`;
-  description.hidden = !descriptionIsVisible;
-
-  if (ariaLabel) {
-    input.setAttribute("aria-label", ariaLabel);
-    input.removeAttribute("aria-labelledby");
-  } else if (ariaLabelledBy) {
-    input.setAttribute("aria-labelledby", ariaLabelledBy);
-    input.removeAttribute("aria-label");
-  } else if (labelIsVisible) {
-    input.setAttribute("aria-labelledby", `${id}-label`);
-    input.removeAttribute("aria-label");
-  } else {
-    input.removeAttribute("aria-label");
-    input.removeAttribute("aria-labelledby");
-  }
-
-  if (ariaDescribedBy) {
-    input.setAttribute("aria-describedby", ariaDescribedBy);
-  } else if (descriptionIsVisible) {
-    input.setAttribute("aria-describedby", `${id}-description`);
-  } else {
-    input.removeAttribute("aria-describedby");
-  }
-
-  ariaInvalid == null
-    ? input.removeAttribute("aria-invalid")
-    : input.setAttribute("aria-invalid", ariaInvalid);
-};
-
 const syncFormValue = (host) => {
-  const { customErrorMessage, input, internals } = instances.get(host);
+  const { customErrorMessage, input, internals } = stateOf(host);
 
   if (!internals) return;
 
-  internals.setFormValue(disabled(host) ? null : host.value);
+  internals.setFormValue(isDisabled(host) ? null : host.value);
 
-  if (disabled(host)) {
+  if (isDisabled(host)) {
     internals.setValidity({});
-    return;
-  }
-
-  if (customErrorMessage) {
+  } else if (customErrorMessage) {
     internals.setValidity({ customError: true }, customErrorMessage, input);
-    return;
+  } else if (input.validity.valid) {
+    internals.setValidity({});
+  } else {
+    internals.setValidity(
+      validityFlags(input.validity),
+      input.validationMessage,
+      input,
+    );
   }
+};
 
-  input.validity.valid
-    ? internals.setValidity({})
-    : internals.setValidity(
-        validityFlags(input.validity),
-        input.validationMessage,
-        input,
-      );
+const setValue = (host, value, { dirty = false } = {}) => {
+  const state = stateOf(host);
+  const nextValue = value == null ? "" : String(value);
+
+  state.value = nextValue;
+  state.valueDirty ||= dirty;
+  host.toggleAttribute("data-has-value", nextValue !== "");
+  if (state.input.value !== nextValue) state.input.value = nextValue;
+  syncFormValue(host);
+};
+
+const syncNativeAttributes = (host) => {
+  const { input } = stateOf(host);
+
+  ["max", "min", "placeholder", "step"].forEach((name) =>
+    setOptionalAttribute(input, name, host.getAttribute(name)),
+  );
+  input.disabled = isDisabled(host);
+  input.readOnly = isReadonly(host);
+  input.required = host.hasAttribute("required");
 };
 
 const sync = (host) => {
-  const {
-    decrement,
-    increment,
-    input,
-    prefix,
-    prefixSlot,
-    suffix,
-    suffixSlot,
-  } = instances.get(host);
+  const state = stateOf(host);
 
-  input.id = instances.get(host).id;
-  if (input.value !== host.value) input.value = host.value;
+  if (state.input.value !== host.value) state.input.value = host.value;
   host.toggleAttribute("data-has-value", host.value !== "");
   syncNativeAttributes(host);
-  syncAria(host);
-  prefix.classList.toggle("has-content", hasSlotContent(prefixSlot));
-  suffix.classList.toggle("has-content", hasSlotContent(suffixSlot));
-  decrement.disabled = disabled(host) || readonly(host);
-  increment.disabled = disabled(host) || readonly(host);
+  syncFieldChrome(host, state);
+  state.decrement.disabled = isDisabled(host) || isReadonly(host);
+  state.increment.disabled = isDisabled(host) || isReadonly(host);
   syncFormValue(host);
 };
 
 const step = (host, direction) => {
-  const { input } = instances.get(host);
+  const { input } = stateOf(host);
 
-  if (disabled(host) || readonly(host) || host.getAttribute("controls") === "none") {
+  if (isDisabled(host) || isReadonly(host) || host.getAttribute("controls") === "none") {
     return;
   }
+
   direction < 0 ? input.stepDown() : input.stepUp();
   setValue(host, input.value);
   emit(host, "input");
@@ -576,7 +293,7 @@ const setListeners = (state, method) =>
   );
 
 const connect = (host) => {
-  const state = instances.get(host);
+  const state = stateOf(host);
 
   if (!state.hasConnected) {
     state.defaultValue = valueAttribute(host);
@@ -589,15 +306,19 @@ const connect = (host) => {
 };
 
 const disconnect = (host) => {
-  setListeners(instances.get(host), "removeEventListener");
+  setListeners(stateOf(host), "removeEventListener");
 };
 
 const mount = (host) => {
   const shadow = host.attachShadow({ mode: "open" });
+
   shadow.append(template.content.cloneNode(true));
+
+  const input = shadow.querySelector("input");
 
   instances.set(host, {
     actions: shadow.querySelector(".actions"),
+    control: input,
     customErrorMessage: "",
     decrement: shadow.querySelector(".decrement"),
     defaultValue: "",
@@ -607,32 +328,36 @@ const mount = (host) => {
     hasConnected: false,
     id: nextInputId(),
     increment: shadow.querySelector(".increment"),
-    input: shadow.querySelector("input"),
+    input,
     internals: createInternals(host),
     label: shadow.querySelector(".label"),
     labelSlot: shadow.querySelector('slot[name="label"]'),
     prefix: shadow.querySelector(".prefix"),
+    prefixHasFallback: false,
     prefixSlot: shadow.querySelector('slot[name="prefix"]'),
     suffix: shadow.querySelector(".suffix"),
+    suffixHasFallback: false,
     suffixSlot: shadow.querySelector('slot[name="suffix"]'),
     value: valueAttribute(host),
     valueDirty: false,
     onChange: (event) => {
-      const { input } = instances.get(host);
       event.stopPropagation();
       setValue(host, input.value, { dirty: true });
       emit(host, "change");
     },
     onContentSlotChange: () => sync(host),
     onInput: (event) => {
-      const { input } = instances.get(host);
       event.stopPropagation();
       setValue(host, input.value, { dirty: true });
       emit(host, "input");
     },
-    onLabelClick: () => instances.get(host).input.focus(),
+    onLabelClick: () => input.focus(),
     onStep: (event) => {
-      const button = event.target.closest("[data-step]");
+      const button =
+        event.target instanceof Element
+          ? event.target.closest("[data-step]")
+          : null;
+
       if (button) step(host, Number(button.dataset.step));
     },
   });
@@ -688,11 +413,11 @@ export class InputNumber extends HTMLElement {
   attributeChangedCallback(name) {
     if (!instances.has(this)) return;
     if (name === "value") {
-      instances.get(this).defaultValue = valueAttribute(this);
+      stateOf(this).defaultValue = valueAttribute(this);
       setValue(this, valueAttribute(this));
-      return;
+    } else {
+      sync(this);
     }
-    sync(this);
   }
 
   get disabled() {
@@ -728,7 +453,7 @@ export class InputNumber extends HTMLElement {
   }
 
   get value() {
-    return instances.get(this)?.value ?? valueAttribute(this);
+    return stateOf(this)?.value ?? valueAttribute(this);
   }
 
   set value(value) {
@@ -744,7 +469,7 @@ export class InputNumber extends HTMLElement {
   }
 
   get valueAsNumber() {
-    return instances.get(this)?.input.valueAsNumber ?? Number.NaN;
+    return stateOf(this)?.input.valueAsNumber ?? Number.NaN;
   }
 
   set valueAsNumber(value) {
@@ -752,38 +477,36 @@ export class InputNumber extends HTMLElement {
   }
 
   get form() {
-    return instances.get(this)?.internals?.form ?? null;
+    return stateOf(this)?.internals?.form ?? null;
   }
 
   get validity() {
-    const state = instances.get(this);
+    const state = stateOf(this);
     return state?.internals?.validity ?? state?.input.validity;
   }
 
   get validationMessage() {
-    const state = instances.get(this);
-    return (
-      state?.internals?.validationMessage ?? state?.input.validationMessage
-    );
+    const state = stateOf(this);
+    return state?.internals?.validationMessage ?? state?.input.validationMessage;
   }
 
   get willValidate() {
-    const state = instances.get(this);
+    const state = stateOf(this);
     return state?.internals?.willValidate ?? state?.input.willValidate ?? false;
   }
 
   checkValidity() {
-    const state = instances.get(this);
+    const state = stateOf(this);
     return state?.internals?.checkValidity() ?? state?.input.checkValidity();
   }
 
   reportValidity() {
-    const state = instances.get(this);
+    const state = stateOf(this);
     return state?.internals?.reportValidity() ?? state?.input.reportValidity();
   }
 
   setCustomValidity(message) {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     if (!state) return;
     state.customErrorMessage = String(message);
@@ -792,15 +515,15 @@ export class InputNumber extends HTMLElement {
   }
 
   focus(options) {
-    instances.get(this)?.input.focus(options);
+    stateOf(this)?.input.focus(options);
   }
 
   blur() {
-    instances.get(this)?.input.blur();
+    stateOf(this)?.input.blur();
   }
 
   formDisabledCallback(isDisabledByForm) {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     if (!state) return;
     state.formDisabled = isDisabledByForm;
@@ -808,7 +531,7 @@ export class InputNumber extends HTMLElement {
   }
 
   formResetCallback() {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     state.valueDirty = false;
     setValue(this, state.defaultValue);

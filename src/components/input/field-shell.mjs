@@ -243,7 +243,12 @@ export const fieldStyles = `
 
 export const fieldTemplate = (
   control,
-  { extraStyles = "", prefixFallback = "", suffixFallback = "" } = {},
+  {
+    afterSuffix = "",
+    extraStyles = "",
+    prefixFallback = "",
+    suffixFallback = "",
+  } = {},
 ) => `
   <style>
     ${fieldStyles}
@@ -263,6 +268,7 @@ export const fieldTemplate = (
         <span part="suffix" class="suffix">
           <slot name="suffix">${suffixFallback}</slot>
         </span>
+        ${afterSuffix}
       </div>
       <p part="description" class="description">
         <slot name="description"></slot>
