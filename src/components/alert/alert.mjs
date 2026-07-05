@@ -7,7 +7,6 @@ const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --alert-width: 976px;
       --alert-direction: row;
       --alert-align-items: center;
       --alert-justify-content: flex-start;
@@ -20,20 +19,15 @@ template.innerHTML = `
       --alert-icon-color: var(--ds-semantic-color-foreground-success-elevated);
 
       box-sizing: border-box;
-      display: inline-flex;
-      width: var(--alert-width);
+      display: block;
+      width: 100%;
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
       font-family: inherit;
       vertical-align: middle;
     }
 
-    :host([size="medium"]) {
-      --alert-width: 560px;
-    }
-
     :host([size="small"]) {
-      --alert-width: 343px;
       --alert-direction: column;
       --alert-align-items: center;
       --alert-justify-content: center;

@@ -22,8 +22,8 @@ template.innerHTML = `
   <style>
     :host {
       box-sizing: border-box;
-      display: inline-grid;
-      width: var(--ds-field-width, 276px);
+      display: grid;
+      width: 100%;
       max-width: 100%;
       gap: var(--ds-primitive-space-03);
       color: var(--ds-semantic-color-foreground-default);
@@ -91,10 +91,6 @@ template.innerHTML = `
     ::slotted(ds-input-select),
     ::slotted(ds-input-text) {
       width: 100%;
-      --ds-input-width: 100%;
-      --ds-input-number-width: 100%;
-      --ds-input-small-width: 100%;
-      --ds-input-number-small-width: 100%;
     }
   </style>
 
@@ -116,8 +112,8 @@ groupTemplate.innerHTML = `
   <style>
     :host {
       box-sizing: border-box;
-      display: inline-grid;
-      width: var(--ds-field-width, 276px);
+      display: grid;
+      width: 100%;
       max-width: 100%;
       gap: var(--ds-primitive-space-03);
       color: var(--ds-semantic-color-foreground-default);
@@ -148,8 +144,9 @@ groupTemplate.innerHTML = `
     .controls {
       display: flex;
       width: 100%;
-      align-items: flex-start;
-      gap: var(--ds-primitive-space-02);
+      flex-direction: var(--ds-field-group-direction, column);
+      align-items: var(--ds-field-group-align-items, stretch);
+      gap: var(--ds-field-group-gap, var(--ds-primitive-space-02));
     }
 
     .description,
@@ -182,21 +179,12 @@ groupTemplate.innerHTML = `
       color: inherit;
     }
 
-    ::slotted(ds-input-select) {
-      flex: 0 0 var(--ds-field-group-select-width, 96px);
-      width: var(--ds-field-group-select-width, 96px);
-      --ds-input-width: 100%;
-      --ds-input-small-width: 100%;
-    }
-
+    ::slotted(ds-input-select),
     ::slotted(ds-input-number),
     ::slotted(ds-input-search),
     ::slotted(ds-input-text) {
-      flex: 1 1 auto;
-      width: auto;
       min-width: 0;
-      --ds-input-width: 100%;
-      --ds-input-number-width: 100%;
+      width: 100%;
     }
   </style>
 

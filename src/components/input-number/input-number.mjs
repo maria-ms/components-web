@@ -68,21 +68,6 @@ template.innerHTML = fieldTemplate(
   {
     afterSuffix: stepper,
     extraStyles: `
-      :host {
-        --ds-input-number-inline-small-width: 193px;
-        --ds-input-number-inline-width: 276px;
-        --ds-input-number-small-width: 140px;
-        --ds-input-number-width: 276px;
-        --ds-input-inline-small-width: var(--ds-input-number-inline-small-width);
-        --ds-input-inline-width: var(--ds-input-number-inline-width);
-        --ds-input-small-width: var(--ds-input-number-small-width);
-        --ds-input-width: var(--ds-input-number-width);
-        --ds-input-small-field-width: var(
-          --ds-input-number-small-field-width,
-          140px
-        );
-      }
-
       .field {
         padding: var(--ds-primitive-space-02) var(--ds-primitive-space-02)
           var(--ds-primitive-space-02) var(--ds-primitive-space-03);

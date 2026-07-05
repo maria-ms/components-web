@@ -60,6 +60,17 @@ API design rules:
 - If the Figma artboard shows multiple use cases, create one composable shell plus optional child elements only when child elements are reusable and stable.
 - If the component is mostly a product layout, page region, header, footer, or marketing/content block, stop and report that it should probably be a pattern or Storybook composition rather than a packaged Web Component.
 
+Layout and composition rules:
+
+- Parent layouts, forms, field groups, and Storybook examples own page/form sizing and flow: width, max-width, columns, horizontal vs vertical direction, wrapping, and grid/flex placement.
+- Component primitives should not bake in Figma frame widths such as `276px`, `343px`, `440px`, or similar artboard/example dimensions as default component widths.
+- Form controls and field wrappers should generally be block/full-width-friendly: use `display: block` or `display: grid`, `width: 100%`, and `max-width: 100%` unless there is a clear native/intrinsic reason not to.
+- Content-sized components such as buttons, avatars, badges, icons, menu triggers, and similar inline affordances may keep their natural intrinsic sizing when that matches the native or visual model.
+- Keep intrinsic component dimensions only when they are part of the component identity: avatar size, icon size, OTP cell size, control height, internal padding, picker width matching the select, and similar internal geometry.
+- If Figma shows a fixed example width, reproduce that width in Storybook or the parent composition, not in the component default CSS.
+- If a composed pattern needs horizontal layout, for example select plus input, the composition should set layout on the wrapper and slotted children. Prefer CSS custom properties for internal group direction/gap/alignment over new layout props.
+- Do not add attributes like `direction`, `layout`, `width`, or `inline` unless the component itself is explicitly a layout primitive. Prefer CSS and parent composition for layout.
+
 Form and validation rules:
 
 - If the component owns a form value, make it form-associated with `ElementInternals` unless there is a concrete browser limitation.
@@ -77,7 +88,7 @@ Implementation rules:
 - Use the existing Web Component style: custom elements, Shadow DOM, `template.innerHTML`, `WeakMap` instance state, small helper functions.
 - Keep the component API minimal, semantic, and web-standard.
 - Prefer slotted content over narrow props when consumers should own the content.
-- The component should provide branded structure, styling, states, accessibility, keyboard behavior, and layout.
+- The component should provide branded structure, styling, states, accessibility, keyboard behavior, and internal layout only. Parent composition owns external layout.
 - Consumers should provide business-specific content such as labels, icons, avatars, media, shortcuts, descriptions, and actions through slots or native attributes.
 - For form controls, treat labels, helper text, and error text as field-wrapper responsibility, not primitive-control responsibility.
 - Keep the Web Component as a light branded style shell where possible: it should park consumer content in the correct structure and apply the design system visual behavior.
@@ -96,7 +107,7 @@ Styling rules:
 - Use low-specificity component-local selectors.
 - Use `:host`, slots, and `part` consistently with existing components.
 - Use focus-visible states and tokenized focus shadows when the component is interactive.
-- Keep fixed Figma dimensions behind component custom properties so consumers can override them.
+- Do not carry Figma artboard/example widths into component defaults. Keep only intrinsic internal dimensions behind component custom properties when consumers may reasonably need to tune them.
 - Do not switch to constructable stylesheets unless the existing package already has that convention.
 
 Package contract:
@@ -127,6 +138,7 @@ Storybook contract:
 - Keep examples composable and realistic.
 - Story examples may include local demo content such as icons or avatars, but that content belongs in Storybook, not in the component package, unless it is intrinsic to the component.
 - Form-control stories with visible labels/help/errors must compose `ds-field` or `ds-field-group` around the primitive. Do not pass `slot="label"` or `slot="description"` into primitive input/select components.
+- Story examples should set composition widths, form layout, field-group direction, and child control proportions explicitly when the example needs them. Do not rely on component defaults for Figma example widths.
 - Show the clean consumer-facing HTML source for the specific story instance, not internal helper code and not every Figma artboard variation.
 - Update `storybook-web/package.json` `check` script to include the new story.
 

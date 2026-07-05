@@ -10,24 +10,15 @@ export const fieldObservedAttributes = [
 export const fieldStyles = `
   :host {
     --ds-input-icon-size: var(--ds-primitive-space-05);
-    --ds-input-inline-small-width: 193px;
-    --ds-input-inline-width: 276px;
-    --ds-input-small-width: 140px;
-    --ds-input-width: 276px;
 
     box-sizing: border-box;
-    display: inline-block;
-    width: var(--ds-input-width);
+    display: block;
+    width: 100%;
     max-width: 100%;
     color: var(--ds-semantic-color-foreground-default);
     font-family: inherit;
     font-size: var(--ds-semantic-typography-body-small-font-size);
     line-height: var(--ds-semantic-typography-body-small-line-height);
-  }
-
-  :host([size="small"]),
-  :host([size="sm"]) {
-    width: var(--ds-input-small-width);
   }
 
   *,
@@ -63,7 +54,6 @@ export const fieldStyles = `
 
   :host([size="small"]) .field,
   :host([size="sm"]) .field {
-    width: var(--ds-input-small-field-width, 140px);
     padding: var(--ds-primitive-space-02);
   }
 

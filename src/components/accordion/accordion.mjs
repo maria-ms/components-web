@@ -14,12 +14,11 @@ const cardTemplate = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --ds-accordion-width: 353px;
       --ds-accordion-icon-size: 20px;
 
       box-sizing: border-box;
       display: block;
-      width: var(--ds-accordion-width);
+      width: 100%;
       max-width: 100%;
       color: var(--ds-semantic-color-foreground-default);
       font-family: inherit;
@@ -196,11 +195,9 @@ const nextAccordionId = (() => {
 cardTemplate.innerHTML = `
   <style>
     :host {
-      --ds-accordion-width: 440px;
-
       box-sizing: border-box;
       display: flex;
-      width: var(--ds-accordion-width);
+      width: 100%;
       max-width: 100%;
       flex-direction: column;
       align-items: stretch;
@@ -231,8 +228,6 @@ cardTemplate.innerHTML = `
 
     ::slotted(ds-accordion-item),
     ::slotted(ds-accordion-panel) {
-      --ds-accordion-width: 100%;
-
       flex: 0 0 auto;
     }
 
