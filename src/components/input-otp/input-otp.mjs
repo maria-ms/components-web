@@ -1,8 +1,9 @@
 import {
   createInternals,
   disabled,
-  nextId,
   setOptionalAttribute,
+  nextId,
+  syncFieldText,
 } from "../input/field-shell.mjs";
 
 const tagName = "ds-input-otp";
@@ -184,13 +185,6 @@ const fieldCount = (host) => {
   return Number.isFinite(count) ? Math.min(12, Math.max(1, count)) : 6;
 };
 
-const hasSlotContent = (slot) =>
-  slot
-    .assignedNodes({ flatten: true })
-    .some(
-      (node) => node.nodeType === 1 || (node.textContent ?? "").trim() !== "",
-    );
-
 const slotText = (slot) =>
   slot
     .assignedNodes({ flatten: true })
@@ -265,18 +259,15 @@ const syncNativeAttributes = (host) => {
 
 const syncAria = (host) => {
   const state = instances.get(host);
-  const labelIsVisible = hasSlotContent(state.labelSlot);
-  const descriptionIsVisible = hasSlotContent(state.descriptionSlot);
   const ariaLabel = host.getAttribute("aria-label");
   const ariaLabelledBy = host.getAttribute("aria-labelledby");
   const ariaDescribedBy = host.getAttribute("aria-describedby");
   const ariaInvalid = host.getAttribute("aria-invalid");
   const visibleLabel = slotText(state.labelSlot);
-
-  state.label.id = `${state.id}-label`;
-  state.label.hidden = !labelIsVisible;
-  state.description.id = `${state.id}-description`;
-  state.description.hidden = !descriptionIsVisible;
+  const { descriptionIsVisible, labelIsVisible } = syncFieldText(
+    state,
+    `${state.id}-0`,
+  );
 
   state.inputs.forEach((input, index) => {
     input.id = `${state.id}-${index}`;

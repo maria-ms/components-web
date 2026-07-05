@@ -320,19 +320,16 @@ export const validityFlags = (validity) =>
   );
 
 export const syncFieldChrome = (host, state) => {
-  const labelIsVisible = hasSlotContent(state.labelSlot);
-  const descriptionIsVisible = hasSlotContent(state.descriptionSlot);
   const ariaLabel = host.getAttribute("aria-label");
   const ariaLabelledBy = host.getAttribute("aria-labelledby");
   const ariaDescribedBy = host.getAttribute("aria-describedby");
   const ariaInvalid = host.getAttribute("aria-invalid");
+  const { descriptionIsVisible, labelIsVisible } = syncFieldText(
+    state,
+    state.id,
+  );
 
   state.control.id = state.id;
-  state.label.id = `${state.id}-label`;
-  state.label.htmlFor = state.id;
-  state.label.hidden = !labelIsVisible;
-  state.description.id = `${state.id}-description`;
-  state.description.hidden = !descriptionIsVisible;
   state.prefix.classList.toggle(
     "has-content",
     state.prefixHasFallback || hasSlotContent(state.prefixSlot),
@@ -367,6 +364,19 @@ export const syncFieldChrome = (host, state) => {
   ariaInvalid == null
     ? state.control.removeAttribute("aria-invalid")
     : state.control.setAttribute("aria-invalid", ariaInvalid);
+};
+
+export const syncFieldText = (state, controlId) => {
+  const labelIsVisible = hasSlotContent(state.labelSlot);
+  const descriptionIsVisible = hasSlotContent(state.descriptionSlot);
+
+  state.label.id = `${state.id}-label`;
+  state.label.htmlFor = controlId;
+  state.label.hidden = !labelIsVisible;
+  state.description.id = `${state.id}-description`;
+  state.description.hidden = !descriptionIsVisible;
+
+  return { descriptionIsVisible, labelIsVisible };
 };
 
 export const nextId = (tagName) => {
