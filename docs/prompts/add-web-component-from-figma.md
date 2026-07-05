@@ -8,6 +8,16 @@ After I provide the URL, use Figma MCP / figma-desktop to inspect that node and 
 
 Treat the Figma artboard as design evidence, not as a 1:1 implementation contract. The artboard may contain variants, states, example content, and product-specific usages. Extract the underlying reusable component model from those examples before writing code.
 
+Before designing the API, classify the component by responsibility:
+
+- Form control: behaves like a styled native input/select/button and participates in forms.
+- Field wrapper: supplies label, description, error, and accessibility wiring around one or more controls, but does not own a form value.
+- Disclosure/menu/interactive shell: owns only interaction state such as `open`, `expanded`, or checkable menu row state, with cancelable events so consumers can control it.
+- Presentational/status shell: owns no business state; it only renders slotted/attribute content with design-system styling.
+- Product pattern: a composed use case that belongs in Storybook or app code, not as a packaged primitive.
+
+Do not implement React-style business state inside the Web Component. Use native browser behavior first, component-owned interaction state only where the platform pattern requires it, and parent/app state for business rules.
+
 Before implementing, inspect:
 
 - `tokens/sources/figma-export-modes`
@@ -43,11 +53,22 @@ API design rules:
 - Design the public API before implementation and keep it smaller than the Figma artboard surface.
 - Prefer semantic native attributes and standard web behavior over design-specific jargon.
 - Prefer slots for consumer-owned content: icons, avatars, images, rich labels, row content, metadata, custom actions, suffixes, prefixes, and supporting visuals.
-- Use attributes/properties only for component-owned state or styling decisions: `disabled`, `open`, `checked`, `selected`, `expanded`, `invalid`, `size`, `variant`, `tone`, `name`, `value`, native form attributes, and ARIA passthrough where appropriate.
+- Use attributes/properties only for component-owned state, native behavior, or styling decisions: `disabled`, `open`, `checked`, `selected`, `expanded`, `size`, `variant`, `tone`, `name`, `value`, native form attributes, and ARIA passthrough where appropriate.
+- For invalid/error state, prefer native form validity and parent-controlled presentation: `required`, `pattern`, `min`, `max`, `setCustomValidity()`, `aria-invalid="true"`, and `ds-field invalid`. Do not add a design-specific `error` prop to a form control.
 - Do not add props that encode example content from Figma, such as `avatarInitials`, `iconName`, `title`, `description`, `shortcut`, `badgeText`, or `items`, unless the existing component pattern already requires that for a specific reason.
 - Avoid API designs that force consumers to duplicate the component for small layout/content differences.
 - If the Figma artboard shows multiple use cases, create one composable shell plus optional child elements only when child elements are reusable and stable.
 - If the component is mostly a product layout, page region, header, footer, or marketing/content block, stop and report that it should probably be a pattern or Storybook composition rather than a packaged Web Component.
+
+Form and validation rules:
+
+- If the component owns a form value, make it form-associated with `ElementInternals` unless there is a concrete browser limitation.
+- Mirror the relevant native element API: `name`, `value`, `defaultValue`, `disabled`, `readonly` where applicable, `required`, constraint attributes, `form`, `validity`, `validationMessage`, `willValidate`, `checkValidity()`, `reportValidity()`, `setCustomValidity()`, `focus()`, and `blur()`.
+- Use the internal native control for browser validation wherever possible, then bridge its value and validity through the custom element.
+- Keep visible error presentation controlled by the parent/app through `aria-invalid="true"` or `ds-field invalid`, because apps decide when validation errors should be shown.
+- Error text belongs in `ds-field slot="error"` or a component description/error slot only when that pattern already exists. The form control should not invent or own business error copy.
+- Support server-side and cross-field validation by exposing `setCustomValidity(message)` and by allowing the parent to set `aria-invalid`.
+- Disabled and readonly states should fail and submit like their native equivalents.
 
 Implementation rules:
 

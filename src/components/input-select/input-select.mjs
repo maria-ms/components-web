@@ -88,7 +88,7 @@ template.innerHTML = fieldTemplate(
 
       :host([data-has-prefix]) .control button {
         padding-inline-start: calc(
-          var(--ds-primitive-space-06) + var(--ds-primitive-space-03)
+          var(--ds-input-icon-size) + var(--ds-primitive-space-03)
         );
       }
 

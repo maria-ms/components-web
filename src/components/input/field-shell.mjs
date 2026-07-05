@@ -10,7 +10,7 @@ export const fieldObservedAttributes = [
 
 export const fieldStyles = `
   :host {
-    --ds-input-icon-size: var(--ds-primitive-space-04);
+    --ds-input-icon-size: var(--ds-primitive-space-05);
     --ds-input-inline-small-width: 193px;
     --ds-input-inline-width: 276px;
     --ds-input-small-width: 140px;
