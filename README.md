@@ -19,10 +19,11 @@ import "@maria-ms/components-web/dropdown";
 ```
 
 ```html
-<ds-input-number name="amount" value="1" min="0" max="10" step="1">
+<ds-field>
   <span slot="label">Amount</span>
-  <span slot="description">Whole numbers only</span>
-</ds-input-number>
+  <ds-input-number name="amount" value="1" min="0" max="10" step="1"></ds-input-number>
+  <span slot="description">Whole numbers only.</span>
+</ds-field>
 ```
 
 Set `data-theme="light"` or `data-theme="dark"` on your document root to switch token themes.
@@ -32,7 +33,6 @@ Set `data-theme="light"` or `data-theme="dark"` on your document root to switch 
 ```html
 <ds-input-number value="1" min="0" max="10" step="1"></ds-input-number>
 <ds-input-number size="small"></ds-input-number>
-<ds-input-number label-position="start"></ds-input-number>
 <ds-input-number aria-invalid="true" value="1"></ds-input-number>
 <ds-input-number disabled value="1"></ds-input-number>
 <ds-input-number controls="none" value="1">
@@ -45,8 +45,9 @@ Events:
 - `input` fires when the value changes.
 - `change` fires when the value is committed.
 
-Override `--ds-input-number-width` or style the host for form layouts that need to
-control width.
+Use `ds-field` for visible labels, descriptions, and validation messages. Use
+`ds-field-group` when a pattern combines multiple controls, such as select plus
+input.
 
 ## Avatar
 
@@ -132,4 +133,5 @@ shared button component.
 
 ```sh
 npm run check
+npm run audit
 ```
