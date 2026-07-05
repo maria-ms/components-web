@@ -348,9 +348,6 @@ const sync = (host) => {
 
 const listeners = (state) => [
   [state.control, "change", state.onChange],
-  [state.label, "click", state.onLabelClick],
-  [state.labelSlot, "slotchange", state.onContentSlotChange],
-  [state.descriptionSlot, "slotchange", state.onContentSlotChange],
   [state.prefixSlot, "slotchange", state.onContentSlotChange],
   [state.suffixSlot, "slotchange", state.onContentSlotChange],
 ];
@@ -397,14 +394,10 @@ const mount = (host) => {
     customErrorMessage: "",
     defaultValue: "",
     defaultValueReady: false,
-    description: shadow.querySelector(".description"),
-    descriptionSlot: shadow.querySelector('slot[name="description"]'),
     formDisabled: false,
     hasConnected: false,
     id: nextSelectId(),
     internals: createInternals(host),
-    label: shadow.querySelector(".label"),
-    labelSlot: shadow.querySelector('slot[name="label"]'),
     observer: new MutationObserver(() => sync(host)),
     prefix: shadow.querySelector(".prefix"),
     prefixHasFallback: false,
@@ -421,7 +414,6 @@ const mount = (host) => {
       emit(host, "change");
     },
     onContentSlotChange: () => sync(host),
-    onLabelClick: () => instances.get(host).control.focus(),
   });
 };
 
@@ -434,9 +426,6 @@ const mount = (host) => {
  * @attr {boolean} disabled - Disables the select.
  * @attr {boolean} required - Requires a selected value before form submission.
  * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @attr {"top"|"start"} label-position - Label placement. Defaults to top.
- * @slot label - Visible label content.
- * @slot description - Helper or validation text.
  * @slot prefix - Optional leading icon or text.
  * @slot suffix - Optional trailing content that replaces the native picker icon.
  * @slot - Native option and optgroup children.

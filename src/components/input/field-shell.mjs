@@ -4,7 +4,6 @@ export const fieldObservedAttributes = [
   "aria-label",
   "aria-labelledby",
   "disabled",
-  "label-position",
   "size",
 ];
 
@@ -31,74 +30,20 @@ export const fieldStyles = `
     width: var(--ds-input-small-width);
   }
 
-  :host([label-position="start"]) {
-    width: var(--ds-input-inline-width);
-  }
-
-  :host([label-position="start"][size="small"]),
-  :host([label-position="start"][size="sm"]) {
-    width: var(--ds-input-inline-small-width);
-  }
-
   *,
   *::before,
   *::after {
     box-sizing: border-box;
   }
 
-  .root,
-  .stack,
   .field,
   .prefix,
   .suffix {
     display: flex;
   }
 
-  .root,
-  .stack {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .root,
-  .stack,
   .field {
     gap: var(--ds-primitive-space-03);
-  }
-
-  :host([label-position="start"]) .root {
-    flex-direction: row;
-    gap: var(--ds-primitive-space-05);
-  }
-
-  :host([label-position="start"]) .stack {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 0;
-  }
-
-  .label,
-  .description {
-    display: block;
-    width: 100%;
-    margin: 0;
-    font-kerning: none;
-    font-variant-ligatures: none;
-  }
-
-  .label {
-    color: var(--ds-semantic-color-foreground-default);
-    font-size: var(--ds-semantic-typography-body-small-font-size);
-    font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
-    line-height: var(--ds-semantic-typography-body-small-line-height);
-  }
-
-  :host([label-position="start"]) .label {
-    width: auto;
-    flex: 0 0 auto;
-    text-align: right;
-    white-space: nowrap;
   }
 
   .field {
@@ -142,11 +87,6 @@ export const fieldStyles = `
         var(--ds-semantic-shadow-focused-4px-color);
   }
 
-  :host([aria-invalid="true"]) .label,
-  :host([aria-invalid="true"]) .description {
-    color: var(--ds-semantic-color-foreground-destructive-elevated);
-  }
-
   :host([aria-invalid="true"]) .field {
     border-color: var(--ds-semantic-color-border-destructive-elevated);
     background: var(--ds-semantic-color-background-destructive-subtle);
@@ -165,11 +105,6 @@ export const fieldStyles = `
 
   :host([disabled]) {
     cursor: not-allowed;
-  }
-
-  :host([disabled]) .label,
-  :host([disabled]) .description {
-    color: var(--ds-semantic-color-foreground-disabled-elevated);
   }
 
   :host([disabled]) .field {
@@ -233,12 +168,6 @@ export const fieldStyles = `
     height: var(--ds-input-icon-size);
   }
 
-  .description {
-    color: var(--ds-semantic-color-foreground-muted-1);
-    font-size: var(--ds-semantic-typography-body-x-small-font-size);
-    font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
-    line-height: var(--ds-semantic-typography-body-x-small-line-height);
-  }
 `;
 
 export const fieldTemplate = (
@@ -255,25 +184,15 @@ export const fieldTemplate = (
     ${extraStyles}
   </style>
 
-  <div part="root" class="root">
-    <label part="label" class="label">
-      <slot name="label"></slot>
-    </label>
-    <div part="stack" class="stack">
-      <div part="field" class="field">
-        <span part="prefix" class="prefix">
-          <slot name="prefix">${prefixFallback}</slot>
-        </span>
-        ${control}
-        <span part="suffix" class="suffix">
-          <slot name="suffix">${suffixFallback}</slot>
-        </span>
-        ${afterSuffix}
-      </div>
-      <p part="description" class="description">
-        <slot name="description"></slot>
-      </p>
-    </div>
+  <div part="field" class="field">
+    <span part="prefix" class="prefix">
+      <slot name="prefix">${prefixFallback}</slot>
+    </span>
+    ${control}
+    <span part="suffix" class="suffix">
+      <slot name="suffix">${suffixFallback}</slot>
+    </span>
+    ${afterSuffix}
   </div>
 `;
 
@@ -324,10 +243,6 @@ export const syncFieldChrome = (host, state) => {
   const ariaLabelledBy = host.getAttribute("aria-labelledby");
   const ariaDescribedBy = host.getAttribute("aria-describedby");
   const ariaInvalid = host.getAttribute("aria-invalid");
-  const { descriptionIsVisible, labelIsVisible } = syncFieldText(
-    state,
-    state.id,
-  );
 
   state.control.id = state.id;
   state.prefix.classList.toggle(
@@ -345,9 +260,6 @@ export const syncFieldChrome = (host, state) => {
   } else if (ariaLabelledBy) {
     state.control.setAttribute("aria-labelledby", ariaLabelledBy);
     state.control.removeAttribute("aria-label");
-  } else if (labelIsVisible) {
-    state.control.setAttribute("aria-labelledby", state.label.id);
-    state.control.removeAttribute("aria-label");
   } else {
     state.control.removeAttribute("aria-label");
     state.control.removeAttribute("aria-labelledby");
@@ -355,8 +267,6 @@ export const syncFieldChrome = (host, state) => {
 
   if (ariaDescribedBy) {
     state.control.setAttribute("aria-describedby", ariaDescribedBy);
-  } else if (descriptionIsVisible) {
-    state.control.setAttribute("aria-describedby", state.description.id);
   } else {
     state.control.removeAttribute("aria-describedby");
   }
@@ -364,19 +274,6 @@ export const syncFieldChrome = (host, state) => {
   ariaInvalid == null
     ? state.control.removeAttribute("aria-invalid")
     : state.control.setAttribute("aria-invalid", ariaInvalid);
-};
-
-export const syncFieldText = (state, controlId) => {
-  const labelIsVisible = hasSlotContent(state.labelSlot);
-  const descriptionIsVisible = hasSlotContent(state.descriptionSlot);
-
-  state.label.id = `${state.id}-label`;
-  state.label.htmlFor = controlId;
-  state.label.hidden = !labelIsVisible;
-  state.description.id = `${state.id}-description`;
-  state.description.hidden = !descriptionIsVisible;
-
-  return { descriptionIsVisible, labelIsVisible };
 };
 
 export const nextId = (tagName) => {

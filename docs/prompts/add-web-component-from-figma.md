@@ -63,6 +63,7 @@ API design rules:
 Form and validation rules:
 
 - If the component owns a form value, make it form-associated with `ElementInternals` unless there is a concrete browser limitation.
+- Form controls must not own visible field label, description/helper text, or error message slots. Those belong to `ds-field` for one control and `ds-field-group` for composed controls.
 - Mirror the relevant native element API: `name`, `value`, `defaultValue`, `disabled`, `readonly` where applicable, `required`, constraint attributes, `form`, `validity`, `validationMessage`, `willValidate`, `checkValidity()`, `reportValidity()`, `setCustomValidity()`, `focus()`, and `blur()`.
 - Use the internal native control for browser validation wherever possible, then bridge its value and validity through the custom element.
 - Keep visible error presentation controlled by the parent/app through `aria-invalid="true"` or `ds-field invalid`, because apps decide when validation errors should be shown.
@@ -78,6 +79,7 @@ Implementation rules:
 - Prefer slotted content over narrow props when consumers should own the content.
 - The component should provide branded structure, styling, states, accessibility, keyboard behavior, and layout.
 - Consumers should provide business-specific content such as labels, icons, avatars, media, shortcuts, descriptions, and actions through slots or native attributes.
+- For form controls, treat labels, helper text, and error text as field-wrapper responsibility, not primitive-control responsibility.
 - Keep the Web Component as a light branded style shell where possible: it should park consumer content in the correct structure and apply the design system visual behavior.
 - Do not add framework code, TypeScript, build tools, new dependencies, or fallback APIs unless the existing package already uses that pattern.
 - Do not use OOP-heavy abstractions beyond the custom element class itself.
@@ -124,6 +126,7 @@ Storybook contract:
 - Controls should expose only real public component attributes/properties, not example labels, icons, item arrays, or helper data.
 - Keep examples composable and realistic.
 - Story examples may include local demo content such as icons or avatars, but that content belongs in Storybook, not in the component package, unless it is intrinsic to the component.
+- Form-control stories with visible labels/help/errors must compose `ds-field` or `ds-field-group` around the primitive. Do not pass `slot="label"` or `slot="description"` into primitive input/select components.
 - Show the clean consumer-facing HTML source for the specific story instance, not internal helper code and not every Figma artboard variation.
 - Update `storybook-web/package.json` `check` script to include the new story.
 

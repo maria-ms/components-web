@@ -102,8 +102,9 @@ const searchStyles = `
  * @attr {boolean} readonly - Prevents editing while keeping the value submittable.
  * @attr {boolean} required - Requires a value before form submission.
  * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @slot label - Optional visible label content.
- * @slot description - Optional helper or validation text.
+ * @attr {string} aria-label - Accessible name when no visible field label is provided.
+ * @attr {string} aria-labelledby - Accessible name reference.
+ * @attr {string} aria-describedby - Accessible description reference.
  * @slot prefix - Optional leading replacement for the search icon.
  * @slot suffix - Optional trailing replacement for the built-in clear button.
  * @prop {string} value - Live value. Setting it does not rewrite the value attribute.

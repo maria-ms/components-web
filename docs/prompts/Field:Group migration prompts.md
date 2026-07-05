@@ -1,0 +1,255 @@
+**Plan**
+
+Run these in order. Do not let the Figma agent edit everything in one pass.
+
+**Prompt 1 — Audit Only**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Audit the current form-related components only. Do not edit anything.
+
+Find and report:
+1. Which components currently include embedded label text.
+2. Which components currently include embedded description/helper text.
+3. Which components currently include embedded error/invalid message areas.
+4. Which components are primitive controls: input text, input number, search, select, OTP, button.
+5. Which components are composed patterns: currency input, phone input, country code input, select+input combinations.
+6. Which states exist for each primitive: default, hover, focus, disabled, invalid, filled, placeholder.
+7. Which variables are bound to spacing, colors, typography, radius, shadows, and icon sizes.
+8. Any raw values that should be variables.
+
+Stop after the report. Do not make changes.
+```
+
+**Prompt 2 — Create Field**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Create or update a Field component.
+
+Field is a wrapper for one form control. It owns:
+- label
+- description/helper text
+- error text
+- vertical spacing between label, control, and description/error
+- invalid presentation for label/description/error
+- layout variants if already present, such as label top or label start
+
+Field does not own:
+- the input value
+- input placeholder
+- select options
+- business validation logic
+- icons inside the control
+
+The Field anatomy should be:
+- Label
+- Control slot / placeholder area
+- Description
+- Error
+
+Create variants/properties only for durable structure:
+- label visible / hidden if needed
+- description visible / hidden if needed
+- error visible / hidden if needed
+- invalid state
+- label position only if the existing system already needs it
+
+Preserve all token/variable bindings. Use existing semantic/component variables where available. If a required variable is missing, report it instead of using raw values.
+
+After changes, report:
+1. Field anatomy.
+2. Field variants/properties.
+3. Variables used.
+4. Any missing variables or ambiguous decisions.
+```
+
+**Prompt 3 — Create Field Group**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Create or update a Field Group component.
+
+Field Group is a wrapper for related controls that visually operate as one field but remain separate controls and separate form values.
+
+It owns:
+- shared label
+- shared description/helper text
+- shared error text
+- grouped layout
+- spacing between grouped controls
+- shared invalid presentation
+- visual joining/divider rules if controls are attached
+
+It does not own:
+- child control values
+- child control options
+- business validation logic
+- product-specific examples such as currency or phone content
+
+The Field Group anatomy should be:
+- Label
+- Controls area with two or more control slots/placeholders
+- Description
+- Error
+
+Create examples/variants for:
+- select + text input
+- select + number input
+- two adjacent inputs if useful
+- invalid state
+- disabled-looking example only if children already have disabled states
+
+Preserve all token/variable bindings. Use existing semantic/component variables where available. If a required variable is missing, report it instead of using raw values.
+
+After changes, report:
+1. Field Group anatomy.
+2. Field Group variants/properties.
+3. Variables used.
+4. Any missing variables or ambiguous decisions.
+```
+
+**Prompt 4 — Refactor Input Primitives**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Refactor input primitives only:
+- input text
+- input number
+- input search
+- input OTP
+
+Remove embedded label, description/helper text, and error message areas from the primitive input components.
+
+Each primitive input should own only:
+- the control surface
+- value/placeholder visual state
+- prefix/suffix/addornment areas if intrinsic to that control
+- icons that are intrinsic to the control, such as search icon or clear icon
+- default, hover, focus, disabled, invalid visual states
+- size/density variants if already present
+
+Each primitive input should not own:
+- external label
+- external description/helper text
+- external error copy
+- composed business use cases such as currency or phone number
+
+Keep all existing visual states. Use Field and Field Group to demonstrate label/description/error around inputs, but do not bake those into the primitive.
+
+Preserve all token/variable bindings. Use existing semantic/component variables where available. If a required variable is missing, report it instead of using raw values.
+
+After changes, report:
+1. Which embedded label/description/error pieces were removed.
+2. Final anatomy of each input primitive.
+3. Remaining variants/states.
+4. Variables used.
+5. Any missing variables or ambiguous decisions.
+```
+
+**Prompt 5 — Refactor Select Primitive**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Refactor the select primitive only.
+
+Remove embedded label, description/helper text, and error message areas from the select component.
+
+The select primitive should own:
+- select trigger/control surface
+- selected value display
+- placeholder state if present
+- optional leading/trailing icon areas if intrinsic to the select
+- picker/dropdown visual surface if designed
+- option row styles
+- default, hover, focus, disabled, invalid visual states
+- size/density variants if already present
+
+The select primitive should not own:
+- external label
+- external description/helper text
+- external error copy
+- currency/phone/country business patterns
+
+Use Field and Field Group to show select with labels or composed with inputs, but keep the primitive clean.
+
+Preserve all token/variable bindings. Use existing semantic/component variables where available. If a required variable is missing, report it instead of using raw values.
+
+After changes, report:
+1. Which embedded label/description/error pieces were removed.
+2. Final select anatomy.
+3. Remaining variants/states.
+4. Variables used.
+5. Any missing variables or ambiguous decisions.
+```
+
+**Prompt 6 — Rebuild Currency And Phone As Patterns**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Rebuild currency and phone examples as patterns, not primitive components.
+
+Currency amount pattern:
+- Field Group
+- Select for currency code
+- Number input for amount
+- shared label
+- shared description/helper text
+- shared error text
+- invalid state at group level
+- child controls remain separate and reusable
+
+Phone number pattern:
+- Field Group
+- Select for country/calling code
+- Text input or number/text input for phone number, whichever matches design intent
+- shared label
+- shared description/helper text
+- shared error text
+- invalid state at group level
+- child controls remain separate and reusable
+
+Do not create new primitive components named Currency Input or Phone Input unless there is a documented behavior that cannot be composed from Field Group + Select + Input.
+
+Preserve visual appearance from the existing designs as closely as possible through composition. Preserve variable bindings. If the existing visuals require new group-level tokens for divider, joined radius, shared focus, or spacing, report those variables instead of using raw values.
+
+After changes, report:
+1. Which old fused examples were replaced.
+2. New pattern anatomy.
+3. Variables used.
+4. Any missing variables needed for grouped control styling.
+```
+
+**Prompt 7 — Final Audit**
+
+```txt
+Overall goal: refactor form components so inputs/selects are primitive controls without embedded label/description/error. Label, description, and error belong to Field / Field Group wrappers. Currency and phone are patterns composed from Field Group + Select + Input, not bespoke standalone components. Preserve visual design, variants, states, and variable bindings.
+
+Run a final audit. Do not edit anything.
+
+Check:
+1. No primitive input/select component contains external label, description/helper text, or error message areas.
+2. Field owns label, description, and error for one control.
+3. Field Group owns label, description, and error for composed controls.
+4. Currency and phone are patterns composed from Field Group + Select + Input.
+5. Primitive controls still have default, hover, focus, disabled, invalid, placeholder/filled states where appropriate.
+6. All visual styles are bound to variables where available.
+7. No important variables were lost during the refactor.
+8. No raw values were introduced where tokens exist.
+9. No product-specific pattern was accidentally turned into a primitive component.
+10. The structure is clear for designers to reuse without knowing implementation details.
+
+Report:
+- pass/fail for each check
+- remaining issues
+- exact components that still need manual cleanup
+- missing variables, if any
+```
+
+Run Prompt 1 first and review the report before allowing edits. Then run the edit prompts one by one.

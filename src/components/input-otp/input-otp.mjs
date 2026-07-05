@@ -3,7 +3,6 @@ import {
   disabled,
   setOptionalAttribute,
   nextId,
-  syncFieldText,
 } from "../input/field-shell.mjs";
 
 const tagName = "ds-input-otp";
@@ -17,7 +16,6 @@ const observedAttributes = [
   "disabled",
   "form",
   "inputmode",
-  "label-position",
   "length",
   "name",
   "readonly",
@@ -49,50 +47,13 @@ template.innerHTML = `
     }
 
     .root,
-    .stack,
     .fields {
       display: flex;
-    }
-
-    .root,
-    .stack {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--ds-primitive-space-03);
-      width: 100%;
-    }
-
-    :host([label-position="start"]) .root {
-      flex-direction: row;
-      gap: var(--ds-primitive-space-05);
     }
 
     .fields {
       gap: var(--ds-input-otp-gap);
       max-width: 100%;
-    }
-
-    .label,
-    .description {
-      display: block;
-      width: 100%;
-      margin: 0;
-      font-kerning: none;
-      font-variant-ligatures: none;
-    }
-
-    .label {
-      color: var(--ds-semantic-color-foreground-default);
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    .description {
-      color: var(--ds-semantic-color-foreground-muted-1);
-      font-size: var(--ds-semantic-typography-body-x-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-x-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-x-small-line-height);
     }
 
     .cell {
@@ -135,11 +96,6 @@ template.innerHTML = `
           var(--ds-semantic-shadow-focused-4px-color);
     }
 
-    :host([aria-invalid="true"]) .label,
-    :host([aria-invalid="true"]) .description {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
     :host([aria-invalid="true"]) .cell {
       border-color: var(--ds-semantic-color-border-destructive-elevated);
       background: var(--ds-semantic-color-background-destructive-subtle);
@@ -150,8 +106,6 @@ template.innerHTML = `
       cursor: not-allowed;
     }
 
-    :host([disabled]) .label,
-    :host([disabled]) .description,
     :host([disabled]) .cell {
       color: var(--ds-semantic-color-foreground-disabled-elevated);
     }
@@ -163,17 +117,7 @@ template.innerHTML = `
     }
   </style>
 
-  <div part="root" class="root">
-    <label part="label" class="label">
-      <slot name="label"></slot>
-    </label>
-    <div part="stack" class="stack">
-      <div part="fields" class="fields"></div>
-      <p part="description" class="description">
-        <slot name="description"></slot>
-      </p>
-    </div>
-  </div>
+  <div part="fields" class="fields"></div>
 `;
 
 const instances = new WeakMap();
@@ -185,10 +129,20 @@ const fieldCount = (host) => {
   return Number.isFinite(count) ? Math.min(12, Math.max(1, count)) : 6;
 };
 
-const slotText = (slot) =>
-  slot
-    .assignedNodes({ flatten: true })
-    .map((node) => node.textContent ?? "")
+const textById = (host, id) => {
+  const root = host.getRootNode();
+  const element =
+    typeof root.getElementById === "function"
+      ? root.getElementById(id)
+      : host.ownerDocument.getElementById(id);
+
+  return element?.textContent ?? "";
+};
+
+const referencedText = (host, ids) =>
+  ids
+    .split(/\s+/)
+    .map((id) => textById(host, id))
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
@@ -263,23 +217,13 @@ const syncAria = (host) => {
   const ariaLabelledBy = host.getAttribute("aria-labelledby");
   const ariaDescribedBy = host.getAttribute("aria-describedby");
   const ariaInvalid = host.getAttribute("aria-invalid");
-  const visibleLabel = slotText(state.labelSlot);
-  const { descriptionIsVisible, labelIsVisible } = syncFieldText(
-    state,
-    `${state.id}-0`,
-  );
+  const label = ariaLabel || (ariaLabelledBy ? referencedText(host, ariaLabelledBy) : "");
 
   state.inputs.forEach((input, index) => {
     input.id = `${state.id}-${index}`;
 
-    if (ariaLabelledBy) {
-      input.setAttribute("aria-labelledby", ariaLabelledBy);
-      input.removeAttribute("aria-label");
-    } else if (ariaLabel) {
-      input.setAttribute("aria-label", `${ariaLabel}, digit ${index + 1}`);
-      input.removeAttribute("aria-labelledby");
-    } else if (labelIsVisible) {
-      input.setAttribute("aria-label", `${visibleLabel}, digit ${index + 1}`);
+    if (label) {
+      input.setAttribute("aria-label", `${label}, digit ${index + 1}`);
       input.removeAttribute("aria-labelledby");
     } else {
       input.setAttribute("aria-label", `Digit ${index + 1} of ${state.inputs.length}`);
@@ -288,8 +232,6 @@ const syncAria = (host) => {
 
     if (ariaDescribedBy) {
       input.setAttribute("aria-describedby", ariaDescribedBy);
-    } else if (descriptionIsVisible) {
-      input.setAttribute("aria-describedby", state.description.id);
     } else {
       input.removeAttribute("aria-describedby");
     }
@@ -350,9 +292,6 @@ const listeners = (state) => [
   [state.fields, "keydown", state.onKeyDown],
   [state.fields, "paste", state.onPaste],
   [state.fields, "change", state.onChange],
-  [state.label, "click", state.onLabelClick],
-  [state.labelSlot, "slotchange", state.onContentSlotChange],
-  [state.descriptionSlot, "slotchange", state.onContentSlotChange],
 ];
 
 const setListeners = (state, method) =>
@@ -384,23 +323,18 @@ const mount = (host) => {
   instances.set(host, {
     customErrorMessage: "",
     defaultValue: "",
-    description: shadow.querySelector(".description"),
-    descriptionSlot: shadow.querySelector('slot[name="description"]'),
     fields: shadow.querySelector(".fields"),
     formDisabled: false,
     hasConnected: false,
     id: nextOtpId(),
     inputs: [],
     internals: createInternals(host),
-    label: shadow.querySelector(".label"),
-    labelSlot: shadow.querySelector('slot[name="label"]'),
     value: valueAttribute(host),
     valueDirty: false,
     onChange: (event) => {
       event.stopPropagation();
       emit(host, "change");
     },
-    onContentSlotChange: () => sync(host),
     onInput: (event) => {
       event.stopPropagation();
       commitInputValue(host, event.target, event.target.value);
@@ -413,7 +347,6 @@ const mount = (host) => {
         instances.get(host).inputs[index - 1]?.focus();
       }
     },
-    onLabelClick: () => instances.get(host).inputs[0]?.focus(),
     onPaste: (event) => {
       event.preventDefault();
       commitInputValue(host, event.target, event.clipboardData.getData("text"));
@@ -433,8 +366,9 @@ const mount = (host) => {
  * @attr {boolean} required - Requires all fields before form submission.
  * @attr {string} autocomplete - Native autocomplete hint. Defaults to one-time-code.
  * @attr {string} inputmode - Native virtual keyboard hint. Defaults to numeric.
- * @slot label - Optional visible label content.
- * @slot description - Helper or validation text.
+ * @attr {string} aria-label - Accessible group name when no visible field label is provided.
+ * @attr {string} aria-labelledby - Accessible group name reference.
+ * @attr {string} aria-describedby - Accessible description reference.
  * @fires input - Fired when the value changes.
  * @fires change - Fired when the value is committed.
  */

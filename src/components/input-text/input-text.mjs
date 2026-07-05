@@ -17,9 +17,9 @@ import { defineTextField } from "../input/text-field.mjs";
  * @attr {boolean} readonly - Prevents editing while keeping the value submittable.
  * @attr {boolean} required - Requires a value before form submission.
  * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @attr {"top"|"start"} label-position - Label placement. Defaults to top.
- * @slot label - Visible label content.
- * @slot description - Helper or validation text.
+ * @attr {string} aria-label - Accessible name when no visible field label is provided.
+ * @attr {string} aria-labelledby - Accessible name reference.
+ * @attr {string} aria-describedby - Accessible description reference.
  * @slot prefix - Optional leading icon or text.
  * @slot suffix - Optional trailing icon or text.
  * @prop {string} value - Live value. Setting it does not rewrite the value attribute.

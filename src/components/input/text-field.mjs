@@ -189,14 +189,10 @@ export const defineTextField = ({
         baseSuffixHasFallback: suffixHasFallback,
         customErrorMessage: "",
         defaultValue: "",
-        description: shadow.querySelector(".description"),
-        descriptionSlot: shadow.querySelector('slot[name="description"]'),
         formDisabled: false,
         hasConnected: false,
         id: nextInputId(),
         internals: createInternals(this),
-        label: shadow.querySelector(".label"),
-        labelSlot: shadow.querySelector('slot[name="label"]'),
         prefix: shadow.querySelector(".prefix"),
         prefixHasFallback,
         prefixSlot: shadow.querySelector('slot[name="prefix"]'),
@@ -213,9 +209,6 @@ export const defineTextField = ({
         ...(clearable && state.clearButton
           ? [[state.clearButton, "click", this.#onClear]]
           : []),
-        [state.label, "click", this.#onLabelClick],
-        [state.labelSlot, "slotchange", this.#onContentSlotChange],
-        [state.descriptionSlot, "slotchange", this.#onContentSlotChange],
         [state.prefixSlot, "slotchange", this.#onContentSlotChange],
         [state.suffixSlot, "slotchange", this.#onContentSlotChange],
       ];
@@ -394,7 +387,6 @@ export const defineTextField = ({
       emit(this, "input");
     };
 
-    #onLabelClick = () => hostState.get(this).control.focus();
   }
 
   if (!customElements.get(tagName)) customElements.define(tagName, TextField);

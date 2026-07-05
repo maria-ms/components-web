@@ -280,9 +280,6 @@ const listeners = (state) => [
   [state.input, "input", state.onInput],
   [state.input, "change", state.onChange],
   [state.actions, "click", state.onStep],
-  [state.label, "click", state.onLabelClick],
-  [state.labelSlot, "slotchange", state.onContentSlotChange],
-  [state.descriptionSlot, "slotchange", state.onContentSlotChange],
   [state.prefixSlot, "slotchange", state.onContentSlotChange],
   [state.suffixSlot, "slotchange", state.onContentSlotChange],
 ];
@@ -322,16 +319,12 @@ const mount = (host) => {
     customErrorMessage: "",
     decrement: shadow.querySelector(".decrement"),
     defaultValue: "",
-    description: shadow.querySelector(".description"),
-    descriptionSlot: shadow.querySelector('slot[name="description"]'),
     formDisabled: false,
     hasConnected: false,
     id: nextInputId(),
     increment: shadow.querySelector(".increment"),
     input,
     internals: createInternals(host),
-    label: shadow.querySelector(".label"),
-    labelSlot: shadow.querySelector('slot[name="label"]'),
     prefix: shadow.querySelector(".prefix"),
     prefixHasFallback: false,
     prefixSlot: shadow.querySelector('slot[name="prefix"]'),
@@ -351,7 +344,6 @@ const mount = (host) => {
       setValue(host, input.value, { dirty: true });
       emit(host, "input");
     },
-    onLabelClick: () => input.focus(),
     onStep: (event) => {
       const button =
         event.target instanceof Element
@@ -377,14 +369,11 @@ const mount = (host) => {
  * @attr {boolean} readonly - Prevents editing while keeping the value submittable.
  * @attr {boolean} required - Requires a value before form submission.
  * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @attr {"top"|"start"} label-position - Label placement. Defaults to top.
  * @attr {"stepper"|"none"} controls - Stepper visibility. Defaults to stepper.
  * @attr {string} aria-label - Accessible name when no visible label is provided.
  * @attr {string} aria-labelledby - Accessible name reference.
  * @attr {string} aria-describedby - Accessible description reference.
  * @attr {"true"|"false"|"grammar"|"spelling"} aria-invalid - Accessibility and visual invalid state.
- * @slot label - Visible label content.
- * @slot description - Helper or validation text.
  * @slot prefix - Optional leading icon or text.
  * @slot suffix - Optional trailing icon or text.
  * @prop {string} value - Live value. Setting it does not rewrite the value attribute.

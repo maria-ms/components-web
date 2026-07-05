@@ -257,13 +257,14 @@ const setManagedReference = (state, element, attribute, idValue, managedKey) => 
 
 const setInvalid = (state, control, invalid) => {
   const current = control.getAttribute("aria-invalid");
+  const wasManaged = state.invalidManaged.has(control);
 
-  if (invalid && (!current || state.invalidManaged)) {
+  if (invalid && (!current || wasManaged)) {
     control.setAttribute("aria-invalid", "true");
-    state.invalidManaged = true;
-  } else if (!invalid && state.invalidManaged) {
+    state.invalidManaged.add(control);
+  } else if (!invalid && wasManaged) {
     control.removeAttribute("aria-invalid");
-    state.invalidManaged = false;
+    state.invalidManaged.delete(control);
   }
 };
 
@@ -296,6 +297,9 @@ const syncField = (host) => {
 
 const syncGroup = (host) => {
   const state = states.get(host);
+  const controls = [...host.children].filter((element) =>
+    element.matches(controlSelector),
+  );
   const hasLabel = hasContent(state.labelSlot);
   const hasDescription = hasContent(state.descriptionSlot);
   const hasError = hasContent(state.errorSlot);
@@ -313,6 +317,7 @@ const syncGroup = (host) => {
   if (!host.hasAttribute("role")) host.setAttribute("role", "group");
   setOptionalAttribute(host, "aria-labelledby", labelId);
   setOptionalAttribute(host, "aria-describedby", descriptionId);
+  controls.forEach((control) => setInvalid(state, control, host.invalid));
 };
 
 const mount = (host, source) => {
@@ -323,7 +328,7 @@ const mount = (host, source) => {
     describedBy: "",
     error: shadow.querySelector(".error"),
     errorSlot: shadow.querySelector('slot[name="error"]'),
-    invalidManaged: false,
+    invalidManaged: new WeakSet(),
     label: shadow.querySelector(".label"),
     labelledBy: "",
     labelSlot: shadow.querySelector('slot[name="label"]'),
