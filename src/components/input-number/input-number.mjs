@@ -1,6 +1,6 @@
 import {
   createInternals,
-  disabled as fieldDisabled,
+  disabled,
   fieldObservedAttributes,
   fieldTemplate,
   nextId,
@@ -13,7 +13,9 @@ const tagName = "ds-input-number";
 
 const observedAttributes = [
   ...fieldObservedAttributes,
-  "controls",
+  "autocomplete",
+  "form",
+  "inputmode",
   "max",
   "min",
   "name",
@@ -24,108 +26,47 @@ const observedAttributes = [
   "value",
 ];
 
-const stepper = `
-  <div part="actions" class="actions">
-    <button
-      part="decrement-button"
-      class="step-button decrement"
-      type="button"
-      data-step="-1"
-      aria-label="Decrease value"
-    >
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path
-          d="M3.5 8H12.5"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
-    <button
-      part="increment-button"
-      class="step-button increment"
-      type="button"
-      data-step="1"
-      aria-label="Increase value"
-    >
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path
-          d="M8 3.5V12.5M3.5 8H12.5"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
-  </div>
-`;
-
 const template = document.createElement("template");
 
 template.innerHTML = fieldTemplate(
   `<input part="input" class="control" type="number" inputmode="decimal" />`,
   {
-    afterSuffix: stepper,
+    afterSuffix: `
+      <div part="stepper" class="stepper">
+        <button part="decrement-button" class="step-button" type="button" data-step="-1" aria-label="Decrease value">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3.5 8H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button part="increment-button" class="step-button" type="button" data-step="1" aria-label="Increase value">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    `,
     extraStyles: `
-      .field {
-        padding: var(--ds-primitive-space-02) var(--ds-primitive-space-02)
-          var(--ds-primitive-space-02) var(--ds-primitive-space-03);
-      }
-
-      :host([size="small"]) .field,
-      :host([size="sm"]) .field {
-        padding: var(--ds-primitive-space-02);
-      }
-
       .control {
-        order: 2;
         appearance: textfield;
       }
 
-      .control::-webkit-outer-spin-button,
-      .control::-webkit-inner-spin-button {
+      .control::-webkit-inner-spin-button,
+      .control::-webkit-outer-spin-button {
         appearance: none;
         margin: 0;
       }
 
-      :host([size="small"]) .control,
-      :host([size="sm"]) .control {
-        text-align: center;
-      }
-
-      .prefix {
-        order: 1;
-      }
-
-      .suffix {
-        order: 3;
-      }
-
-      .actions,
-      .step-button {
+      .stepper {
         display: flex;
-      }
-
-      .actions {
-        order: 4;
-        align-items: center;
         flex: 0 0 auto;
-        gap: var(--ds-primitive-space-03);
-      }
-
-      :host([size="small"]) .actions,
-      :host([size="sm"]) .actions {
-        display: contents;
-      }
-
-      :host([controls="none"]) .actions {
-        display: none;
+        align-items: center;
+        gap: var(--ds-primitive-space-02);
       }
 
       .step-button {
-        width: 24px;
-        height: 24px;
+        display: inline-flex;
+        width: var(--ds-component-input-number-control-size);
+        height: var(--ds-component-input-number-control-size);
         flex: 0 0 auto;
         align-items: center;
         justify-content: center;
@@ -141,39 +82,37 @@ template.innerHTML = fieldTemplate(
         background: var(--ds-component-button-color-background-secondary);
       }
 
+      .step-button:focus-visible {
+        outline: 2px solid var(--ds-semantic-color-border-focus);
+        outline-offset: 2px;
+      }
+
       :host([aria-invalid="true"]) .step-button {
         color: var(--ds-component-button-color-foreground-destructive-primary);
       }
 
-      :host([disabled]) .step-button {
+      :host([disabled]) .step-button,
+      :host([readonly]) .step-button {
         color: var(--ds-component-button-color-foreground-disabled);
         cursor: not-allowed;
       }
 
-      .decrement {
-        order: 1;
-      }
-
-      .increment {
-        order: 3;
-      }
-
       .step-button svg {
-        width: var(--ds-primitive-space-05);
-        height: var(--ds-primitive-space-05);
+        width: var(--ds-component-input-number-control-icon-size);
+        height: var(--ds-component-input-number-control-icon-size);
       }
     `,
   },
 );
 
-const instances = new WeakMap();
+const states = new WeakMap();
 const nextInputId = nextId(tagName);
 
 const valueAttribute = (host) => host.getAttribute("value") ?? "";
 
-const stateOf = (host) => instances.get(host);
+const stateOf = (host) => states.get(host);
 
-const isDisabled = (host) => fieldDisabled(host, stateOf(host));
+const isDisabled = (host) => disabled(host, stateOf(host));
 
 const isReadonly = (host) => host.hasAttribute("readonly");
 
@@ -184,32 +123,33 @@ const emit = (host, type) => {
     new CustomEvent(type, {
       bubbles: true,
       composed: true,
-      detail: {
-        value: host.value,
-        valueAsNumber: input.valueAsNumber,
-      },
+      detail: { value: host.value, valueAsNumber: input.valueAsNumber },
     }),
   );
 };
 
 const syncFormValue = (host) => {
-  const { customErrorMessage, input, internals } = stateOf(host);
+  const state = stateOf(host);
 
-  if (!internals) return;
+  if (!state.internals) return;
 
-  internals.setFormValue(isDisabled(host) ? null : host.value);
+  state.internals.setFormValue(isDisabled(host) ? null : host.value);
 
   if (isDisabled(host)) {
-    internals.setValidity({});
-  } else if (customErrorMessage) {
-    internals.setValidity({ customError: true }, customErrorMessage, input);
-  } else if (input.validity.valid) {
-    internals.setValidity({});
+    state.internals.setValidity({});
+  } else if (state.customErrorMessage) {
+    state.internals.setValidity(
+      { customError: true },
+      state.customErrorMessage,
+      state.input,
+    );
+  } else if (state.input.validity.valid) {
+    state.internals.setValidity({});
   } else {
-    internals.setValidity(
-      validityFlags(input.validity),
-      input.validationMessage,
-      input,
+    state.internals.setValidity(
+      validityFlags(state.input.validity),
+      state.input.validationMessage,
+      state.input,
     );
   }
 };
@@ -228,8 +168,8 @@ const setValue = (host, value, { dirty = false } = {}) => {
 const syncNativeAttributes = (host) => {
   const { input } = stateOf(host);
 
-  ["max", "min", "placeholder", "step"].forEach((name) =>
-    setOptionalAttribute(input, name, host.getAttribute(name)),
+  ["autocomplete", "inputmode", "max", "min", "placeholder", "step"].forEach(
+    (name) => setOptionalAttribute(input, name, host.getAttribute(name)),
   );
   input.disabled = isDisabled(host);
   input.readOnly = isReadonly(host);
@@ -243,20 +183,19 @@ const sync = (host) => {
   host.toggleAttribute("data-has-value", host.value !== "");
   syncNativeAttributes(host);
   syncFieldChrome(host, state);
-  state.decrement.disabled = isDisabled(host) || isReadonly(host);
-  state.increment.disabled = isDisabled(host) || isReadonly(host);
+  state.stepButtons.forEach((button) => {
+    button.disabled = isDisabled(host) || isReadonly(host);
+  });
   syncFormValue(host);
 };
 
 const step = (host, direction) => {
   const { input } = stateOf(host);
 
-  if (isDisabled(host) || isReadonly(host) || host.getAttribute("controls") === "none") {
-    return;
-  }
+  if (isDisabled(host) || isReadonly(host)) return;
 
   direction < 0 ? input.stepDown() : input.stepUp();
-  setValue(host, input.value);
+  setValue(host, input.value, { dirty: true });
   emit(host, "input");
   emit(host, "change");
 };
@@ -264,9 +203,9 @@ const step = (host, direction) => {
 const listeners = (state) => [
   [state.input, "input", state.onInput],
   [state.input, "change", state.onChange],
-  [state.actions, "click", state.onStep],
-  [state.prefixSlot, "slotchange", state.onContentSlotChange],
-  [state.suffixSlot, "slotchange", state.onContentSlotChange],
+  [state.stepper, "click", state.onStep],
+  [state.prefixSlot, "slotchange", state.onSlotChange],
+  [state.suffixSlot, "slotchange", state.onSlotChange],
 ];
 
 const setListeners = (state, method) =>
@@ -287,9 +226,7 @@ const connect = (host) => {
   sync(host);
 };
 
-const disconnect = (host) => {
-  setListeners(stateOf(host), "removeEventListener");
-};
+const disconnect = (host) => setListeners(stateOf(host), "removeEventListener");
 
 const mount = (host) => {
   const shadow = host.attachShadow({ mode: "open" });
@@ -298,21 +235,20 @@ const mount = (host) => {
 
   const input = shadow.querySelector("input");
 
-  instances.set(host, {
-    actions: shadow.querySelector(".actions"),
+  states.set(host, {
     control: input,
     customErrorMessage: "",
-    decrement: shadow.querySelector(".decrement"),
     defaultValue: "",
     formDisabled: false,
     hasConnected: false,
     id: nextInputId(),
-    increment: shadow.querySelector(".increment"),
     input,
     internals: createInternals(host),
     prefix: shadow.querySelector(".prefix"),
     prefixHasFallback: false,
     prefixSlot: shadow.querySelector('slot[name="prefix"]'),
+    stepButtons: [...shadow.querySelectorAll(".step-button")],
+    stepper: shadow.querySelector(".stepper"),
     suffix: shadow.querySelector(".suffix"),
     suffixHasFallback: false,
     suffixSlot: shadow.querySelector('slot[name="suffix"]'),
@@ -323,12 +259,12 @@ const mount = (host) => {
       setValue(host, input.value, { dirty: true });
       emit(host, "change");
     },
-    onContentSlotChange: () => sync(host),
     onInput: (event) => {
       event.stopPropagation();
       setValue(host, input.value, { dirty: true });
       emit(host, "input");
     },
+    onSlotChange: () => sync(host),
     onStep: (event) => {
       const button =
         event.target instanceof Element
@@ -341,28 +277,23 @@ const mount = (host) => {
 };
 
 /**
- * Form-associated number input.
+ * Form-associated number input that mirrors native number-input semantics.
  *
  * @tag ds-input-number
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial value used by form reset.
  * @attr {string} min - Native minimum value.
  * @attr {string} max - Native maximum value.
- * @attr {string} step - Native step value and stepper interval.
- * @attr {string} placeholder - Placeholder text shown when the input is empty.
- * @attr {boolean} disabled - Disables the input and stepper buttons.
- * @attr {boolean} readonly - Prevents editing while keeping the value submittable.
- * @attr {boolean} required - Requires a value before form submission.
- * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @attr {"stepper"|"none"} controls - Stepper visibility. Defaults to stepper.
- * @attr {string} aria-label - Accessible name when no visible label is provided.
- * @attr {string} aria-labelledby - Accessible name reference.
- * @attr {string} aria-describedby - Accessible description reference.
+ * @attr {string} step - Native step value.
+ * @attr {string} placeholder - Placeholder text.
+ * @attr {boolean} disabled - Disables the control.
+ * @attr {boolean} readonly - Prevents editing while preserving form value.
+ * @attr {boolean} required - Requires a value.
  * @attr {"true"|"false"|"grammar"|"spelling"} aria-invalid - Accessibility and visual invalid state.
- * @slot prefix - Optional leading icon or text.
- * @slot suffix - Optional trailing icon or text.
- * @prop {string} value - Live value. Setting it does not rewrite the value attribute.
- * @prop {string} defaultValue - Initial value reflected through the value attribute.
+ * @slot prefix - Optional leading content.
+ * @slot suffix - Optional trailing content before the stepper.
+ * @prop {string} value - Live value.
+ * @prop {string} defaultValue - Reset value reflected through the value attribute.
  * @fires input - Fired when the value changes.
  * @fires change - Fired when the value is committed.
  */
@@ -385,7 +316,7 @@ export class InputNumber extends HTMLElement {
   }
 
   attributeChangedCallback(name) {
-    if (!instances.has(this)) return;
+    if (!states.has(this)) return;
     if (name === "value") {
       stateOf(this).defaultValue = valueAttribute(this);
       setValue(this, valueAttribute(this));
@@ -431,7 +362,7 @@ export class InputNumber extends HTMLElement {
   }
 
   set value(value) {
-    if (instances.has(this)) setValue(this, value, { dirty: true });
+    if (states.has(this)) setValue(this, value, { dirty: true });
   }
 
   get defaultValue() {

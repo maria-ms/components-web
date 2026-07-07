@@ -14,6 +14,7 @@ Load the token CSS once in your app entry, then register the component module yo
 import "@maria-ms/tokens/css/light";
 import "@maria-ms/tokens/css/dark";
 import "@maria-ms/components-web/avatar";
+import "@maria-ms/components-web/compound-control";
 import "@maria-ms/components-web/input-number";
 import "@maria-ms/components-web/dropdown";
 ```
@@ -31,13 +32,9 @@ Set `data-theme="light"` or `data-theme="dark"` on your document root to switch 
 ## Input Number
 
 ```html
-<ds-input-number value="1" min="0" max="10" step="1"></ds-input-number>
-<ds-input-number size="small"></ds-input-number>
+<ds-input-number name="amount" value="1" min="0" max="10" step="1"></ds-input-number>
 <ds-input-number aria-invalid="true" value="1"></ds-input-number>
 <ds-input-number disabled value="1"></ds-input-number>
-<ds-input-number controls="none" value="1">
-  <svg slot="suffix" aria-hidden="true"></svg>
-</ds-input-number>
 ```
 
 Events:
@@ -45,9 +42,38 @@ Events:
 - `input` fires when the value changes.
 - `change` fires when the value is committed.
 
+## Input Select
+
+```html
+<ds-input-select name="country" value="ro">
+  <option value="ro">Romania</option>
+  <option value="gb">United Kingdom</option>
+  <option value="us">United States</option>
+</ds-input-select>
+```
+
+## Field And Compound Control
+
 Use `ds-field` for visible labels, descriptions, and validation messages. Use
-`ds-field-group` when a pattern combines multiple controls, such as select plus
-input.
+`ds-compound-control` when related controls should share one visual border,
+focus ring, and invalid state while keeping each child control independently
+focusable and form-associated.
+
+```html
+<ds-field>
+  <span slot="label">Price</span>
+
+  <ds-compound-control>
+    <ds-input-select name="currency" value="eur" aria-label="Currency" style="flex: 0 0 96px;">
+      <option value="eur">EUR</option>
+      <option value="usd">USD</option>
+    </ds-input-select>
+    <ds-input-number name="amount" value="1250" min="0" step="0.01" aria-label="Amount"></ds-input-number>
+  </ds-compound-control>
+
+  <span slot="description">Enter the amount before tax.</span>
+</ds-field>
+```
 
 ## Avatar
 
@@ -133,5 +159,4 @@ shared button component.
 
 ```sh
 npm run check
-npm run audit
 ```

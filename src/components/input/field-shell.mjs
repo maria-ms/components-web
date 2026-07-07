@@ -4,12 +4,42 @@ export const fieldObservedAttributes = [
   "aria-label",
   "aria-labelledby",
   "disabled",
-  "size",
 ];
 
 export const fieldStyles = `
   :host {
-    --ds-input-icon-size: var(--ds-primitive-space-05);
+    --ds-input-icon-size: var(--ds-component-input-icon-size);
+    --ds-control-background: var(--ds-component-input-color-background-default);
+    --ds-control-border-color: var(--ds-component-input-color-border-default);
+    --ds-control-border-radius: var(--ds-primitive-radius-04);
+    --ds-control-border-width: 1px;
+    --ds-control-hover-background: var(--ds-component-input-color-background-hover);
+    --ds-control-focus-background: var(--ds-component-input-color-background-default);
+    --ds-control-focus-border-color: var(--ds-semantic-color-border-focus);
+    --ds-control-focus-shadow:
+      var(--ds-semantic-shadow-xs-offset-x)
+        var(--ds-semantic-shadow-xs-offset-y)
+        var(--ds-semantic-shadow-xs-blur)
+        var(--ds-semantic-shadow-xs-spread)
+        var(--ds-semantic-shadow-xs-color),
+      var(--ds-semantic-shadow-focused-4px-offset-x)
+        var(--ds-semantic-shadow-focused-4px-offset-y)
+        var(--ds-semantic-shadow-focused-4px-blur)
+        var(--ds-semantic-shadow-focused-4px-spread)
+        var(--ds-semantic-shadow-focused-4px-color);
+    --ds-control-invalid-background: var(--ds-semantic-color-background-destructive-subtle);
+    --ds-control-invalid-border-color: var(--ds-semantic-color-border-destructive-elevated);
+    --ds-control-invalid-shadow:
+      var(--ds-semantic-shadow-xs-offset-x)
+        var(--ds-semantic-shadow-xs-offset-y)
+        var(--ds-semantic-shadow-xs-blur)
+        var(--ds-semantic-shadow-xs-spread)
+        var(--ds-semantic-shadow-xs-color),
+      var(--ds-semantic-shadow-focused-4px-destructive-offset-x)
+        var(--ds-semantic-shadow-focused-4px-destructive-offset-y)
+        var(--ds-semantic-shadow-focused-4px-destructive-blur)
+        var(--ds-semantic-shadow-focused-4px-destructive-spread)
+        var(--ds-semantic-shadow-focused-4px-destructive-color);
 
     box-sizing: border-box;
     display: block;
@@ -39,58 +69,33 @@ export const fieldStyles = `
 
   .field {
     width: 100%;
-    min-height: var(--ds-primitive-space-07);
+    min-height: var(--ds-component-input-height-root);
     align-items: center;
     overflow: hidden;
     padding: var(--ds-primitive-space-02) var(--ds-primitive-space-03);
-    border: 1px solid var(--ds-component-input-color-border-default);
-    border-radius: var(--ds-primitive-radius-04);
-    background: var(--ds-component-input-color-background-default);
+    border: var(--ds-control-border-width) solid var(--ds-control-border-color);
+    border-radius: var(--ds-control-border-radius);
+    background: var(--ds-control-background);
     transition:
       background-color 120ms ease,
       border-color 120ms ease,
       box-shadow 120ms ease;
   }
 
-  :host([size="small"]) .field,
-  :host([size="sm"]) .field {
-    padding: var(--ds-primitive-space-02);
-  }
-
   :host(:not([disabled]):not([aria-invalid="true"]):hover) .field {
-    background: var(--ds-component-input-color-background-hover);
+    background: var(--ds-control-hover-background);
   }
 
   :host(:not([disabled]):not([aria-invalid="true"]):focus-within) .field {
-    border-color: var(--ds-semantic-color-border-focus);
-    background: var(--ds-component-input-color-background-default);
-    box-shadow:
-      var(--ds-semantic-shadow-xs-offset-x)
-        var(--ds-semantic-shadow-xs-offset-y)
-        var(--ds-semantic-shadow-xs-blur)
-        var(--ds-semantic-shadow-xs-spread)
-        var(--ds-semantic-shadow-xs-color),
-      var(--ds-semantic-shadow-focused-4px-offset-x)
-        var(--ds-semantic-shadow-focused-4px-offset-y)
-        var(--ds-semantic-shadow-focused-4px-blur)
-        var(--ds-semantic-shadow-focused-4px-spread)
-        var(--ds-semantic-shadow-focused-4px-color);
+    border-color: var(--ds-control-focus-border-color);
+    background: var(--ds-control-focus-background);
+    box-shadow: var(--ds-control-focus-shadow);
   }
 
   :host([aria-invalid="true"]) .field {
-    border-color: var(--ds-semantic-color-border-destructive-elevated);
-    background: var(--ds-semantic-color-background-destructive-subtle);
-    box-shadow:
-      var(--ds-semantic-shadow-xs-offset-x)
-        var(--ds-semantic-shadow-xs-offset-y)
-        var(--ds-semantic-shadow-xs-blur)
-        var(--ds-semantic-shadow-xs-spread)
-        var(--ds-semantic-shadow-xs-color),
-      var(--ds-semantic-shadow-focused-4px-destructive-offset-x)
-        var(--ds-semantic-shadow-focused-4px-destructive-offset-y)
-        var(--ds-semantic-shadow-focused-4px-destructive-blur)
-        var(--ds-semantic-shadow-focused-4px-destructive-spread)
-        var(--ds-semantic-shadow-focused-4px-destructive-color);
+    border-color: var(--ds-control-invalid-border-color);
+    background: var(--ds-control-invalid-background);
+    box-shadow: var(--ds-control-invalid-shadow);
   }
 
   :host([disabled]) {

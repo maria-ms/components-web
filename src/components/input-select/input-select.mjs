@@ -24,16 +24,9 @@ const template = document.createElement("template");
 
 template.innerHTML = fieldTemplate(
   `<select part="select" class="control">
-    <button>
+    <button type="button">
       <selectedcontent></selectedcontent>
-      <svg
-        class="picker-icon"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-        data-icon="chevrons-up-down"
-        data-figma-node-id="40020640:9296"
-      >
+      <svg class="picker-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path
           d="M7 9L12 4L17 9M7 15L12 20L17 15"
           stroke="currentColor"
@@ -53,24 +46,15 @@ template.innerHTML = fieldTemplate(
         }
       }
 
-      .control {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-      }
-
       .field {
         position: relative;
       }
 
-      :host([data-has-prefix]) .prefix {
-        position: absolute;
-        z-index: 1;
-        inset-inline-start: var(--ds-primitive-space-03);
-        top: 50%;
-        pointer-events: none;
-        transform: translateY(-50%);
+      .control {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        cursor: pointer;
       }
 
       .control button {
@@ -84,12 +68,6 @@ template.innerHTML = fieldTemplate(
         background: transparent;
         color: inherit;
         font: inherit;
-      }
-
-      :host([data-has-prefix]) .control button {
-        padding-inline-start: calc(
-          var(--ds-input-icon-size) + var(--ds-primitive-space-03)
-        );
       }
 
       .control selectedcontent {
@@ -119,6 +97,21 @@ template.innerHTML = fieldTemplate(
         height: var(--ds-input-icon-size);
         flex: 0 0 auto;
         color: var(--ds-semantic-color-foreground-muted-1);
+      }
+
+      :host([data-has-prefix]) .prefix {
+        position: absolute;
+        z-index: 1;
+        inset-inline-start: var(--ds-primitive-space-03);
+        top: 50%;
+        pointer-events: none;
+        transform: translateY(-50%);
+      }
+
+      :host([data-has-prefix]) .control button {
+        padding-inline-start: calc(
+          var(--ds-input-icon-size) + var(--ds-primitive-space-03)
+        );
       }
 
       :host([data-has-suffix]) .picker-icon {
@@ -162,8 +155,8 @@ template.innerHTML = fieldTemplate(
       }
 
       .control option {
-        min-height: var(--ds-primitive-space-07);
         display: flex;
+        min-height: var(--ds-primitive-space-07);
         align-items: center;
         gap: var(--ds-primitive-space-03);
         padding: var(--ds-primitive-space-02) var(--ds-primitive-space-03);
@@ -241,28 +234,28 @@ template.innerHTML = fieldTemplate(
   },
 );
 
-const instances = new WeakMap();
+const states = new WeakMap();
 const nextSelectId = nextId(tagName);
+
 const valueAttribute = (host) => host.getAttribute("value") ?? "";
+
+const stateOf = (host) => states.get(host);
 
 const optionChildren = (host) =>
   [...host.children].filter((node) =>
     ["OPTGROUP", "OPTION"].includes(node.tagName),
   );
 
-const selectButton = (control) => {
+const ensureSelectButton = (select) => {
   const button =
-    control.querySelector(":scope > button") ?? document.createElement("button");
+    select.querySelector(":scope > button") ?? document.createElement("button");
 
+  button.type = "button";
   if (!button.querySelector("selectedcontent")) {
     button.replaceChildren(document.createElement("selectedcontent"));
   }
 
   return button;
-};
-
-const formValue = (host, state) => {
-  return state.control.value;
 };
 
 const emit = (host, type) => {
@@ -275,38 +268,12 @@ const emit = (host, type) => {
   );
 };
 
-const setValue = (host, value, { dirty = false } = {}) => {
-  const state = instances.get(host);
-  const nextValue = value == null ? "" : String(value);
-
-  state.value = nextValue;
-  state.valueDirty ||= dirty;
-  state.control.value = nextValue;
-  host.toggleAttribute("data-has-value", nextValue !== "");
-  syncFormValue(host);
-};
-
-const syncOptions = (host) => {
-  const state = instances.get(host);
-
-  state.control.replaceChildren(
-    selectButton(state.control),
-    ...optionChildren(host).map((option) => option.cloneNode(true)),
-  );
-
-  if (state.valueDirty || host.hasAttribute("value")) {
-    state.control.value = state.value;
-  } else {
-    state.value = state.control.value;
-  }
-};
-
 const syncFormValue = (host) => {
-  const state = instances.get(host);
+  const state = stateOf(host);
 
   if (!state.internals) return;
 
-  state.internals.setFormValue(disabled(host, state) ? null : formValue(host, state));
+  state.internals.setFormValue(disabled(host, state) ? null : host.value);
 
   if (disabled(host, state)) {
     state.internals.setValidity({});
@@ -314,28 +281,54 @@ const syncFormValue = (host) => {
     state.internals.setValidity(
       { customError: true },
       state.customErrorMessage,
-      state.control,
+      state.select,
     );
-  } else if (state.control.validity.valid) {
+  } else if (state.select.validity.valid) {
     state.internals.setValidity({});
   } else {
     state.internals.setValidity(
-      validityFlags(state.control.validity),
-      state.control.validationMessage,
-      state.control,
+      validityFlags(state.select.validity),
+      state.select.validationMessage,
+      state.select,
     );
   }
 };
 
-const syncNativeAttributes = (host) => {
-  const state = instances.get(host);
+const setValue = (host, value, { dirty = false } = {}) => {
+  const state = stateOf(host);
+  const nextValue = value == null ? "" : String(value);
 
-  state.control.disabled = disabled(host, state);
-  state.control.required = host.hasAttribute("required");
+  state.value = nextValue;
+  state.valueDirty ||= dirty;
+  state.select.value = nextValue;
+  host.toggleAttribute("data-has-value", nextValue !== "");
+  syncFormValue(host);
+};
+
+const syncOptions = (host) => {
+  const state = stateOf(host);
+
+  state.select.replaceChildren(
+    ensureSelectButton(state.select),
+    ...optionChildren(host).map((option) => option.cloneNode(true)),
+  );
+
+  if (state.valueDirty || host.hasAttribute("value")) {
+    state.select.value = state.value;
+  } else {
+    state.value = state.select.value;
+  }
+};
+
+const syncNativeAttributes = (host) => {
+  const state = stateOf(host);
+
+  state.select.disabled = disabled(host, state);
+  state.select.required = host.hasAttribute("required");
 };
 
 const sync = (host) => {
-  const state = instances.get(host);
+  const state = stateOf(host);
 
   syncOptions(host);
   syncNativeAttributes(host);
@@ -347,9 +340,9 @@ const sync = (host) => {
 };
 
 const listeners = (state) => [
-  [state.control, "change", state.onChange],
-  [state.prefixSlot, "slotchange", state.onContentSlotChange],
-  [state.suffixSlot, "slotchange", state.onContentSlotChange],
+  [state.select, "change", state.onChange],
+  [state.prefixSlot, "slotchange", state.onSlotChange],
+  [state.suffixSlot, "slotchange", state.onSlotChange],
 ];
 
 const setListeners = (state, method) =>
@@ -358,7 +351,7 @@ const setListeners = (state, method) =>
   );
 
 const connect = (host) => {
-  const state = instances.get(host);
+  const state = stateOf(host);
 
   if (!state.hasConnected) {
     state.defaultValue = valueAttribute(host);
@@ -372,6 +365,7 @@ const connect = (host) => {
   });
   setListeners(state, "addEventListener");
   sync(host);
+
   if (!state.defaultValueReady) {
     if (!host.hasAttribute("value")) state.defaultValue = state.value;
     state.defaultValueReady = true;
@@ -379,7 +373,7 @@ const connect = (host) => {
 };
 
 const disconnect = (host) => {
-  const state = instances.get(host);
+  const state = stateOf(host);
 
   state.observer.disconnect();
   setListeners(state, "removeEventListener");
@@ -387,10 +381,13 @@ const disconnect = (host) => {
 
 const mount = (host) => {
   const shadow = host.attachShadow({ mode: "open" });
+
   shadow.append(template.content.cloneNode(true));
 
-  instances.set(host, {
-    control: shadow.querySelector("select"),
+  const select = shadow.querySelector("select");
+
+  states.set(host, {
+    control: select,
     customErrorMessage: "",
     defaultValue: "",
     defaultValueReady: false,
@@ -402,6 +399,7 @@ const mount = (host) => {
     prefix: shadow.querySelector(".prefix"),
     prefixHasFallback: false,
     prefixSlot: shadow.querySelector('slot[name="prefix"]'),
+    select,
     suffix: shadow.querySelector(".suffix"),
     suffixHasFallback: false,
     suffixSlot: shadow.querySelector('slot[name="suffix"]'),
@@ -413,22 +411,24 @@ const mount = (host) => {
       emit(host, "input");
       emit(host, "change");
     },
-    onContentSlotChange: () => sync(host),
+    onSlotChange: () => sync(host),
   });
 };
 
 /**
- * Form-associated select input.
+ * Form-associated select control backed by native option and optgroup children.
  *
  * @tag ds-input-select
  * @attr {string} name - Form field name.
  * @attr {string} value - Initial selected value used by form reset.
  * @attr {boolean} disabled - Disables the select.
- * @attr {boolean} required - Requires a selected value before form submission.
- * @attr {"small"|"medium"} size - Visual size. Defaults to medium.
- * @slot prefix - Optional leading icon or text.
- * @slot suffix - Optional trailing content that replaces the native picker icon.
+ * @attr {boolean} required - Requires a selected value.
+ * @attr {"true"|"false"|"grammar"|"spelling"} aria-invalid - Accessibility and visual invalid state.
+ * @slot prefix - Optional leading content.
+ * @slot suffix - Optional trailing content that replaces the picker icon.
  * @slot - Native option and optgroup children.
+ * @prop {string} value - Live selected value.
+ * @prop {string} defaultValue - Reset value reflected through the value attribute.
  * @fires input - Fired when the value changes.
  * @fires change - Fired when the value is committed.
  */
@@ -451,9 +451,9 @@ export class InputSelect extends HTMLElement {
   }
 
   attributeChangedCallback(name) {
-    if (!instances.has(this)) return;
+    if (!states.has(this)) return;
     if (name === "value") {
-      instances.get(this).defaultValue = valueAttribute(this);
+      stateOf(this).defaultValue = valueAttribute(this);
       setValue(this, valueAttribute(this));
     } else {
       sync(this);
@@ -485,11 +485,11 @@ export class InputSelect extends HTMLElement {
   }
 
   get value() {
-    return instances.get(this)?.value ?? valueAttribute(this);
+    return stateOf(this)?.value ?? valueAttribute(this);
   }
 
   set value(value) {
-    if (instances.has(this)) setValue(this, value, { dirty: true });
+    if (states.has(this)) setValue(this, value, { dirty: true });
   }
 
   get defaultValue() {
@@ -501,53 +501,53 @@ export class InputSelect extends HTMLElement {
   }
 
   get form() {
-    return instances.get(this)?.internals?.form ?? null;
+    return stateOf(this)?.internals?.form ?? null;
   }
 
   get validity() {
-    const state = instances.get(this);
-    return state?.internals?.validity ?? state?.control.validity;
+    const state = stateOf(this);
+    return state?.internals?.validity ?? state?.select.validity;
   }
 
   get validationMessage() {
-    const state = instances.get(this);
-    return state?.internals?.validationMessage ?? state?.control.validationMessage;
+    const state = stateOf(this);
+    return state?.internals?.validationMessage ?? state?.select.validationMessage;
   }
 
   get willValidate() {
-    const state = instances.get(this);
-    return state?.internals?.willValidate ?? state?.control.willValidate ?? false;
+    const state = stateOf(this);
+    return state?.internals?.willValidate ?? state?.select.willValidate ?? false;
   }
 
   checkValidity() {
-    const state = instances.get(this);
-    return state?.internals?.checkValidity() ?? state?.control.checkValidity();
+    const state = stateOf(this);
+    return state?.internals?.checkValidity() ?? state?.select.checkValidity();
   }
 
   reportValidity() {
-    const state = instances.get(this);
-    return state?.internals?.reportValidity() ?? state?.control.reportValidity();
+    const state = stateOf(this);
+    return state?.internals?.reportValidity() ?? state?.select.reportValidity();
   }
 
   setCustomValidity(message) {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     if (!state) return;
     state.customErrorMessage = String(message);
-    state.control.setCustomValidity(message);
+    state.select.setCustomValidity(message);
     syncFormValue(this);
   }
 
   focus(options) {
-    instances.get(this)?.control.focus(options);
+    stateOf(this)?.select.focus(options);
   }
 
   blur() {
-    instances.get(this)?.control.blur();
+    stateOf(this)?.select.blur();
   }
 
   formDisabledCallback(isDisabledByForm) {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     if (!state) return;
     state.formDisabled = isDisabledByForm;
@@ -555,7 +555,7 @@ export class InputSelect extends HTMLElement {
   }
 
   formResetCallback() {
-    const state = instances.get(this);
+    const state = stateOf(this);
 
     state.valueDirty = false;
     setValue(this, state.defaultValue);
