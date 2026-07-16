@@ -794,7 +794,7 @@ const mountItem = (host) => {
 /**
  * Token-driven action menu button shell.
  * This component implements the WAI-ARIA menu button pattern for commands,
- * links, and checkable menu rows. Use ds-input-select for form value selection.
+ * links, and checkable menu rows. Use a dedicated form control for value selection.
  *
  * @tag ds-dropdown
  * @attr {"start"|"end"} align - Menu alignment relative to the trigger. Defaults to end.

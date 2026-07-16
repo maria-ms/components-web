@@ -13,67 +13,42 @@ Load the token CSS once in your app entry, then register the component module yo
 ```js
 import "@maria-ms/tokens/css/light";
 import "@maria-ms/tokens/css/dark";
+import "@maria-ms/components-web/accordion";
+import "@maria-ms/components-web/alert";
 import "@maria-ms/components-web/avatar";
-import "@maria-ms/components-web/compound-control";
-import "@maria-ms/components-web/input-number";
+import "@maria-ms/components-web/button";
 import "@maria-ms/components-web/dropdown";
-```
-
-```html
-<ds-field>
-  <span slot="label">Amount</span>
-  <ds-input-number name="amount" value="1" min="0" max="10" step="1"></ds-input-number>
-  <span slot="description">Whole numbers only.</span>
-</ds-field>
 ```
 
 Set `data-theme="light"` or `data-theme="dark"` on your document root to switch token themes.
 
-## Input Number
+## Button
+
+`ds-button` decorates one native `<button>` or `<a>`. The native element keeps
+its form, link, keyboard, event, and attribute behavior; the wrapper only owns
+the tokenized visual states.
 
 ```html
-<ds-input-number name="amount" value="1" min="0" max="10" step="1"></ds-input-number>
-<ds-input-number aria-invalid="true" value="1"></ds-input-number>
-<ds-input-number disabled value="1"></ds-input-number>
+<ds-button variant="primary" size="md">
+  <button type="submit">Save changes</button>
+</ds-button>
+
+<ds-button variant="outline" size="md">
+  <a href="/settings">Settings</a>
+</ds-button>
+
+<ds-button variant="ghost" size="md" icon-only>
+  <button type="button" aria-label="Add item">
+    <svg aria-hidden="true"></svg>
+  </button>
+</ds-button>
 ```
 
-Events:
-
-- `input` fires when the value changes.
-- `change` fires when the value is committed.
-
-## Input Select
-
-```html
-<ds-input-select name="country" value="ro">
-  <option value="ro">Romania</option>
-  <option value="gb">United Kingdom</option>
-  <option value="us">United States</option>
-</ds-input-select>
-```
-
-## Field And Compound Control
-
-Use `ds-field` for visible labels, descriptions, and validation messages. Use
-`ds-compound-control` when related controls should share one visual border,
-focus ring, and invalid state while keeping each child control independently
-focusable and form-associated.
-
-```html
-<ds-field>
-  <span slot="label">Price</span>
-
-  <ds-compound-control>
-    <ds-input-select name="currency" value="eur" aria-label="Currency" style="flex: 0 0 96px;">
-      <option value="eur">EUR</option>
-      <option value="usd">USD</option>
-    </ds-input-select>
-    <ds-input-number name="amount" value="1250" min="0" step="0.01" aria-label="Amount"></ds-input-number>
-  </ds-compound-control>
-
-  <span slot="description">Enter the amount before tax.</span>
-</ds-field>
-```
+Use `variant="primary|secondary|outline|ghost|link|link-muted"`,
+`tone="destructive"`, `size="xs|sm|md|lg"`, and `icon-only`. Disabled links
+still require application behavior to suppress navigation; `aria-disabled`
+only exposes the state and styling. Consumer-provided icons can size themselves
+with the inherited `--ds-button-icon-size` custom property.
 
 ## Avatar
 

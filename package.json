@@ -22,11 +22,7 @@
     "./alert": "./src/components/alert/alert.mjs",
     "./avatar": "./src/components/avatar/avatar.mjs",
     "./button": "./src/components/button/button.mjs",
-    "./compound-control": "./src/components/compound-control/compound-control.mjs",
     "./dropdown": "./src/components/dropdown/dropdown.mjs",
-    "./field": "./src/components/field/field.mjs",
-    "./input-number": "./src/components/input-number/input-number.mjs",
-    "./input-select": "./src/components/input-select/input-select.mjs",
     "./package.json": "./package.json"
   },
   "sideEffects": true,
@@ -35,7 +31,7 @@
     "provenance": true
   },
   "scripts": {
-    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/accordion/accordion.mjs && node --check src/components/alert/alert.mjs && node --check src/components/avatar/avatar.mjs && node --check src/components/button/button.mjs && node --check src/components/compound-control/compound-control.mjs && node --check src/components/dropdown/dropdown.mjs && node --check src/components/field/field.mjs && node --check src/components/input/field-shell.mjs && node --check src/components/input-number/input-number.mjs && node --check src/components/input-select/input-select.mjs",
+    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/accordion/accordion.mjs && node --check src/components/alert/alert.mjs && node --check src/components/avatar/avatar.mjs && node --check src/components/button/button.mjs && node --check src/components/dropdown/dropdown.mjs",
     "prepack": "npm run check",
     "pack:dry-run": "npm pack --dry-run"
   },

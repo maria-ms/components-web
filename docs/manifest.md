@@ -1,168 +1,236 @@
 # Component Library Manifest
 
-The Web Components package should expose the smallest reusable building blocks
-needed to build product interfaces consistently.
+This document defines the durable engineering and design rules for Maria's Web
+Component library. Component implementations, Figma components, and Storybook
+examples should all follow it.
 
-## Default Model
+## Package Responsibilities
 
-The package exports:
+The design system is split across three independently managed packages:
 
-- primitives
-- structural wrappers
-- component behavior that is stable across products
+- `@maria-ms/tokens` turns reviewed Figma Export Modes sources into generated
+  platform artifacts, including light and dark CSS custom properties.
+- `@maria-ms/components-web` implements reusable `ds-*` custom elements using
+  those generated tokens.
+- `@maria-ms/storybook-web` documents public APIs and demonstrates realistic
+  compositions using published package entry points.
 
-Figma and Storybook show:
+Figma variables are the visual source of truth. Generated token artifacts are
+the code-facing contract. Components consume that contract; they do not recreate
+or reinterpret the token system.
 
-- examples
-- product-like compositions
-- implementation patterns
-- realistic usage cases
+## Decision Priorities
 
-Examples in Figma or Storybook do not automatically become exported package
-components.
+When requirements conflict, use this order:
 
-## Primitives
+1. Accessibility, user safety, and correct semantics
+2. Web standards and native browser behavior
+3. Composability and public API stability
+4. Existing package conventions
+5. Design-system consistency
+6. Figma visual fidelity
+7. Implementation convenience
 
-Primitives are durable components with reusable behavior or visual identity.
+Treat Figma as design evidence, not a literal DOM or API specification. A visual
+detail must not override correct semantics, keyboard behavior, accessible
+naming, focus behavior, contrast, or reduced-motion requirements.
 
-Examples:
+## What Belongs In The Package
 
-- `ds-button`
-- `ds-input-text`
-- `ds-input-search`
-- `ds-input-number`
-- `ds-input-select`
-- `ds-input-otp`
-- `ds-avatar`
-- `ds-alert`
-- `ds-accordion`
-- `ds-dropdown`
+The package should expose the smallest durable building blocks needed to build
+product interfaces consistently:
 
-Primitives own:
+- **Primitives** own reusable behavior or visual identity, such as a button,
+  input, avatar, alert, or disclosure item.
+- **Structural wrappers** own a stable composition or accessibility contract,
+  such as associating a label, description, and error with one or more controls.
+- **Behavior shells** own a reusable interaction model, such as menu opening,
+  dismissal, keyboard navigation, or selection.
 
-- visual identity
-- native-like behavior
-- accessibility
-- keyboard behavior where relevant
-- focus, hover, disabled, invalid, selected, open, and filled states where
-  relevant
-- tokenized typography, color, spacing, radius, shadows, and intrinsic geometry
-- slots or native attributes for consumer-owned content
+Package a component only when it has a clear responsibility, a durable public
+API, meaningful reusable behavior or accessibility requirements, tokenized
+states, and repeated cross-product value.
 
-Primitives should not own:
+Keep something as a Figma/Storybook pattern when it is mostly an arrangement of
+existing components, contains product-specific rules or content, is likely to
+vary by workflow, or is difficult to name without business context.
 
-- business copy
-- product-specific examples
-- surrounding form labels, descriptions, or error messages
-- page or form layout
-- one-off Figma artboard widths
-- APIs that encode example content, such as `iconName`, `avatarInitials`,
-  `items`, `description`, or `shortcut`, unless the component truly owns that
-  behavior
+Examples that normally remain compositions include currency fields, phone
+fields, profile menus, payment rows, page headers, footers, dashboard cards, and
+billing sections.
 
-## Structural Wrappers
+## Ownership Boundary
 
-Structural wrappers provide reusable composition contracts.
+A component owns:
 
-Examples:
+- its stable behavior and state model
+- semantic structure and accessibility behavior
+- keyboard and focus behavior where relevant
+- intrinsic internal geometry
+- tokenized visual identity
+- the slots and parts where consumer content is placed
 
-- `ds-field`
-- `ds-field-group`
+The consumer owns:
 
-Wrappers own:
+- product meaning, business data, and copy
+- validation timing and business rules
+- page, form, and composition layout
+- composition width and placement
+- icons, media, and actions unless they are intrinsic to component behavior
 
-- label, description, and error placement
-- accessibility wiring between labels, descriptions, errors, and controls
-- grouped layout where multiple controls form one logical field
-- invalid/focus context around one control or a group of controls
-- spacing and geometry needed for the wrapper itself
+Components provide a parking space and behavior contract. They must not encode
+example content from a Figma artboard as properties such as `iconName`,
+`avatarInitials`, `items`, `description`, or `shortcut` unless the component
+genuinely owns that data model.
 
-Wrappers should not own:
+## Web Platform Contract
 
-- child control values
-- child control options
-- validation timing
-- business rules
-- product-specific content
+Use native HTML and browser behavior first. Do not replace links, buttons,
+headings, lists, labels, tables, landmarks, or form controls with custom
+semantics merely for styling.
 
-## Product Patterns
+Every public component must:
 
-Product patterns are usually documented in Figma and Storybook instead of
-exported from the package.
+- have one clear responsibility and work independently
+- compose through documented attributes, properties, slots, events, and styles
+- avoid another component's private DOM and internal class names
+- tolerate missing, long, localized, and nested consumer content
+- behave correctly when connected, disconnected, and reconnected
+- clean up listeners, observers, timers, and subscriptions
+- avoid global mutable state and unsafe consumer HTML injection
+- use idempotent custom-element registration
 
-Examples:
+Use the `ds-` custom-element prefix. Prefer open shadow roots when encapsulation
+is valuable. Use light DOM when a shadow boundary would damage native semantics,
+document structure, accessibility relationships, or consumer composition.
 
-- phone number field
-- currency amount field
-- profile menu
-- payment method row
-- country selector with flag
-- billing address section
+Shadow DOM is an implementation boundary, not a reason to invent an API.
+Consumers must never need to query or mutate private shadow DOM.
 
-These should normally be composed from primitives and wrappers:
+## Composition Contract
 
-```html
-<ds-field-group>
-  <span slot="label">Phone number</span>
+Use the smallest appropriate public mechanism:
 
-  <div class="phone-layout">
-    <ds-input-select name="countryCode"></ds-input-select>
-    <ds-input-text name="phone"></ds-input-text>
-  </div>
+- slots for consumer-owned DOM content
+- attributes for small serializable configuration
+- properties for non-serializable values or native-like state
+- native events when their semantics apply
+- custom events only for behavior without a suitable native event
+- CSS custom properties for intentional theme or component overrides
+- CSS parts only for stable styling surfaces consumers genuinely need
 
-  <span slot="description">Include your area code.</span>
-  <span slot="error">Enter a valid phone number.</span>
-</ds-field-group>
+Custom events must have stable names and documented payloads. They should bubble,
+cross a shadow boundary, or be cancelable only when the interaction contract
+requires it.
+
+Do not accept HTML strings when DOM can be slotted, serialize complex objects
+into attributes, expose internal classes, hardcode page layout, or create a
+large variant matrix from example content.
+
+## Forms And Fields
+
+Form controls should behave like enriched native controls, not React-style state
+containers. Preserve the relevant native contract, including value, name,
+disabled/readonly/required state, validation, form submission, reset behavior,
+focus, and `input`/`change` timing.
+
+Use a real native control internally when possible. Use a form-associated custom
+element and `ElementInternals` when the custom element itself must participate in
+the form contract. Verify the behavior in real browsers.
+
+Primitive controls own their own interactive and visual states. They do not own
+surrounding visible labels, descriptions, or error messages. A structural field
+wrapper may provide those relationships when that wrapper exists in the public
+package. Until then, stories and consumers must use correct native labeling and
+must not assume an unavailable `ds-field` component.
+
+## Accessibility Contract
+
+Implement in this order:
+
+1. Correct native HTML
+2. Native browser APIs and behavior
+3. Progressive enhancement
+4. ARIA only for semantics or states native HTML cannot express
+5. Custom interaction only when genuinely required
+
+Do not use ARIA to repair avoidable semantic mistakes or add redundant roles to
+native elements. Interactive components must have a correct accessible name,
+logical tab order, visible focus, appropriate keyboard behavior, no keyboard
+trap, and correctly exposed disabled/expanded/selected/checked/invalid states.
+
+Check applicable WCAG 2.2 AA concerns, including contrast, target size, zoom and
+reflow, forced colors, reduced motion, right-to-left layout, localization, touch
+input, and states that cannot rely on color alone.
+
+Automated accessibility checks are a safety net, not proof of accessibility.
+Keyboard behavior and semantic outcomes must also be reviewed.
+
+## Tokens And Styling
+
+Components consume generated CSS variables from `@maria-ms/tokens`:
+
+1. Prefer component tokens when they express the exact intent.
+2. Otherwise use semantic tokens.
+3. Use primitive tokens only for intentionally invariant geometry or when no
+   more meaningful exported token exists.
+
+If Figma binds a required visual property to a variable but the corresponding
+generated token is absent from either light or dark CSS, stop component work and
+report the upstream gap. Do not hardcode the missing value, add a fallback, or
+quietly modify the token pipeline.
+
+Use logical properties, intrinsic sizing, resilient wrapping, and
+container-relative behavior. Parent layouts own page widths and flow. Components
+own only intrinsic dimensions that are part of their identity or behavior.
+
+The application root owns font loading and `font-family`; components inherit it.
+Do not add `letter-spacing: 0`. Do not leak styles globally or reset unrelated
+consumer styles.
+
+## Package Contract
+
+`@maria-ms/components-web` uses plain `.mjs` modules, native Custom Elements,
+JSDoc where useful, and no framework or compilation step.
+
+Each component module:
+
+- lives at `src/components/<name>/<name>.mjs`
+- exports its public class or classes
+- idempotently registers its own `ds-*` element or related element family
+- is available through an explicit package subpath
+
+Consumers should import only the component they need:
+
+```js
+import "@maria-ms/components-web/avatar";
 ```
 
-## Packaging Rule
+The root entry remains an aggregate convenience entry. Do not introduce Lit,
+TypeScript, a new build system, a class-only registration layer, `register-all`,
+generated declarations, or Custom Elements Manifest tooling as part of an
+ordinary component task. Those require a deliberate package-wide migration.
 
-Package a component when it has:
+## Storybook Contract
 
-- stable reusable behavior
-- meaningful accessibility requirements
-- tokenized states
-- a durable API
-- repeated use across products
-- behavior that would be error-prone to rebuild from smaller pieces
+Storybook imports public component subpaths and generated light/dark token CSS.
+It must not deep-import private source files.
 
-Keep something as a pattern when it is:
+Stories should explain the smallest useful public API through:
 
-- mostly arrangement of existing primitives
-- product-specific content
-- likely to vary by product or workflow
-- mostly a layout example
-- difficult to name without business context
+- default usage
+- important semantic and interaction states
+- composition with consumer-owned content
+- form behavior when relevant
+- one grouped visual overview only when it materially helps review
 
-## Composition Rule
+Stories do not mirror Figma variants one-to-one. Story controls expose only real
+public attributes/properties; demo data and layout controls stay hidden.
+Product-like content, icons, and layout belong in Storybook, not in the component
+package.
 
-Components should provide the parking space and behavior contract.
+## Change Rule
 
-They define:
-
-- where content goes
-- how content is spaced and aligned
-- how states look
-- which tokens are used
-- what accessibility behavior exists
-
-Consumers provide:
-
-- business copy
-- icons and media
-- product data
-- actions
-- validation timing
-- layout around the component
-
-## Source Of Truth
-
-Figma variables and exported token sources define the visual system.
-
-The token package turns those sources into generated platform artifacts.
-
-The Web Components package consumes generated tokens and implements reusable
-behavior and structure.
-
-Storybook demonstrates how primitives and wrappers compose into real usage
-patterns.
+Do not turn a component task into an architecture migration. New dependencies,
+testing frameworks, registration models, generated metadata, or token transforms
+must be proposed and approved as separate package-wide work.

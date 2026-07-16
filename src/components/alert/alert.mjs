@@ -296,7 +296,7 @@ const mount = (host) => {
  * @attr {"polite"|"assertive"} live - Announcement urgency. Defaults to polite status semantics.
  * @slot title - Alert title.
  * @slot description - Supporting alert message.
- * @slot action - Alert action, commonly a ds-button.
+ * @slot action - Consumer-provided alert action.
  * @part root - Alert surface.
  * @part icon - Status icon wrapper.
  * @part content - Text content wrapper.
