@@ -18,11 +18,7 @@
   "homepage": "https://github.com/maria-ms/components-web#readme",
   "exports": {
     ".": "./src/index.mjs",
-    "./accordion": "./src/components/accordion/accordion.mjs",
-    "./alert": "./src/components/alert/alert.mjs",
-    "./avatar": "./src/components/avatar/avatar.mjs",
     "./button": "./src/components/button/button.mjs",
-    "./dropdown": "./src/components/dropdown/dropdown.mjs",
     "./package.json": "./package.json"
   },
   "sideEffects": true,
@@ -31,7 +27,7 @@
     "provenance": true
   },
   "scripts": {
-    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/accordion/accordion.mjs && node --check src/components/alert/alert.mjs && node --check src/components/avatar/avatar.mjs && node --check src/components/button/button.mjs && node --check src/components/dropdown/dropdown.mjs",
+    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs",
     "prepack": "npm run check",
     "pack:dry-run": "npm pack --dry-run"
   },

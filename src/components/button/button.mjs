@@ -6,56 +6,50 @@ template.innerHTML = `
   <style>
     :host {
       --button-block-size: var(--ds-component-button-height-md);
-      --button-gap: var(--ds-primitive-space-03);
-      --button-icon-only-size: var(--ds-component-button-icon-only-size-md);
-      --ds-button-icon-size: var(--ds-component-icon-size-md);
-      --button-padding-block: var(--ds-primitive-space-04);
-      --button-padding-inline: var(--ds-primitive-space-04);
-      --button-radius: var(--ds-primitive-radius-04);
-      --button-font-size: var(--ds-semantic-typography-body-small-font-size);
-      --button-line-height: var(--ds-semantic-typography-body-small-line-height);
+      --button-gap: var(--ds-semantic-spacing-xs);
+      --button-padding-block: var(--ds-semantic-spacing-xs);
+      --button-padding-inline: var(--ds-semantic-spacing-sm);
+      --button-radius: var(--ds-semantic-radius-md);
+      --button-font-size: var(--ds-semantic-typography-control-default-font-size);
+      --button-font-weight: var(--ds-semantic-typography-control-default-font-weight-root);
+      --button-line-height: var(--ds-semantic-typography-control-default-line-height);
+      --button-letter-spacing: var(--ds-semantic-typography-control-default-letter-spacing);
       --button-background: var(--ds-component-button-color-background-default);
       --button-background-hover: var(--ds-component-button-color-background-hover-elevated);
       --button-border: transparent;
       --button-foreground: var(--ds-component-button-color-foreground-default);
+      --button-focus-color: var(--ds-semantic-border-focus-primary-color);
+      --button-focus-offset-x: var(--ds-semantic-border-focus-primary-offset-x);
+      --button-focus-offset-y: var(--ds-semantic-border-focus-primary-offset-y);
+      --button-focus-blur: var(--ds-semantic-border-focus-primary-blur);
+      --button-focus-spread: var(--ds-semantic-border-focus-primary-spread);
+      --ds-button-icon-size: var(--ds-component-icon-size-md);
 
       box-sizing: border-box;
       display: inline-block;
-      max-width: 100%;
-      font-family: inherit;
+      max-inline-size: 100%;
       vertical-align: middle;
     }
 
-    :host([size="xs"]) {
-      --button-block-size: var(--ds-component-button-height-xs);
-      --button-gap: var(--ds-primitive-space-02);
-      --button-icon-only-size: var(--ds-component-button-icon-only-size-xs);
-      --ds-button-icon-size: var(--ds-component-icon-size-sm);
-      --button-padding-block: var(--ds-primitive-space-02);
-      --button-padding-inline: var(--ds-primitive-space-03);
-      --button-radius: var(--ds-primitive-radius-03);
-    }
-
-    :host([size="sm"]) {
+    :host([size="small"]) {
       --button-block-size: var(--ds-component-button-height-sm);
-      --button-gap: var(--ds-primitive-space-02);
-      --button-icon-only-size: var(--ds-component-button-icon-only-size-sm);
+      --button-gap: var(--ds-semantic-spacing-2xs);
+      --button-padding-block: var(--ds-semantic-spacing-2xs);
+      --button-padding-inline: var(--ds-semantic-spacing-xs);
+      --button-radius: var(--ds-semantic-radius-base);
       --ds-button-icon-size: var(--ds-component-icon-size-sm);
-      --button-padding-block: var(--ds-primitive-space-02);
-      --button-padding-inline: var(--ds-primitive-space-03);
-      --button-radius: var(--ds-primitive-radius-04);
     }
 
-    :host([size="lg"]) {
+    :host([size="large"]) {
       --button-block-size: var(--ds-component-button-height-lg);
-      --button-gap: var(--ds-primitive-space-03);
-      --button-icon-only-size: var(--ds-component-button-icon-only-size-lg);
-      --ds-button-icon-size: var(--ds-component-icon-size-lg);
-      --button-padding-block: var(--ds-primitive-space-04);
-      --button-padding-inline: var(--ds-primitive-space-05);
-      --button-radius: var(--ds-primitive-radius-05);
+      --button-padding-block: var(--ds-semantic-spacing-sm);
+      --button-padding-inline: var(--ds-semantic-spacing-md);
+      --button-radius: var(--ds-semantic-radius-lg);
       --button-font-size: var(--ds-semantic-typography-body-base-font-size);
+      --button-font-weight: var(--ds-semantic-typography-body-base-font-weight-medium);
       --button-line-height: var(--ds-semantic-typography-body-base-line-height);
+      --button-letter-spacing: var(--ds-semantic-typography-body-base-letter-spacing);
+      --ds-button-icon-size: var(--ds-component-icon-size-lg);
     }
 
     :host([variant="secondary"]) {
@@ -77,63 +71,31 @@ template.innerHTML = `
       --button-foreground: var(--ds-component-button-color-foreground-secondary);
     }
 
-    :host([variant="link"]),
-    :host([variant="link-muted"]) {
-      --button-background: transparent;
-      --button-background-hover: transparent;
-      --button-padding-block: var(--ds-primitive-space-01);
-      --button-padding-inline: 0;
-      --button-foreground: var(--ds-component-button-color-foreground-primary);
-    }
-
-    :host([variant="link-muted"]) {
-      --button-foreground: var(--ds-component-button-color-foreground-secondary);
-    }
-
-    :host([tone="destructive"]) {
-      --button-background: var(--ds-component-button-color-background-destructive-elevated);
-      --button-background-hover: var(--ds-component-button-color-background-destructive-hover-elevated);
-      --button-foreground: var(--ds-component-button-color-foreground-destructive-secondary);
-    }
-
-    :host([tone="destructive"][variant="secondary"]) {
-      --button-background: var(--ds-component-button-color-background-destructive-muted);
+    :host([variant="destructive"]) {
+      --button-background: var(--ds-component-button-color-background-destructive-default);
       --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
       --button-foreground: var(--ds-component-button-color-foreground-destructive-primary);
-    }
-
-    :host([tone="destructive"][variant="outline"]) {
-      --button-background: var(--ds-component-button-color-background-tertiary);
-      --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
-      --button-border: var(--ds-component-button-color-border-destructive-elevated);
-      --button-foreground: var(--ds-component-button-color-foreground-destructive-primary);
-    }
-
-    :host([tone="destructive"][variant="ghost"]),
-    :host([tone="destructive"][variant="link"]) {
-      --button-background: transparent;
-      --button-background-hover: var(--ds-component-button-color-background-destructive-hover-muted);
-      --button-foreground: var(--ds-component-button-color-foreground-destructive-primary);
-    }
-
-    :host([tone="destructive"][variant="link"]) {
-      --button-background-hover: transparent;
+      --button-focus-color: var(--ds-semantic-border-focus-destructive-color);
+      --button-focus-offset-x: var(--ds-semantic-border-focus-destructive-offset-x);
+      --button-focus-offset-y: var(--ds-semantic-border-focus-destructive-offset-y);
+      --button-focus-blur: var(--ds-semantic-border-focus-destructive-blur);
+      --button-focus-spread: var(--ds-semantic-border-focus-destructive-spread);
     }
 
     slot {
       display: contents;
     }
 
-    ::slotted(button),
-    ::slotted(a) {
+    ::slotted(button) {
       box-sizing: border-box;
       display: inline-flex;
-      min-width: 0;
-      max-width: 100%;
-      min-height: var(--button-block-size);
+      min-inline-size: 0;
+      max-inline-size: 100%;
+      min-block-size: var(--button-block-size);
       align-items: center;
       justify-content: center;
       gap: var(--button-gap);
+      margin: 0;
       border: var(--ds-semantic-border-width-thin) solid var(--button-border);
       border-radius: var(--button-radius);
       padding: var(--button-padding-block) var(--button-padding-inline);
@@ -141,111 +103,56 @@ template.innerHTML = `
       color: var(--button-foreground);
       font-family: inherit;
       font-size: var(--button-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      font-weight: var(--button-font-weight);
       line-height: var(--button-line-height);
+      letter-spacing: var(--button-letter-spacing);
       text-align: center;
-      text-decoration: none;
       cursor: pointer;
       appearance: none;
       -webkit-appearance: none;
     }
 
-    ::slotted(button:hover),
-    ::slotted(a:hover) {
+    ::slotted(button:not(:disabled):hover) {
       background: var(--button-background-hover);
     }
 
-    :host([variant="ghost"]) ::slotted(button:hover),
-    :host([variant="ghost"]) ::slotted(a:hover) {
+    :host([variant="ghost"]) ::slotted(button:not(:disabled):hover) {
       color: var(--ds-component-button-color-foreground-primary);
     }
 
-    :host([tone="destructive"][variant="ghost"]) ::slotted(button:hover),
-    :host([tone="destructive"][variant="ghost"]) ::slotted(a:hover) {
-      color: var(--ds-component-button-color-foreground-destructive-primary);
-    }
-
-    :host([variant="link"]) ::slotted(button:hover),
-    :host([variant="link"]) ::slotted(a:hover),
-    :host([variant="link-muted"]) ::slotted(button:hover),
-    :host([variant="link-muted"]) ::slotted(a:hover) {
-      text-decoration: underline;
-      text-underline-offset: var(--ds-primitive-space-01);
-    }
-
-    ::slotted(button:focus-visible),
-    ::slotted(a:focus-visible) {
+    ::slotted(button:focus-visible) {
       outline: 0;
       box-shadow:
-        var(--ds-semantic-shadow-xs-offset-x)
-          var(--ds-semantic-shadow-xs-offset-y)
-          var(--ds-semantic-shadow-xs-blur)
-          var(--ds-semantic-shadow-xs-spread)
-          var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-shadow-focused-4px-offset-x)
-          var(--ds-semantic-shadow-focused-4px-offset-y)
-          var(--ds-semantic-shadow-focused-4px-blur)
-          var(--ds-semantic-shadow-focused-4px-spread)
-          var(--ds-semantic-shadow-focused-4px-color);
+        var(--button-focus-offset-x)
+        var(--button-focus-offset-y)
+        var(--button-focus-blur)
+        var(--button-focus-spread)
+        var(--button-focus-color);
     }
 
-    :host([tone="destructive"]) ::slotted(button:focus-visible),
-    :host([tone="destructive"]) ::slotted(a:focus-visible) {
-      box-shadow:
-        var(--ds-semantic-shadow-xs-offset-x)
-          var(--ds-semantic-shadow-xs-offset-y)
-          var(--ds-semantic-shadow-xs-blur)
-          var(--ds-semantic-shadow-xs-spread)
-          var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-shadow-focused-4px-destructive-offset-x)
-          var(--ds-semantic-shadow-focused-4px-destructive-offset-y)
-          var(--ds-semantic-shadow-focused-4px-destructive-blur)
-          var(--ds-semantic-shadow-focused-4px-destructive-spread)
-          var(--ds-semantic-shadow-focused-4px-destructive-color);
-    }
-
-    ::slotted(button:disabled),
-    ::slotted(button[aria-disabled="true"]),
-    ::slotted(a[aria-disabled="true"]) {
+    ::slotted(button:disabled) {
       border-color: transparent;
       background: var(--ds-component-button-color-background-disabled);
       color: var(--ds-component-button-color-foreground-disabled);
       cursor: not-allowed;
     }
 
-    :host([variant="outline"]) ::slotted(button:disabled),
-    :host([variant="outline"]) ::slotted(button[aria-disabled="true"]),
-    :host([variant="outline"]) ::slotted(a[aria-disabled="true"]) {
+    :host([variant="outline"]) ::slotted(button:disabled) {
       border-color: var(--ds-component-button-color-border-disabled);
     }
 
-    :host([variant="ghost"]) ::slotted(button:disabled),
-    :host([variant="ghost"]) ::slotted(button[aria-disabled="true"]),
-    :host([variant="ghost"]) ::slotted(a[aria-disabled="true"]),
-    :host([variant="link"]) ::slotted(button:disabled),
-    :host([variant="link"]) ::slotted(button[aria-disabled="true"]),
-    :host([variant="link"]) ::slotted(a[aria-disabled="true"]),
-    :host([variant="link-muted"]) ::slotted(button:disabled),
-    :host([variant="link-muted"]) ::slotted(button[aria-disabled="true"]),
-    :host([variant="link-muted"]) ::slotted(a[aria-disabled="true"]) {
+    :host([variant="ghost"]) ::slotted(button:disabled) {
       background: transparent;
     }
 
-    :host([icon-only]) ::slotted(button),
-    :host([icon-only]) ::slotted(a) {
-      width: var(--button-icon-only-size);
-      min-width: var(--button-icon-only-size);
-      padding: 0;
-    }
-
     @media (forced-colors: active) {
-      ::slotted(button),
-      ::slotted(a) {
+      ::slotted(button) {
         border-color: ButtonText;
+        background: ButtonFace;
+        color: ButtonText;
       }
 
-      ::slotted(button:focus-visible),
-      ::slotted(a:focus-visible) {
+      ::slotted(button:focus-visible) {
         outline: 2px solid Highlight;
         outline-offset: 2px;
         box-shadow: none;
@@ -257,8 +164,10 @@ template.innerHTML = `
 `;
 
 /**
- * Styles one consumer-owned native button or link without replacing its native
- * semantics, attributes, form behavior, events, or child composition.
+ * Token styles for one consumer-owned native button.
+ *
+ * The native button keeps its complete HTML contract: form participation,
+ * type, disabled state, accessibility attributes, events, and child content.
  */
 export class Button extends HTMLElement {
   constructor() {
