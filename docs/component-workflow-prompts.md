@@ -16,9 +16,21 @@ and component instances. Do not create duplicate variables, styles or icons.
 
 The page must be a designer-friendly working page and an unambiguous handoff
 for developers and coding agents. Use exactly these four top-level frames, in
-this order:
+this order. This is the `BUTTON-SHADCN` page pattern:
 
-1. 01 Component
+1. 00 Contract
+   - Write concise, explicit statements for: Purpose, Semantics, Public
+     interface, Slots/content positions, State evidence, Ownership, Layout,
+     Scope, and Implementation rule.
+   - State the semantic element, accessibility rule, responsive/content
+     ownership, out-of-scope cases, and any compound-child ownership here.
+     For example, Field composes a Label, one Input/Select/Textarea control,
+     and optional description or validation text; it must use those real child
+     instances rather than a flattened drawing.
+   - This frame records decisions that visuals cannot express. It is not a
+     second component set and must not duplicate variable values.
+
+2. 01 Components
    - Create the canonical reusable component set here.
    - Include only public choices as component properties: required appearance
      variants, size, boolean product conditions, text and instance-swap
@@ -27,11 +39,11 @@ this order:
      do not type visual values into layers. Keep meaningful layers: Container,
      leading content, label/control, trailing content. Do not flatten reusable
      child components.
-   - Add a concise component description that says purpose, semantic element,
-     public choices, accessibility rule, and what is deliberately out of
-     scope. Add descriptions to non-obvious component properties.
+   - Add a concise component description that repeats only the public API and
+     the implementation mapping a user needs while selecting the component.
+     The complete rationale belongs in `00 Contract`.
 
-2. 02 State reference
+3. 02 States
    - Show default, hover, focus-visible, disabled and any other defined
      behaviour as visual reference. These are evidence for implementation,
      not public properties, unless users can intentionally choose them in the
@@ -39,21 +51,12 @@ this order:
    - Use the same variables and layers as the canonical component. Mark any
      missing state or token as a decision needed; never invent it.
 
-3. 03 Examples
+4. 03 Examples
    - Show the smallest set of meaningful product compositions: normal use,
      optional content/slots, long content, and a real compound composition
      where relevant.
    - Use instances of the component set and actual child components. Examples
      are examples, not new variants or text properties.
-
-4. 04 Handoff notes
-   - Write brief, explicit notes for semantics, keyboard/accessibility,
-     responsive/content ownership, slot/content order, and out-of-scope cases.
-   - For a compound component, name the child component(s) it composes and
-     state which child owns each responsibility. For example, Field composes a
-     Label, one Input/Select/Textarea control, and optional description or
-     validation text; it must use those real child instances rather than a
-     flattened drawing.
 
 Rules:
 - A primitive owns only its semantic element, token styling and defined native
@@ -88,7 +91,9 @@ Implement [COMPONENT NAME] from this canonical Figma page:
 Work only in ds/components-web and ds/storybook-web. Use values only from the
 generated ds/tokens/dist output. Inspect the Figma canonical component set,
 state-reference frame, examples, component/property descriptions and the
-actual variable/style bindings before writing code. Treat them as one contract.
+actual variable/style bindings before writing code. Read `00 Contract` first,
+then the canonical component set in `01 Components`, `02 States`, and `03
+Examples`. Treat them as one contract.
 
 First report the implementation contract: semantic HTML target; public
 properties and defaults; native states; content/slots; composed children;
@@ -118,14 +123,13 @@ counterpart:
   every interactive control.
 
 Create only the stories justified by the Figma page:
-1. Playground: public choices as Controls, real semantic markup and event
-   logging in Actions.
-2. Canonical variants/sizes only when the Figma component set needs visual
-   comparison.
-3. FigmaExamples: mirror the examples/compositions frame using approved child
-   assets. Do not create a story for every cross-product.
-4. Native state evidence such as disabled; do not expose hover/focus as fake
-   Controls.
+1. `01 Components` creates Playground: public choices as Controls, real
+   semantic markup and event logging in Actions. Add a compact
+   variants/sizes comparison only when the canonical component set needs it.
+2. `03 Examples` creates FigmaExamples using its approved child assets. Do not
+   create a story for every cross-product.
+3. `02 States` creates directly inspectable native-state evidence, such as
+   disabled. Do not expose hover or focus as fake Controls.
 
 Import components through their public package entry point and token CSS from
 @maria-ms/tokens. Update the package export, concise README and this workflow

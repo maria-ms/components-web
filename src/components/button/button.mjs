@@ -5,25 +5,26 @@ const template = document.createElement("template");
 template.innerHTML = `
   <style>
     :host {
-      --button-block-size: var(--ds-component-button-height-md);
-      --button-gap: var(--ds-semantic-spacing-xs);
-      --button-padding-block: var(--ds-semantic-spacing-xs);
-      --button-padding-inline: var(--ds-semantic-spacing-sm);
+      --button-block-size: var(--ds-component-button-height-sm);
+      --button-gap: var(--ds-semantic-spacing-2xs);
+      --button-padding-block: var(--ds-semantic-spacing-2xs);
+      --button-padding-inline: var(--ds-semantic-spacing-xs);
       --button-radius: var(--ds-semantic-radius-md);
       --button-font-size: var(--ds-semantic-typography-control-default-font-size);
       --button-font-weight: var(--ds-semantic-typography-control-default-font-weight-root);
       --button-line-height: var(--ds-semantic-typography-control-default-line-height);
-      --button-letter-spacing: var(--ds-semantic-typography-control-default-letter-spacing);
+      --button-letter-spacing: normal;
       --button-background: var(--ds-component-button-color-background-default);
       --button-background-hover: var(--ds-component-button-color-background-hover-elevated);
       --button-border: transparent;
+      --button-border-width: 0;
       --button-foreground: var(--ds-component-button-color-foreground-default);
       --button-focus-color: var(--ds-semantic-border-focus-primary-color);
       --button-focus-offset-x: var(--ds-semantic-border-focus-primary-offset-x);
       --button-focus-offset-y: var(--ds-semantic-border-focus-primary-offset-y);
       --button-focus-blur: var(--ds-semantic-border-focus-primary-blur);
       --button-focus-spread: var(--ds-semantic-border-focus-primary-spread);
-      --ds-button-icon-size: var(--ds-component-icon-size-md);
+      --ds-button-icon-size: var(--ds-component-icon-size-sm);
 
       box-sizing: border-box;
       display: inline-block;
@@ -31,13 +32,13 @@ template.innerHTML = `
       vertical-align: middle;
     }
 
-    :host([size="small"]) {
-      --button-block-size: var(--ds-component-button-height-sm);
-      --button-gap: var(--ds-semantic-spacing-2xs);
-      --button-padding-block: var(--ds-semantic-spacing-2xs);
-      --button-padding-inline: var(--ds-semantic-spacing-xs);
-      --button-radius: var(--ds-semantic-radius-base);
-      --ds-button-icon-size: var(--ds-component-icon-size-sm);
+    :host([size="medium"]) {
+      --button-block-size: var(--ds-component-button-height-md);
+      --button-gap: var(--ds-semantic-spacing-xs);
+      --button-padding-block: var(--ds-semantic-spacing-sm);
+      --button-padding-inline: var(--ds-semantic-spacing-sm);
+      --button-radius: var(--ds-semantic-radius-lg);
+      --ds-button-icon-size: var(--ds-component-icon-size-md);
     }
 
     :host([size="large"]) {
@@ -62,6 +63,7 @@ template.innerHTML = `
       --button-background: var(--ds-component-button-color-background-tertiary);
       --button-background-hover: var(--ds-component-button-color-background-secondary);
       --button-border: var(--ds-component-button-color-border-primary);
+      --button-border-width: var(--ds-semantic-border-width-default);
       --button-foreground: var(--ds-component-button-color-foreground-primary);
     }
 
@@ -82,6 +84,12 @@ template.innerHTML = `
       --button-focus-spread: var(--ds-semantic-border-focus-destructive-spread);
     }
 
+    :host([variant="secondary"][size="medium"]),
+    :host([variant="outline"][size="medium"]),
+    :host([variant="ghost"][size="medium"]) {
+      --button-padding-block: var(--ds-semantic-spacing-xs);
+    }
+
     slot {
       display: contents;
     }
@@ -91,17 +99,17 @@ template.innerHTML = `
       display: inline-flex;
       min-inline-size: 0;
       max-inline-size: 100%;
-      min-block-size: var(--button-block-size);
+      block-size: var(--button-block-size);
       align-items: center;
       justify-content: center;
       gap: var(--button-gap);
       margin: 0;
-      border: var(--ds-semantic-border-width-thin) solid var(--button-border);
+      border: var(--button-border-width) solid var(--button-border);
       border-radius: var(--button-radius);
       padding: var(--button-padding-block) var(--button-padding-inline);
       background: var(--button-background);
       color: var(--button-foreground);
-      font-family: inherit;
+      font-family: var(--ds-primitive-font-family-body);
       font-size: var(--button-font-size);
       font-weight: var(--button-font-weight);
       line-height: var(--button-line-height);
@@ -123,6 +131,11 @@ template.innerHTML = `
     ::slotted(button:focus-visible) {
       outline: 0;
       box-shadow:
+        var(--ds-semantic-shadow-xs-offset-x)
+        var(--ds-semantic-shadow-xs-offset-y)
+        var(--ds-semantic-shadow-xs-blur)
+        var(--ds-semantic-shadow-xs-spread)
+        var(--ds-semantic-shadow-xs-color),
         var(--button-focus-offset-x)
         var(--button-focus-offset-y)
         var(--button-focus-blur)
@@ -145,8 +158,27 @@ template.innerHTML = `
       background: transparent;
     }
 
+    :host([variant="outline"]) ::slotted(button:disabled) {
+      background: transparent;
+    }
+
+    :host([variant="secondary"]) ::slotted(button:disabled) {
+      background: var(--ds-component-button-color-background-secondary);
+      color: var(--ds-component-button-color-foreground-primary);
+      opacity: 0.5;
+    }
+
+    :host([variant="secondary"][size="large"]) ::slotted(button:disabled) {
+      padding-block: var(--ds-semantic-spacing-md);
+    }
+
+    :host([variant="ghost"]) ::slotted(button:focus-visible) {
+      background: var(--ds-component-button-color-background-tertiary);
+    }
+
     @media (forced-colors: active) {
       ::slotted(button) {
+        border-width: var(--ds-semantic-border-width-default);
         border-color: ButtonText;
         background: ButtonFace;
         color: ButtonText;

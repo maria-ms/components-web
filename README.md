@@ -33,7 +33,7 @@ the native element or invent a second button API.
 | Figma property | Web contract |
 | --- | --- |
 | `Variant` | `primary` (default), `secondary`, `outline`, `ghost`, or `destructive` on `ds-button` |
-| `Size` | `small`, `medium` (default), or `large` on `ds-button` |
+| `Size` | `small` (default), `medium`, or `large` on `ds-button` |
 | `Disabled` | Native `disabled` on the inner `<button>` |
 | `Label` | The inner button's accessible text content |
 | `Leading icon` / `Trailing icon` | Ordinary first / last child content of the inner button |
