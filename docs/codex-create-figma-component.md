@@ -61,6 +61,10 @@ multiple, conflicting meanings.
 - Part — a named internal piece or canonical child component.
 - Example — a representative use of the canonical component.
 
+Classify every 03 Examples item explicitly as one of: a canonical component
+instance, a fixture-only composition, or a missing compound component. Do not
+leave a raw frame whose ownership or implementation status is ambiguous.
+
 First report a concise proposed contract containing:
 - semantic native target and purpose;
 - out-of-scope cases;
@@ -121,6 +125,8 @@ this exact order:
   values into layers. If an approved source has an unavoidable raw visual
   exception, document it in 00 About rather than creating a speculative
   token.
+- Read and preserve each exact Figma binding. Never infer a token from a
+  visual value, a frame's apparent size, or a component name.
 - Name properties and parts by the capability they permit, not only the asset
   currently shown. For example, call a position `Leading content` only when it
   genuinely permits more than icons; otherwise keep the deliberate constraint
@@ -148,7 +154,9 @@ this exact order:
   and reduced-motion rule in 00 About; do not imply an unspecified animation.
 
 03 Examples
-- Use real component instances and actual child components.
+- Use real component instances and actual child components whenever a
+  canonical component exists. A fixture-only composition must be named as such
+  and must not pretend to be a canonical instance or introduce a public API.
 - Show the smallest meaningful set: normal use, optional content, long
   content, and one meaningful compound composition when relevant.
 - Examples are not new variants and not a permutation matrix.
@@ -163,8 +171,8 @@ Before reporting completion, re-read the page through Figma MCP and verify:
 - canonical component properties and their references on descendant layers;
 - variable/style bindings and every declared raw-value exception;
 - separation between public component properties and state evidence;
-- examples are real instances of canonical components and real child
-  components;
+- each example's instance / fixture / missing-compound classification, plus
+  its child components and exact bindings;
 - a screenshot shows readable, uncropped, non-overlapping content.
 
 Report the new page and canonical component-set URLs/IDs, public properties,

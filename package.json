@@ -19,6 +19,7 @@
   "exports": {
     ".": "./src/index.mjs",
     "./button": "./src/components/button/button.mjs",
+    "./spinner": "./src/components/spinner/spinner.mjs",
     "./package.json": "./package.json"
   },
   "sideEffects": true,
@@ -27,7 +28,7 @@
     "provenance": true
   },
   "scripts": {
-    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs",
+    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs && node --check src/components/spinner/spinner.mjs",
     "prepack": "npm run check",
     "pack:dry-run": "npm pack --dry-run"
   },

@@ -54,6 +54,8 @@ First report the implementation contract:
 - content/slot contract and composed child components;
 - native states and accessibility/form behaviour;
 - exact token mappings available in dist;
+- the exact Figma variable path for every fixed size, gap, padding, radius,
+  colour, and typography decision;
 - smallest stories justified by the Figma page;
 - every unresolved gap.
 
@@ -91,8 +93,22 @@ When the contract is complete:
   allowed. An explicitly documented Figma fixed exception, inherited value, or
   intrinsic asset geometry may be reproduced exactly; do not create an
   undocumented hard-coded value.
+- Map the exact Figma variable path to its `tokens/dist` export. Do not infer a
+  token from a matching current value, visual appearance, or component name.
+  An alias with the same resolved value is not automatically the same handoff
+  reference.
+- Translate fixed Figma frame dimensions with `box-sizing: border-box` when
+  the frame has padding, so its declared height or width includes that padding.
+- For an approved Figma vector, render the approved vector geometry directly;
+  do not substitute a similarly named icon or redraw it. Use inherited
+  `currentColor` only when the Figma contract documents contextual foreground.
 - If the approved contract has motion, implement only its documented trigger,
   timing, and end/loop behaviour, and include its reduced-motion treatment.
+- In a custom element, do not mutate the host's attributes or children in its
+  constructor. Render or update them in `connectedCallback` (or use a valid
+  shadow-DOM bootstrap). Verify the component upgrades and renders actual DOM
+  in a fresh Storybook iframe or restarted dev server; hot reload cannot replace
+  an already-defined custom-element class.
 - Follow the existing Button's composable-child approach where it applies:
   consumer content remains real DOM content. Use named slots only when the
   component genuinely owns stable named content positions.
@@ -116,7 +132,7 @@ Create only the stories evidenced by the approved Figma page:
 2. Compact variant/size comparison only when it makes the canonical set easier
    to inspect; never create a story for every cross-product.
 3. Figma Examples from 03 Examples: exactly mirror its labels, composition,
-   and approved assets.
+   approved assets, exact variable bindings, and fixed-frame sizing semantics.
 4. Inspectable native-state evidence from 02 States, such as disabled. Do not
    expose hover or focus as fake controls.
 
@@ -125,9 +141,11 @@ child DOM. Mark their mapping clearly; never turn them into component attributes
 unless the approved Figma Contract defines them as such.
 
 When a Figma Example demonstrates composition rather than a public Option,
-create it as a fixed, inspectable example—not as a new component control. If
-the approved component has motion, include the reduced-motion result in the
-component verification.
+first identify it as a canonical instance, fixture-only composition, or missing
+compound. Create a fixture-only composition as a fixed, inspectable example—not
+as a new component control or an ambiguous inline replacement for a missing
+component. If the approved component has motion, include the reduced-motion
+result in the component verification.
 
 Import the component through its public package entry point and the light/dark
 token CSS through @maria-ms/tokens. Run the package check and a Storybook

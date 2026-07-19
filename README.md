@@ -1,6 +1,6 @@
 # Maria Web Components
 
-This package currently ships one component: `ds-button`.
+This package currently ships `ds-button` and `ds-spinner`.
 
 ## Install and register
 
@@ -66,6 +66,29 @@ not reproduce React-specific APIs such as `asChild`.
 The component provides token-backed default, hover, focus-visible and disabled
 styles. It deliberately has no active/pressed treatment because that state is
 not yet defined by the canonical Figma component.
+
+## Spinner
+
+`ds-spinner` is a pure decorative loading indicator. It has no status role,
+live-region behaviour or accessible name; its parent supplies the visible task
+or status message and any announcement.
+
+```html
+<p id="saving-status">
+  <ds-spinner size="medium"></ds-spinner>
+  Saving changes…
+</p>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-spinner` |
+| Decorative by default | `ds-spinner` is always `aria-hidden="true"`; do not give it a role |
+| Reduced motion | CSS stops rotation under `prefers-reduced-motion: reduce` while keeping the partial circle visible |
+
+Spinner inherits the surrounding text colour through `currentColor`. Its outer
+sizes use the existing icon-size tokens; its geometry comes from the
+Figma-exported SVG content.
 
 ## Development
 
