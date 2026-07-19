@@ -11,9 +11,18 @@ Create an implementation-ready canonical Figma page for [COMPONENT NAME], a
 Figma MCP. Use [SOURCE FIGMA URL OR EXISTING COMPONENT] only as source
 material, not as a reason to duplicate obsolete structure.
 
+Start with this designer brief. State `unknown` rather than guessing:
+- Component or change:
+- Primitive or compound:
+- Product situation it supports:
+- Known content or child parts:
+- Known states or behaviours:
+- Source material or existing page:
+- Decisions already made:
+
 Before changing anything, inspect these sources in this order:
 1. Figma README, Foundations, and live variable/style bindings.
-2. BUTTON-SHADCN, the page, layer, contract, and handoff benchmark.
+2. BUTTON-SHADCN, the page, layers, About rules, and handoff benchmark.
 3. ds/tokens/dist, which defines the implementation values available to code.
 4. The existing Button in ds/components-web and its README, for native
    composition, exports, and package conventions.
@@ -25,7 +34,7 @@ Before changing anything, inspect these sources in this order:
 
 `BUTTON-SHADCN` is the only canonical Button baseline. Legacy component pages
 are discovery-only: never inherit their variants, state axes, or old web API
-unless the new `00 Contract` explicitly adds and justifies them.
+unless the new `00 About` explicitly adds and justifies them.
 
 External cross-reference rules — these inform behaviour and interface decisions;
 they never supply visual values or override our Figma Contract or `tokens/dist`.
@@ -42,6 +51,16 @@ they never supply visual values or override our Figma Contract or `tokens/dist`.
 - Carbon and GOV.UK provide cross-checks for usage, state coverage, tokens,
   forms, content, accessibility, documentation, and test completeness.
 
+Before proposing a contract, classify every proposed addition with one primary
+meaning. A change may be shown in more than one section, but it must not gain
+multiple, conflicting meanings.
+
+- Option — a product-controlled choice.
+- State — a temporary user, system, or platform condition.
+- Rule — behaviour that is always true.
+- Part — a named internal piece or canonical child component.
+- Example — a representative use of the canonical component.
+
 First report a concise proposed contract containing:
 - semantic native target and purpose;
 - out-of-scope cases;
@@ -53,6 +72,25 @@ First report a concise proposed contract containing:
 - available token mappings and the smallest required stories;
 - every unresolved decision.
 
+Also report, before writing to Figma:
+- the Option / State / Rule / Part / Example classification;
+- required existing child components and missing dependencies;
+- a value map: token-bound, inherited from the surrounding context, documented
+  fixed exception, or missing;
+- a decision table for every unresolved material choice, with question,
+  viable choices, recommendation, Figma impact, and implementation impact.
+
+Treat a component that has no native semantic equivalent as a material
+accessibility decision: define whether it is purely visual, exposes a status,
+or has its meaning owned by a parent. If it has motion, define its trigger,
+direction, timing/easing, loop/end behaviour, and reduced-motion behaviour.
+
+Before adding a Figma variant axis, calculate the resulting component matrix.
+If it would create more than 30 combinations or an impractical browsing and
+maintenance burden, stop and propose a nested canonical part, state evidence,
+or a revised public interface. Do not multiply variants merely to represent a
+temporary condition.
+
 If a material token, semantic, accessibility, state, ownership, responsive, or
 content decision is missing, stop and request that decision. Do not invent a
 token, visual value, state, public property, accessibility rule, or responsive
@@ -63,41 +101,51 @@ If the contract is complete, create a new Figma page named
 pattern. The page contains one component section with these four frames, in
 this exact order:
 
-00 Contract
+00 About
 - State purpose, native semantics, public interface, content positions,
   ownership, state rules, layout/content ownership, scope, and platform
   implementation mapping.
+- Keep the same short `How to update this page` guide and shared meanings for
+  Option, State, Rule, Part, and Example as BUTTON-SHADCN. Adapt the component
+  content; do not copy Button-specific rules.
 - Record decisions visuals cannot express. Do not repeat token values here.
 - A true/false Figma variant may represent a native boolean condition such as
   disabled when it is needed to show the visual result. State its native
   platform mapping here. Hover, focus-visible, pressed, empty, and loading are
   not public properties unless product users intentionally configure them.
 
-01 Components
+01 Component
 - Create the canonical reusable component set with only intentional public
   product choices and real defaults.
 - Bind visual layers to existing Figma variables and styles. Do not type visual
   values into layers. If an approved source has an unavoidable raw visual
-  exception, document it in 00 Contract rather than creating a speculative
+  exception, document it in 00 About rather than creating a speculative
   token.
+- Name properties and parts by the capability they permit, not only the asset
+  currently shown. For example, call a position `Leading content` only when it
+  genuinely permits more than icons; otherwise keep the deliberate constraint
+  explicit.
 - Keep meaningful layers: Container, leading content, control or label,
   trailing content, description, and validation where applicable.
 - A primitive owns one semantic control, its token styling, and defined native
   states. A compound is also a component: it composes real child component
   instances and exposes only its stable public interface. Never flatten or
   redraw a reusable child component.
-- A compound may compose only an already-canonical child component. If a child
-  is missing, create and approve it first with this prompt, unless the task
-  explicitly authorises a component-family page.
+- Any canonical component that references a child, including a conditional
+  state or an example, may compose only an already-canonical child component.
+  If a child is missing, create and approve it first with this prompt, unless
+  the task explicitly authorises a component-family page.
 - Add a concise component description for the selection panel: public API and
   platform mapping only.
 
 02 States
 - Show only defined default, hover, focus-visible, disabled, and other
   documented states as visual evidence.
-- Use the same structure, variables, and layers as 01 Components.
+- Use the same structure, variables, and layers as 01 Component.
 - State evidence is not a product API. If a state or its token is absent, leave
   it unresolved and report it; never invent it.
+- For motion, show the static visual reference and record the approved motion
+  and reduced-motion rule in 00 About; do not imply an unspecified animation.
 
 03 Examples
 - Use real component instances and actual child components.
@@ -110,6 +158,8 @@ variables, text styles, icons, and components; do not create duplicates.
 
 Before reporting completion, re-read the page through Figma MCP and verify:
 - the page hierarchy and the four required frames;
+- every Option in 00 About maps to an intentional public Figma property, and
+  every public Figma property is explained in 00 About;
 - canonical component properties and their references on descendant layers;
 - variable/style bindings and every declared raw-value exception;
 - separation between public component properties and state evidence;
