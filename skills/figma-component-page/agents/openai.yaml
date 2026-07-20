@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma Component Page"
+  short_description: "Create validated Figma component pages"
+  default_prompt: "Use $figma-component-page to create a canonical Figma page for a design-system component."

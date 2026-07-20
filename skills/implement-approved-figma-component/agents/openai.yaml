@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Approved Figma Component"
+  short_description: "Implement approved Figma components and stories"
+  default_prompt: "Use $implement-approved-figma-component to implement an accepted Figma component page."
