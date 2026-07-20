@@ -56,6 +56,9 @@ invent a fallback.
   In particular, a `preview` table row—such as Figma `Preview text`,
   `Preview value`, or `Preview state`—maps to native content (for example, placeholder,
   value/defaultValue, or child options) and must never become a component API.
+- A Properties-table row with type `native` maps to the target platform's
+  standard element attributes, properties, events, and form behaviour. Do not
+  create a bespoke wrapper property for it.
 - Use only generated CSS custom properties from `ds/tokens/dist` for design
   values. Browser resets/forced-colors rules and explicitly documented fixed
   exceptions are allowed; do not add undocumented hard-coded visual values.
