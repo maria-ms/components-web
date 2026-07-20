@@ -105,7 +105,7 @@ Duplicate `COMPONENT-PAGE-TEMPLATE`, rename the new page
 `[COMPONENT NAME]-SHADCN`, and preserve this exact visible layer tree:
 
 ```text
-Component / Page
+[Component name] / Page
 ├── Page metadata
 └── Page content
     ├── Page title
@@ -133,7 +133,7 @@ Component / Page
         └── Examples
 ```
 
-Keep exactly one visible `Component / Page` root and one canonical public
+Keep exactly one visible `[Component name] / Page` root and one canonical public
 component set. Do not create duplicate page shells, legacy matrices, loose
 legends, or competing public assets.
 
