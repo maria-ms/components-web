@@ -32,7 +32,7 @@ for compositional or behavioural precedent.
 Before writing code, report:
 
 - native semantic target and public API/defaults;
-- mapping from each approved Figma Option to the platform API or native HTML;
+- mapping from each approved Figma Property to the platform API or native HTML;
 - content/part contract and canonical child components;
 - native states, state precedence, accessibility/form behaviour, and approved
   motion/reduced-motion treatment;
@@ -51,7 +51,7 @@ invent a fallback.
 - Use the smallest composable implementation with the correct native element.
   Preserve standard attributes, properties, events, focus API, constraint
   validation, form participation, keyboard behaviour, and accessible name.
-- Add a public property only for an approved Figma Option. State evidence,
+- Add a public property only for an approved Figma Property. State evidence,
   Figma previews, consumer conditions, and fixture content do not create API.
 - Use only generated CSS custom properties from `ds/tokens/dist` for design
   values. Browser resets/forced-colors rules and explicitly documented fixed
@@ -75,7 +75,7 @@ invent a fallback.
 
 Create only the stories evidenced by the approved page:
 
-1. **Playground** — 01 Component with controls only for real public options and
+1. **Playground** — 01 Component with controls only for real public properties and
    Actions wired to real native events.
 2. **Comparison** — only when a compact comparison makes the canonical set
    easier to inspect; never render a full cross-product by default.

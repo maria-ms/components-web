@@ -65,7 +65,7 @@ Report this compact contract before writing:
 
 - purpose, native semantic target, and out-of-scope cases;
 - primitive/compound decision and canonical child dependencies;
-- public choices, defaults, and platform mapping;
+- public properties, defaults, and platform mapping;
 - named parts/content positions, reading order, and ownership of label,
   description, validation, status, and child controls;
 - required visual states, precedence where states overlap, accessibility/form
@@ -73,7 +73,7 @@ Report this compact contract before writing:
 - available token/style bindings, visible theme evidence, smallest useful
   examples, and unresolved material decisions.
 
-Classify each proposed addition once: **Option** (product-controlled choice),
+Classify each proposed addition once: **Property** (product-controlled choice),
 **State** (temporary condition), **Rule** (always true), **Part** (internal
 piece or canonical child), or **Example** (representative use).
 
@@ -91,7 +91,7 @@ Calculate the public variant matrix before adding an axis. If it would exceed
 30 public combinations or become impractical to browse, use a named part,
 state evidence, or a smaller interface. Do not turn hover, focus-visible,
 pressed, open, empty, validation, loading, or a Figma-only content preview into
-a public option merely because it has visual evidence. Name a preview `Preview`
+a public property merely because it has visual evidence. Name a preview `Preview`
 and record its native mapping; it is not a code property by itself.
 
 ## Create from the fixed shell
@@ -109,7 +109,8 @@ Component / Page
     │   ├── Section guidance
     │   ├── Update note
     │   ├── Usage
-    │   ├── Options
+    │   ├── Properties
+    │   │   └── Properties table
     │   └── Rules
     ├── 01 Component
     │   ├── Section title
@@ -136,10 +137,15 @@ legends, or competing public assets.
 ### Populate 00 Use
 
 - State intended use and nearest inappropriate use.
-- List only genuine public choices in Options.
+- Use the Properties table for genuine public properties only. It has four
+  columns: **Property**, **Type**, **Default**, and **Description**. State the
+  allowed values and native/platform mapping in Description.
+- Label Figma-only canvas content as `preview`; state its mapping clearly and
+  never present it as a code property. Use `native` for platform attributes a
+  consumer supplies rather than inventing a wrapper property.
 - Record invariant content, accessibility, ownership, and composition behaviour
   in Rules.
-- Use Update note only for a decision that changes a public option, state, or
+- Use Update note only for a decision that changes a public property, state, or
   rule. Do not duplicate token values.
 
 ### Populate 01 Component
@@ -178,7 +184,7 @@ Re-read the created page through Figma MCP and inspect a screenshot. Confirm:
 
 - exact shell hierarchy, one visible root, no stale placeholder, loose legend,
   duplicate asset, cropped content, or overlap;
-- every public Figma property is an approved Option and every Option is
+- every public Figma property is an approved Property and every Property is
   explained in 00 Use;
 - every State is evidence, not an accidental public property, and overlapping
   state precedence is recorded;
@@ -188,6 +194,6 @@ Re-read the created page through Figma MCP and inspect a screenshot. Confirm:
   clear;
 - variables/styles are bound and every raw-value exception is explicit.
 
-Report page/component-set URLs and IDs, public options, named parts, state and
+Report page/component-set URLs and IDs, public properties, named parts, state and
 theme coverage, child dependencies, variable/style bindings, examples, and
 remaining decisions. Do not implement code.
