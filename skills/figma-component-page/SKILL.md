@@ -91,8 +91,13 @@ Calculate the public variant matrix before adding an axis. If it would exceed
 30 public combinations or become impractical to browse, use a named part,
 state evidence, or a smaller interface. Do not turn hover, focus-visible,
 pressed, open, empty, validation, loading, or a Figma-only content preview into
-a public property merely because it has visual evidence. Name a preview `Preview`
-and record its native mapping; it is not a code property by itself.
+a public property merely because it has visual evidence. Name textual canvas
+content `Preview text`; use `Preview value` only when it represents a displayed
+numeric/control value. In the Properties table, give it type `preview` and state
+`Figma-only canvas preview; not a code API.` Record its native mapping. Never
+call this a generic `Preview`, `Text`, `Canvas content`, `Canvas value`, or
+`Content / Preview`. When Placeholder/Value is needed as canvas evidence, name
+that Figma-only variant property `Preview state`.
 
 ## Create from the fixed shell
 
@@ -106,8 +111,6 @@ Component / Page
     ├── Page title
     ├── 00 Use
     │   ├── Section title
-    │   ├── Section guidance
-    │   ├── Update note
     │   ├── Usage
     │   ├── Properties
     │   │   └── Properties table
@@ -137,21 +140,36 @@ legends, or competing public assets.
 ### Populate 00 Use
 
 - State intended use and nearest inappropriate use.
-- Use the Properties table for genuine public properties only. It has four
-  columns: **Property**, **Type**, **Default**, and **Description**. State the
-  allowed values and native/platform mapping in Description.
-- Label Figma-only canvas content as `preview`; state its mapping clearly and
-  never present it as a code property. Use `native` for platform attributes a
+- Do not add generic section guidance or an update note. Record only information
+  that affects use, the interface, or implementation.
+- Use the Properties table for genuine public properties and, where needed,
+  Figma-only preview rows. It has four columns: **Property**, **Type**,
+  **Default**, and **Description**. State allowed values and native/platform
+  mapping in Description.
+- A preview row has type `preview` and is named `Preview text` or, only for a
+  numeric/control value, `Preview value`. Its Description starts: `Figma-only
+  canvas preview; not a code API.` State its native mapping (for example,
+  placeholder or value/defaultValue). Use `native` for platform attributes a
   consumer supplies rather than inventing a wrapper property.
-- Record invariant content, accessibility, ownership, and composition behaviour
-  in Rules.
-- Use Update note only for a decision that changes a public property, state, or
-  rule. Do not duplicate token values.
+- If the component needs a canvas-only Placeholder/Value selector, name that
+  Figma variant property `Preview state`. Describe it with the preview row; it
+  is not a code API. If it is exposed in the Figma inspector, give it its own
+  table row with type `preview`, never `enum`.
+- Record invariant content, accessibility, ownership, composition behaviour,
+  and state precedence in 00 Use → Rules. For an interactive component,
+  state the component-specific resolution order in one concise sentence.
+  Separate a persistent value such as Checked, Selected, or Indeterminate from
+  temporary interaction treatment. Do not reuse a generic order blindly:
+  compound controls must state child ownership and bound/disabled behaviour,
+  while a non-interactive asset needs no precedence rule.
 
 ### Populate 01 Component
 
 - Replace the placeholder with the single canonical public component set. It is
   the only asset designers use on product screens.
+- Set Section guidance exactly to: `Public asset. Use from Assets in product
+  screens.` Put any meaningful implementation mapping in 00 Use, not in this
+  generic guidance line.
 - Include only intentional public properties and real defaults. Add a concise
   Figma component description describing the public interface and native/
   platform mapping.
@@ -166,6 +184,10 @@ legends, or competing public assets.
 
 - Show only approved visual-state evidence, using instances of the 01 Component
   asset. State evidence is never a competing public component set.
+- Prefix every private component asset with `.`. Use names such as
+  `.Component / State reference` or `.Component / Embedded`; the dot signals
+  “internal, not for product screens” but does not replace an explicit
+  documentation-only description.
 - Keep Light and Dark evidence when the theme has a visible result.
 - For motion, show static evidence and record the approved motion and
   reduced-motion rule in 00 Use.
@@ -175,8 +197,10 @@ legends, or competing public assets.
 - Use real 01 Component instances and other canonical child instances.
 - Show only normal use, meaningful optional/long content, and one meaningful
   compound composition where relevant. Do not make a permutation matrix.
-- Name a fixture-only composition as such. If it has a stable reusable
-  interface, stop and propose a missing compound component instead.
+- Name a fixture-only composition as such: its visible label begins
+  `Fixture only —` and its root layer begins `Fixture only /`. It is not an
+  Asset or component API. If it has a stable reusable interface, stop and
+  propose a missing compound component instead.
 
 ## Validate and report
 
@@ -187,7 +211,7 @@ Re-read the created page through Figma MCP and inspect a screenshot. Confirm:
 - every public Figma property is an approved Property and every Property is
   explained in 00 Use;
 - every State is evidence, not an accidental public property, and overlapping
-  state precedence is recorded;
+  state precedence is recorded in 00 Use → Rules when applicable;
 - States and Examples use real canonical instances or are explicitly marked as
   fixture-only compositions;
 - child references, property references, layer names, and reading order are
