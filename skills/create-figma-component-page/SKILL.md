@@ -207,6 +207,10 @@ legends, or competing public assets.
 
 - Show only approved visual-state evidence, using instances of the 01 Component
   asset. State evidence is never a competing public component set.
+- For a native control with browser-owned parts, define the control and each
+  browser-owned part's states separately. Do not infer that a child uses the
+  parent’s focus treatment. Record the approved keyboard-focus treatment and
+  any geometry rule that affects the part, then show it as state evidence.
 - Prefix every private component asset with `.`. Use names such as
   `.Component / State reference` or `.Component / Embedded`; the dot signals
   “internal, not for product screens” but does not replace an explicit

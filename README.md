@@ -201,6 +201,9 @@ Within the enhanced native picker, the keyboard-focused option uses native
 `option:focus` and the same background highlight as hover. It does not add a
 component-level focus border or ring.
 
+Option rows use the active Select size. The enhanced picker has no vertical
+padding; its dividers must not change row geometry or content alignment.
+
 The Select contract is one fixed-choice select. Do not use this primitive for
 search, a custom popup, `multiple`, or a listbox. In browsers that implement
 customizable selects, `ds-select` styles the approved Figma picker, options, and

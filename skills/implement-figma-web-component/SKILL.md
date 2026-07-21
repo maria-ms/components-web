@@ -87,6 +87,12 @@ accepted Figma contract defines that interface.
 States and examples must use public assets or canonical child assets. Treat a
 fixture-only Figma composition as product evidence, not as a missing API.
 
+For a native control with browser-owned parts, treat the control and each part
+as separate state targets. Do not infer that a focused option, picker item, or
+other native subpart uses the control’s focus treatment. Implement the approved
+subpart state explicitly, and verify real keyboard interaction in a supported
+browser so browser default focus styling cannot silently override the contract.
+
 ## Report the mapping before writing code
 
 State concisely:
@@ -163,7 +169,8 @@ Verify through public package entry points with active token theme CSS:
 - fresh custom-element render and actual DOM structure;
 - all accepted public properties/assets and exact token bindings in Light and
   Dark;
-- native interaction, accessible name, keyboard, disabled, and focus behaviour;
+- native interaction, accessible name, keyboard, disabled, and focus behaviour,
+  including browser default focus styling on browser-owned parts;
 - form submit/reset, validation, and `aria-*` association when applicable;
 - motion and `prefers-reduced-motion` when applicable;
 - package syntax check, package dry run, Storybook syntax check, and Storybook
