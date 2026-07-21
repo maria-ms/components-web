@@ -76,7 +76,7 @@ if (!document.getElementById(styleId)) {
         var(--ds-semantic-border-focus-primary-color);
     }
 
-    ds-text-input > input:not(:disabled):is(:invalid, [aria-invalid="true"]) {
+    ds-text-input > input:not(:disabled)[aria-invalid="true"] {
       border-color: var(--ds-semantic-color-border-destructive-default);
       background: var(--ds-semantic-color-background-destructive-subtle);
       color: var(--ds-semantic-color-foreground-destructive-elevated);
@@ -88,7 +88,7 @@ if (!document.getElementById(styleId)) {
         var(--ds-semantic-shadow-xs-color);
     }
 
-    ds-text-input > input:not(:disabled):is(:invalid, [aria-invalid="true"]):focus-visible {
+    ds-text-input > input:not(:disabled)[aria-invalid="true"]:focus-visible {
       box-shadow:
         var(--ds-semantic-shadow-xs-offset-x)
         var(--ds-semantic-shadow-xs-offset-y)

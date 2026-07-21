@@ -1,7 +1,7 @@
 # Maria Web Components
 
-This package currently ships `ds-button`, `ds-icon-button`, `ds-spinner`, and
-`ds-text-input`.
+This package currently ships `ds-button`, `ds-icon-button`, `ds-field`,
+`ds-spinner`, and `ds-text-input`.
 
 ## Install and register
 
@@ -130,8 +130,39 @@ The native input owns its `type`, form `name`, value, placeholder, disabled and
 readonly states, accessible name, `aria-*` relationships, events, focus,
 constraint validation, and form submission/reset behaviour. It accepts native
 textual input types such as `text`, `email`, `password`, `search`, `tel`, and
-`url`. `:invalid` and `[aria-invalid="true"]` use the documented invalid visual;
-the Field component will own when an error becomes visible.
+`url`. `[aria-invalid="true"]` uses the documented invalid visual; Field sets it
+after blur or failed submit so required empty inputs do not show an error early.
+
+## Field
+
+`ds-field` is the structural compound for one canonical text-like control. It
+has no wrapper attributes: compose real Label, Control, and optional Message
+parts in its named slots.
+
+```js
+import "@maria-ms/components-web/field";
+import "@maria-ms/components-web/text-input";
+```
+
+```html
+<ds-field>
+  <label slot="label">Email address</label>
+  <ds-text-input slot="control" size="medium">
+    <input type="email" name="email" placeholder="name@example.com" required />
+  </ds-text-input>
+  <p slot="message">We’ll only use this for account updates.</p>
+</ds-field>
+```
+
+Field connects the native label to the one child control and adds its visible
+Message to the control's `aria-describedby`, while preserving any existing ID
+references. It uses native constraint validation after blur or failed submit:
+the browser's `validationMessage` (including a custom `setCustomValidity()`
+message) temporarily replaces supporting copy. There is no live region.
+
+The allowed control is one canonical Text Input, Textarea, Select Input, or
+Number Input. The current package implementation supports Text Input; the same
+structural contract will apply when the other canonical controls are added.
 
 ## Development
 
