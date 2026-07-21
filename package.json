@@ -19,7 +19,10 @@
   "exports": {
     ".": "./src/index.mjs",
     "./button": "./src/components/button/button.mjs",
+    "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./field": "./src/components/field/field.mjs",
+    "./radio": "./src/components/radio/radio.mjs",
+    "./select": "./src/components/select/select.mjs",
     "./spinner": "./src/components/spinner/spinner.mjs",
     "./text-input": "./src/components/text-input/text-input.mjs",
     "./textarea": "./src/components/textarea/textarea.mjs",
@@ -31,7 +34,7 @@
     "provenance": true
   },
   "scripts": {
-    "check": "node --check scripts/link-skills.mjs && node --check scripts/unlink-skills.mjs && node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs && node --check src/components/field/field.mjs && node --check src/components/spinner/spinner.mjs && node --check src/components/text-input/text-input.mjs && node --check src/components/textarea/textarea.mjs",
+    "check": "node --check scripts/link-skills.mjs && node --check scripts/unlink-skills.mjs && node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs && node --check src/components/checkbox/checkbox.mjs && node --check src/components/field/field.mjs && node --check src/components/radio/radio.mjs && node --check src/components/select/select.mjs && node --check src/components/spinner/spinner.mjs && node --check src/components/text-input/text-input.mjs && node --check src/components/textarea/textarea.mjs",
     "skills:link": "node scripts/link-skills.mjs",
     "skills:unlink": "node scripts/unlink-skills.mjs",
     "prepack": "npm run check",

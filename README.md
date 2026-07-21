@@ -1,7 +1,8 @@
 # Maria Web Components
 
-This package currently ships `ds-button`, `ds-icon-button`, `ds-field`,
-`ds-spinner`, `ds-text-input`, and `ds-textarea`.
+This package currently ships `ds-button`, `ds-icon-button`, `ds-checkbox`,
+`ds-field`, `ds-radio`, `ds-select`, `ds-spinner`, `ds-text-input`, and
+`ds-textarea`.
 
 ## Install and register
 
@@ -159,6 +160,124 @@ focus, resize, constraint validation, and form submission/reset. It retains
 browser resize behaviour. `[aria-invalid="true"]` uses the documented invalid
 visual; Field can set it after blur or failed submit.
 
+## Select
+
+`ds-select` styles one consumer-owned, native single-select `<select>`. It
+does not replace the select, its options, or its browser form behaviour.
+
+```js
+import "@maria-ms/components-web/select";
+```
+
+```html
+<ds-select size="medium">
+  <select name="country" required>
+    <button><selectedcontent></selectedcontent></button>
+    <option value="" disabled>Select a country</option>
+    <option value="ro">Romania</option>
+    <option value="fr">France</option>
+  </select>
+</ds-select>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-select` |
+| `Disabled` | Native `disabled` on the inner `<select>` |
+| `Preview state` / `Preview text` | Figma-only canvas evidence; use native options and the select's `value` / `defaultValue` instead |
+
+The consumer owns the real `<select>`, its `<option>` / `<optgroup>` children,
+and its native `name`, value/defaultValue, required, disabled, autocomplete,
+events, focus, constraint validation, accessible name, and form submission/reset
+behaviour. The optional first child `<button><selectedcontent></selectedcontent></button>`
+is the browser-owned closed-control structure for modern customizable selects;
+it is not a `ds-button` and must not contain one.
+
+A disabled `value=""` option is treated as a placeholder: it remains visible
+while selected, then is hidden from the enhanced picker after a real value is
+selected.
+
+Within the enhanced native picker, the keyboard-focused option uses native
+`option:focus` and the same background highlight as hover. It does not add a
+component-level focus border or ring.
+
+The Select contract is one fixed-choice select. Do not use this primitive for
+search, a custom popup, `multiple`, or a listbox. In browsers that implement
+customizable selects, `ds-select` styles the approved Figma picker, options, and
+indicator with `appearance: base-select`; other browsers retain their native
+picker. `[aria-invalid="true"]` supplies the documented invalid appearance;
+Field decides when validation is shown.
+
+## Checkbox
+
+`ds-checkbox` styles one consumer-owned native `<input type="checkbox">`. It
+does not replace its native form or validation contract.
+
+```js
+import "@maria-ms/components-web/checkbox";
+```
+
+```html
+<label>
+  <ds-checkbox size="medium">
+    <input type="checkbox" name="terms" value="accepted" required />
+  </ds-checkbox>
+  I accept the Terms &amp; Conditions.
+</label>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-checkbox` |
+| `Selection` | Native `checked` or `input.indeterminate`; neither is a `ds-checkbox` attribute |
+| `Disabled` | Native `disabled` on the inner checkbox |
+
+The native checkbox owns `name`, `value`, `checked`, `defaultChecked`,
+`indeterminate`, `required`, `disabled`, its accessible name, events, focus,
+constraint validation, and form submission/reset. An unchecked required
+checkbox is invalid. `[aria-invalid="true"]` supplies the documented error
+appearance after the owning Field or form has chosen to show validation.
+
+Checkbox is intentionally unlabeled. Put its associated native `<label>` and
+any supporting/error text in Choice Field, Field, or the surrounding form.
+
+## Radio
+
+`ds-radio` styles one consumer-owned native `<input type="radio">`. It does
+not replace native radio grouping, form submission, or validation.
+
+```js
+import "@maria-ms/components-web/radio";
+```
+
+```html
+<fieldset>
+  <legend>Choose a notification delivery preference</legend>
+  <label>
+    <ds-radio size="medium">
+      <input type="radio" name="delivery" value="email" checked />
+    </ds-radio>
+    Email
+  </label>
+</fieldset>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-radio` |
+| `Checked` | Native `checked` on the inner radio; it is not a `ds-radio` attribute |
+| `Disabled` | Native `disabled` on the inner radio |
+
+The native radio owns `id`, `name`, `value`, `checked`, `defaultChecked`,
+`required`, `disabled`, its accessible name, events, focus, constraint
+validation, and form submission/reset. Same-name radios are mutually exclusive;
+only the selected value is submitted. A required same-name group is invalid
+until any member is selected.
+
+Radio is intentionally unlabeled. Its parent supplies each native label; Radio
+Group or Field owns the legend, supporting/error copy, and validation timing.
+The approved Radio contract has no standalone invalid appearance.
+
 ## Field
 
 `ds-field` is the structural compound for one canonical text-like control. It
@@ -186,9 +305,9 @@ references. It uses native constraint validation after blur or failed submit:
 the browser's `validationMessage` (including a custom `setCustomValidity()`
 message) temporarily replaces supporting copy. There is no live region.
 
-The allowed control is one canonical Text Input, Textarea, Select Input, or
-Number Input. The package currently supports Text Input and Textarea; the same
-structural contract will apply when the other canonical controls are added.
+The allowed control is one canonical Text Input, Textarea, Select, or Number
+Input. The package currently supports Text Input, Textarea, and Select; the
+same structural contract will apply when the other canonical controls are added.
 
 ## Development
 
