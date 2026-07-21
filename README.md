@@ -1,6 +1,7 @@
 # Maria Web Components
 
-This package currently ships `ds-button`, `ds-icon-button`, and `ds-spinner`.
+This package currently ships `ds-button`, `ds-icon-button`, `ds-spinner`, and
+`ds-text-input`.
 
 ## Install and register
 
@@ -103,6 +104,34 @@ or status message and any announcement.
 Spinner inherits the surrounding text colour through `currentColor`. Its outer
 sizes use the existing icon-size tokens; its geometry comes from the
 Figma-exported SVG content.
+
+## Text Input
+
+`ds-text-input` styles one consumer-owned native, single-line `<input>`. It
+does not replace the input or duplicate its native form and validation API.
+
+```js
+import "@maria-ms/components-web/text-input";
+```
+
+```html
+<ds-text-input size="medium">
+  <input type="email" name="email" placeholder="Email address" required />
+</ds-text-input>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-text-input` |
+| `Disabled` | Native `disabled` on the inner `<input>` |
+| `Preview state` / `Preview text` | Figma-only canvas evidence; use native `placeholder`, `value`, or `defaultValue` instead |
+
+The native input owns its `type`, form `name`, value, placeholder, disabled and
+readonly states, accessible name, `aria-*` relationships, events, focus,
+constraint validation, and form submission/reset behaviour. It accepts native
+textual input types such as `text`, `email`, `password`, `search`, `tel`, and
+`url`. `:invalid` and `[aria-invalid="true"]` use the documented invalid visual;
+the Field component will own when an error becomes visible.
 
 ## Development
 
