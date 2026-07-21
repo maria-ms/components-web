@@ -1,107 +1,157 @@
 ---
 name: implement-approved-figma-component
-description: Implement an accepted canonical Figma component page in ds/components-web and Storybook. Use after a component page created with figma-component-page is approved, when asked to turn that Figma contract into a composable, standards-compliant web component and the smallest evidence-based stories. Do not use to create or correct Figma pages.
+description: Implement an accepted canonical Figma component page as standards-compliant Web Components in ds/components-web, with minimal Storybook evidence. Use after a canonical *-SHADCN Figma page is approved and the task is to port it to components-web/Storybook. Apply the repository's Figma conventions, native HTML/MDN semantics, tokens/dist bindings, and Web Component architecture. Do not use to create or modify Figma pages.
 ---
 
-# Implement an approved Figma component
+# Implement an approved Figma Web Component
 
-Implement only after the user supplies an accepted canonical Figma page or
-component URL. Work only in `ds/components-web` and `ds/storybook-web`; do not
-modify Figma, Foundations, token source snapshots, or `ds/tokens/dist`.
+Implement only an accepted canonical `*-SHADCN` Figma page. Work in
+`ds/components-web` and `ds/storybook-web` only. Do not alter Figma,
+Foundations, token source snapshots, or `ds/tokens/dist`.
+
+Stop and report the gap before coding when the supplied Figma page lacks a
+clear public contract, an essential state/ownership/accessibility decision, a
+required canonical child, or an exact token in `tokens/dist`.
 
 ## Read the contract
 
-Inspect, in this order:
+Inspect in this order:
 
-1. Figma README, Foundations, and actual live variable/style bindings.
-2. `COMPONENT-PAGE-TEMPLATE` for the canonical shell and BUTTON-SHADCN for
-   quality precedent only.
-3. The approved `[COMPONENT NAME]-SHADCN` page: `00 Use`, `01 Component`,
-   `02 States`, `03 Examples`, component descriptions, and actual bindings.
-4. `ds/tokens/dist`, the only source for design values in code.
-5. Existing components, exports, Storybook configuration, and stories.
-6. The closest shadcn and MDN/native HTML sources. Use WAI-ARIA APG only where
-   native HTML cannot supply the required widget behaviour.
+1. The accepted Figma page: `00 Use`, `01 Component`, `02 States`, `03
+   Examples`, public component descriptions, and live variable/style bindings.
+   Read legacy pages only when explicitly supplied as visual discovery material.
+2. The relevant MDN/native HTML reference through MCP. Establish the native
+   semantic target, standard attributes/properties, events, focus API,
+   keyboard behaviour, form behaviour, and constraint validation before
+   designing a wrapper API. Use WAI-ARIA only when native HTML cannot provide
+   the required widget.
+3. Existing `ds/components-web` components, package exports, and Storybook.
+   Match their public entry-point and Web Component conventions unless the
+   accepted contract requires a deliberate change.
+4. `ds/tokens/dist`, the only source for values in code. Map each non-browser
+   visual decision to the exact Figma-bound token.
+5. The closest shadcn registry component only when a composition, named-part,
+   or behaviour question remains. Use it as precedent; never copy its React
+   API, visual values, dependencies, or implementation wholesale.
 
-Treat legacy Figma pages as discovery-only. Do not adopt their variants, states,
-or web API unless the accepted component's 00 Use explicitly approves them.
-Use Foundations/Figma for visual values; native HTML and MDN for semantics,
-attributes, events, keyboard and form behaviour; shadcn and other systems only
-for compositional or behavioural precedent.
+## Apply this decision hierarchy
 
-Before writing code, report:
+Use these sources to resolve conflicts:
 
-- native semantic target and public API/defaults;
-- mapping from each approved Figma Property to the platform API or native HTML;
-- content/part contract and canonical child components;
-- native states, state precedence, accessibility/form behaviour, and approved
-  motion/reduced-motion treatment;
-- exact Figma variable path and matching `tokens/dist` export for every
-  non-browser-default visual decision;
-- smallest stories evidenced by the accepted page;
-- unresolved material gaps.
+1. **Native HTML / MDN** — semantics, existing interface, events, focus,
+   keyboard behaviour, validation, form participation, and accessible name.
+2. **Accepted Figma `00 Use`** — the product-specific visual contract, public
+   design-system choices, named parts, ownership, and approved state rules.
+   It cannot override native behaviour.
+3. **Existing `components-web`** — Web Component architecture, package
+   boundaries, naming, and composition conventions.
+4. **Actual Figma bindings + `tokens/dist`** — exact visual values and theme
+   resolution. `tokens/dist` is the code source of truth.
+5. **shadcn and other systems** — optional compositional precedent only.
 
-Stop and ask for direction if a value is not in `tokens/dist`, a material
-semantic/state/accessibility/ownership/responsive rule is ambiguous, or a
-required child component is not canonical. Do not repair the design in code or
-invent a fallback.
+Never infer an interface from a screenshot, an old component page, a visual
+state, an example, or a shadcn prop.
 
-## Implement
+## Translate Figma conventions deliberately
 
-- Use the smallest composable implementation with the correct native element.
-  Preserve standard attributes, properties, events, focus API, constraint
-  validation, form participation, keyboard behaviour, and accessible name.
-- Add a public property only for an approved Figma Property. State evidence,
-  Figma previews, consumer conditions, and fixture content do not create API.
-  In particular, a `preview` table row—such as Figma `Preview text`,
-  `Preview value`, or `Preview state`—maps to native content (for example, placeholder,
-  value/defaultValue, or child options) and must never become a component API.
-- A Properties-table row with type `native` maps to the target platform's
-  standard element attributes, properties, events, and form behaviour. Do not
-  create a bespoke wrapper property for it.
-- Use only generated CSS custom properties from `ds/tokens/dist` for design
-  values. Browser resets/forced-colors rules and explicitly documented fixed
-  exceptions are allowed; do not add undocumented hard-coded visual values.
-- Translate the exact Figma binding, not a visually matching alias. Use
-  `box-sizing: border-box` where a fixed Figma dimension includes padding.
-- Preserve approved vector geometry. Use `currentColor` only when the Figma
-  contract makes contextual foreground explicit.
-- In custom elements, do not mutate host attributes or children in the
-  constructor. Verify that a fresh Storybook iframe upgrades and renders the
-  actual DOM.
-- Keep consumer content as real DOM. Add named slots only for stable named
-  content positions owned by the component.
-- Compose actual canonical child components for a compound; never redraw or
-  flatten a child component. A missing child is a blocker unless the approved
-  Figma contract explicitly permits a family implementation.
-- Update public exports and the concise package README only when the approved
-  public contract requires it.
+Classify every Figma item before adding code:
 
-## Create evidence-based stories
+| Figma item | Web Components treatment |
+| --- | --- |
+| `Property` | Add a public component API only when it is a deliberate design-system choice and is not already native. |
+| `native` row | Preserve/map to the real native element's standard attribute, property, event, focus, validation, or form behaviour. Never wrap it in a bespoke API. |
+| `preview` row, `Preview text`, `Preview value`, `Preview state` | Canvas evidence only. Map it to native content such as placeholder, value/defaultValue, or child options; never create a component API. |
+| `State` / `02 States` | Implement with native mechanisms, CSS pseudo-classes, or documented state coordination. Do not turn it into a public attribute unless `00 Use` approves it as a Property. |
+| `Part` | Implement as a semantic DOM part, stable named slot, or canonical child component only when that position is part of the public composition contract. |
+| `Example` / `03 Examples` | Use as composition or content evidence. It does not create a component, property, or required Storybook story. |
+| `.Name / …` | Private Figma reference asset. Never export it, expose it in Assets, or treat it as a code API. |
 
-Create only the stories evidenced by the approved page:
+`01 Component` contains the only public Figma asset(s) designers use. If a
+page deliberately contains a component family—such as labelled Button and
+Icon-only Button—implement and document one public Web Component per distinct
+public asset. Do not collapse them into an invented boolean or enum unless the
+accepted Figma contract defines that interface.
 
-1. **Playground** — 01 Component with controls only for real public properties and
-   Actions wired to real native events.
-2. **Comparison** — only when a compact comparison makes the canonical set
-   easier to inspect; never render a full cross-product by default.
-3. **Figma Examples** — exact 03 Examples labels, composition, assets, bindings,
-   and fixed-frame sizing semantics.
-4. **State evidence** — inspectable native states from 02 States, such as
-   disabled. Never expose hover/focus as fake consumer controls.
+States and examples must use public assets or canonical child assets. Treat a
+fixture-only Figma composition as product evidence, not as a missing API.
 
-Fixture-only story arguments may create native child DOM for documented Figma
-content, but label the mapping clearly and never promote it to a component API.
-When an example has a stable reusable interface, stop and propose the missing
-compound instead of disguising it as a fixture.
+## Report the mapping before writing code
+
+State concisely:
+
+- native semantic target and whether the implementation is a direct native
+  control or a styling/composition wrapper around consumer-owned native DOM;
+- each accepted Figma Property and its Web Component mapping;
+- every `native`, `preview`, State, Part, and Example mapping that affects
+  implementation;
+- named slots/child components, reading order, and ownership boundaries;
+- state precedence, accessible-name path, form/validation behaviour, and
+  motion/reduced-motion rule;
+- exact Figma variable path and corresponding `tokens/dist` CSS custom
+  property for each non-browser visual decision;
+- smallest Storybook evidence and any unresolved material decision.
+
+Stop for direction instead of inventing a fallback.
+
+## Implement Web Components
+
+- Start with the real native element. Never imitate an input, button, select,
+  checkbox, or other standard control with a `div`.
+- Preserve native attributes, properties, events, focus API, keyboard
+  activation, constraint validation, form participation, and accessible name.
+- Use a custom-element wrapper only for a stable visual/compositional role.
+  Do not make it obscure, replace, or duplicate the native control's contract.
+- Add only approved design-system properties. Consumer conditions, temporary
+  states, preview controls, fixture content, and examples do not create API.
+- Keep consumer content as real DOM. Add a named slot only for a stable,
+  documented content position. Compose real canonical child components for a
+  compound; never redraw them.
+- Use only generated CSS custom properties from `tokens/dist` for design
+  values. Translate the exact Figma variable binding, not a visually similar
+  alias. Browser resets, forced-colors rules, and documented raw exceptions
+  are the only exceptions.
+- Use `box-sizing: border-box` when a Figma fixed dimension includes padding.
+  Resolve Light/Dark through token CSS and the existing theme mechanism, never
+  through copied theme-specific values.
+- Preserve approved SVG geometry. Use `currentColor` only where the Figma
+  contract explicitly makes the foreground contextual.
+- Do not mutate host attributes or consumer children in a custom-element
+  constructor. Verify a fresh Storybook iframe upgrades and renders the real
+  DOM.
+- Update exports and the concise package README only for an approved public
+  asset or public interface change.
+
+## Create minimal Storybook evidence
+
+For each public Web Component, create one colocated story file with one
+`Playground` story:
+
+- Expose genuine component configuration as Controls and wire real native
+  events to Actions.
+- A Storybook fixture arg may create documented native child DOM—such as a
+  Button label, icon, or Icon Button accessible name—but must state its mapping
+  and must never become a Web Component attribute unless the Figma contract
+  approves it.
+- Add one fixed named story only when a meaningful composition, content stress
+  case, deterministic state, or behaviour cannot be clearly inspected through
+  Playground Controls.
+- Use the global theme toolbar for Light/Dark. Do not add variant/size matrices,
+  duplicate every Figma example, or create fake hover/focus controls.
+- Link the canonical Figma page in the story's design parameter.
 
 ## Verify and report
 
-Import through the public package entry point and load token theme CSS through
-`@maria-ms/tokens`. Verify native semantic/form/keyboard/accessibility behaviour
-and a fresh custom-element render where relevant. Run the package check and
-Storybook production build.
+Verify through public package entry points with active token theme CSS:
 
-Report the Figma-to-code mapping, public API, token bindings, stories created,
-files changed, verification performed, documented exceptions, and unresolved
-gaps.
+- fresh custom-element render and actual DOM structure;
+- all accepted public properties/assets and exact token bindings in Light and
+  Dark;
+- native interaction, accessible name, keyboard, disabled, and focus behaviour;
+- form submit/reset, validation, and `aria-*` association when applicable;
+- motion and `prefers-reduced-motion` when applicable;
+- package syntax check, package dry run, Storybook syntax check, and Storybook
+  production build.
+
+Report the Figma-to-code mapping, public Web Components, token bindings,
+Storybook stories, files changed, verification performed, documented
+exceptions, and unresolved decisions.
