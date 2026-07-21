@@ -109,3 +109,21 @@ Figma-exported SVG content.
 ```sh
 npm run check
 ```
+
+### Register the repository skills locally
+
+From `ds/components-web`, run:
+
+```sh
+npm run skills:link
+```
+
+This symlinks the version-controlled skills in `skills/` into
+`~/.codex/skills`. It links only this package's two skills and refuses to
+replace a non-symlink at either destination.
+
+To remove only those links later:
+
+```sh
+npm run skills:unlink
+```

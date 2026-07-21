@@ -1,4 +1,0 @@
-interface:
-  display_name: "Implement Figma Web Components"
-  short_description: "Port approved Figma pages to Web Components"
-  default_prompt: "Use $implement-approved-figma-component to port an accepted Figma component page to components-web and minimal Storybook evidence."

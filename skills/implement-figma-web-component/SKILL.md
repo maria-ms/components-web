@@ -1,5 +1,5 @@
 ---
-name: implement-approved-figma-component
+name: implement-figma-web-component
 description: Implement an accepted canonical Figma component page as standards-compliant Web Components in ds/components-web, with minimal Storybook evidence. Use after a canonical *-SHADCN Figma page is approved and the task is to port it to components-web/Storybook. Apply the repository's Figma conventions, native HTML/MDN semantics, tokens/dist bindings, and Web Component architecture. Do not use to create or modify Figma pages.
 ---
 
@@ -12,6 +12,17 @@ Foundations, token source snapshots, or `ds/tokens/dist`.
 Stop and report the gap before coding when the supplied Figma page lacks a
 clear public contract, an essential state/ownership/accessibility decision, a
 required canonical child, or an exact token in `tokens/dist`.
+
+## Intake
+
+Before inspection, ask only for the Figma component page-root URL when it is
+not already supplied.
+
+Infer the component name, whether this is a new component or reconciliation,
+the public interface, states, tokens, examples, and platform semantics from the
+Figma page, MDN, `tokens/dist`, and this package. Do not ask the user to repeat
+them. Ask a follow-up question only when the audit finds a material unresolved
+gap, including a compatibility behaviour that cannot be discovered.
 
 ## Read the contract
 

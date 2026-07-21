@@ -205,15 +205,15 @@ const template = createTemplate();
 
 const iconButtonTemplate = createTemplate(`
   :host {
-    --button-inline-size: var(--ds-component-button-icon-only-size-sm);
+    --button-inline-size: var(--ds-component-button-height-sm);
   }
 
   :host([size="medium"]) {
-    --button-inline-size: var(--ds-component-button-icon-only-size-md);
+    --button-inline-size: var(--ds-component-button-height-md);
   }
 
   :host([size="large"]) {
-    --button-inline-size: var(--ds-component-button-icon-only-size-lg);
+    --button-inline-size: var(--ds-component-button-height-lg);
   }
 
   ::slotted(button) {

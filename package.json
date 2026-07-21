@@ -28,7 +28,9 @@
     "provenance": true
   },
   "scripts": {
-    "check": "node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs && node --check src/components/spinner/spinner.mjs",
+    "check": "node --check scripts/link-skills.mjs && node --check scripts/unlink-skills.mjs && node --check src/index.mjs && node --check src/components/index.mjs && node --check src/components/button/button.mjs && node --check src/components/spinner/spinner.mjs",
+    "skills:link": "node scripts/link-skills.mjs",
+    "skills:unlink": "node scripts/unlink-skills.mjs",
     "prepack": "npm run check",
     "pack:dry-run": "npm pack --dry-run"
   },

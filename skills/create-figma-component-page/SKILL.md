@@ -1,5 +1,5 @@
 ---
-name: figma-component-page
+name: create-figma-component-page
 description: Create or revise an implementation-ready canonical component page in this Design System's Figma file. Use when asked to add a Figma component page, turn an old component into a canonical page, or create a new primitive or compound before code implementation. Research the component interface with Figma Foundations, shadcn, MDN, and relevant standards; duplicate and validate the fixed COMPONENT-PAGE-TEMPLATE shell.
 ---
 
@@ -15,22 +15,18 @@ available or cannot write to the supplied Design System file.
 
 ## Intake
 
-Before inspecting or changing Figma, ask only for the following. Accept
-`unknown` when the decision has not been made.
+Before inspecting or changing Figma, ask only for:
 
 1. Component name.
-2. What it is and the product job it supports.
-3. Primitive, compound, or unknown. For a compound, name expected child
-   components if known.
-4. Figma links or selections that show an old/deprecated component, a visual
-   reference, a product screen, or a related canonical component. Accept
-   `none`.
-5. Known decisions or open questions: states, validation, content, loading,
-   responsive behaviour, accessibility, or motion.
+2. What it helps a person do, in one sentence.
+3. Optional Figma links or selections for an old component, visual reference,
+   related component, or product screen. Accept `none`.
 
-Summarize the answer concisely. Propose the page name
-`[COMPONENT NAME]-SHADCN`. Do not create the page until the brief is sufficient
-to research; do not guess missing material decisions.
+Infer whether it is primitive or compound, its child dependencies, interface,
+states, accessibility, motion, and responsive behaviour through research. Do
+not ask the user to define them. Summarize the answer concisely and propose the
+page name `[COMPONENT NAME]-SHADCN`. Ask a follow-up question only when research
+finds a material unresolved decision; never guess one.
 
 ## Research and decision hierarchy
 
