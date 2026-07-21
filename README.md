@@ -1,6 +1,6 @@
 # Maria Web Components
 
-This package currently ships `ds-button` and `ds-spinner`.
+This package currently ships `ds-button`, `ds-icon-button`, and `ds-spinner`.
 
 ## Install and register
 
@@ -55,8 +55,22 @@ the native element or invent a second button API.
 The inner native button owns every native concern: `type`, `name`, `value`,
 `form`, `disabled`, `aria-*`, popover/command attributes, event listeners and
 its child composition. Use `type="button"` unless the intended form action is
-submission. Use a Link component for navigation rather than styling an anchor
-as Button.
+submission. The system has no approved Link component or Link Button API yet.
+
+## Icon Button
+
+`ds-icon-button` is the separate public Icon-only Button asset. It uses the
+same Variant, Size, native disabled, hover, and focus rules as `ds-button`, but
+has a fixed square footprint. Supply a decorative icon and the inner native
+button's accessible name.
+
+```html
+<ds-icon-button variant="ghost" size="medium">
+  <button type="button" aria-label="Search">
+    <svg aria-hidden="true" viewBox="0 0 24 24"></svg>
+  </button>
+</ds-icon-button>
+```
 
 This is the Web Components equivalent of shadcn's composable-child approach:
 the caller supplies the real semantic control and its content, while

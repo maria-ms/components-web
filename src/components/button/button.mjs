@@ -1,8 +1,10 @@
-const tagName = "ds-button";
+const buttonTagName = "ds-button";
+const iconButtonTagName = "ds-icon-button";
 
-const template = document.createElement("template");
+const createTemplate = (iconOnlyStyles = "") => {
+  const template = document.createElement("template");
 
-template.innerHTML = `
+  template.innerHTML = `
   <style>
     :host {
       --button-block-size: var(--ds-component-button-height-sm);
@@ -10,9 +12,9 @@ template.innerHTML = `
       --button-padding-block: var(--ds-semantic-spacing-2xs);
       --button-padding-inline: var(--ds-semantic-spacing-xs);
       --button-radius: var(--ds-semantic-radius-md);
-      --button-font-size: var(--ds-semantic-typography-control-default-font-size);
-      --button-font-weight: var(--ds-semantic-typography-control-default-font-weight-root);
-      --button-line-height: var(--ds-semantic-typography-control-default-line-height);
+      --button-font-size: var(--ds-primitive-font-size-small);
+      --button-font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+      --button-line-height: var(--ds-primitive-font-line-height-small);
       --button-letter-spacing: normal;
       --button-background: var(--ds-component-button-color-background-default);
       --button-background-hover: var(--ds-component-button-color-background-hover-elevated);
@@ -46,10 +48,9 @@ template.innerHTML = `
       --button-padding-block: var(--ds-semantic-spacing-sm);
       --button-padding-inline: var(--ds-semantic-spacing-md);
       --button-radius: var(--ds-semantic-radius-lg);
-      --button-font-size: var(--ds-semantic-typography-body-base-font-size);
+      --button-font-size: var(--ds-primitive-font-size-base);
       --button-font-weight: var(--ds-semantic-typography-body-base-font-weight-medium);
-      --button-line-height: var(--ds-semantic-typography-body-base-line-height);
-      --button-letter-spacing: var(--ds-semantic-typography-body-base-letter-spacing);
+      --button-line-height: var(--ds-primitive-font-line-height-base);
       --ds-button-icon-size: var(--ds-component-icon-size-lg);
     }
 
@@ -176,6 +177,8 @@ template.innerHTML = `
       background: var(--ds-component-button-color-background-tertiary);
     }
 
+    ${iconOnlyStyles}
+
     @media (forced-colors: active) {
       ::slotted(button) {
         border-width: var(--ds-semantic-border-width-default);
@@ -195,6 +198,30 @@ template.innerHTML = `
   <slot></slot>
 `;
 
+  return template;
+};
+
+const template = createTemplate();
+
+const iconButtonTemplate = createTemplate(`
+  :host {
+    --button-inline-size: var(--ds-component-button-icon-only-size-sm);
+  }
+
+  :host([size="medium"]) {
+    --button-inline-size: var(--ds-component-button-icon-only-size-md);
+  }
+
+  :host([size="large"]) {
+    --button-inline-size: var(--ds-component-button-icon-only-size-lg);
+  }
+
+  ::slotted(button) {
+    inline-size: var(--button-inline-size);
+    padding: 0;
+  }
+`);
+
 /**
  * Token styles for one consumer-owned native button.
  *
@@ -208,4 +235,20 @@ export class Button extends HTMLElement {
   }
 }
 
-if (!customElements.get(tagName)) customElements.define(tagName, Button);
+/**
+ * Token styles for one consumer-owned native icon-only button.
+ *
+ * The consumer supplies one decorative icon and the native button's accessible
+ * name, for example with aria-label.
+ */
+export class IconButton extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" }).append(iconButtonTemplate.content.cloneNode(true));
+  }
+}
+
+if (!customElements.get(buttonTagName)) customElements.define(buttonTagName, Button);
+if (!customElements.get(iconButtonTagName)) {
+  customElements.define(iconButtonTagName, IconButton);
+}
