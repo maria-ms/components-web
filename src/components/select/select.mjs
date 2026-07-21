@@ -151,14 +151,17 @@ if (!document.getElementById(styleId)) {
       }
 
       ds-select > select::picker(select) {
+        align-items: stretch;
         box-sizing: border-box;
+        flex-direction: column;
+        gap: var(--ds-primitive-space-02);
         inline-size: var(--ds-select-inline-size);
         min-inline-size: 0;
         max-inline-size: 100%;
         margin-block-start: var(--ds-semantic-spacing-xs);
         border: var(--ds-semantic-border-width-default) solid var(--ds-component-input-color-border-default);
         border-radius: var(--ds-select-radius);
-        padding: 0;
+        padding: var(--ds-primitive-space-02);
         background: var(--ds-component-input-color-background-default);
         box-shadow:
           var(--ds-semantic-shadow-xs-offset-x)
@@ -168,44 +171,24 @@ if (!document.getElementById(styleId)) {
           var(--ds-semantic-shadow-xs-color);
       }
 
+      ds-select > select:open::picker(select) {
+        display: flex;
+      }
+
       ds-select > select option {
         align-items: center;
         box-sizing: border-box;
         display: flex;
         justify-content: flex-start;
+        inline-size: 100%;
         block-size: var(--ds-select-block-size);
         min-block-size: 0;
         padding-block: 0;
         padding-inline: var(--ds-semantic-spacing-xs);
+        border-radius: var(--ds-primitive-radius-02);
         background: var(--ds-component-input-color-background-default);
         color: var(--ds-semantic-color-foreground-default);
         font: inherit;
-      }
-
-      /*
-       * Figma renders dividers over the row boundary, rather than inside an
-       * option. Use an inset shadow for the same no-layout-shift result. The
-       * hidden placeholder must not create a line above the first visible
-       * choice.
-       */
-      ds-select > select option:not([value=""]) + option {
-        box-shadow: inset 0 var(--ds-semantic-border-width-default) 0 var(--ds-component-input-color-border-default);
-      }
-
-      /*
-       * The outer picker and the first/last option share a radius. When a
-       * disabled placeholder is hidden after selection, the next real option
-       * becomes the visual first row.
-       */
-      ds-select > select option:first-of-type,
-      ds-select > select option[disabled][value=""]:not(:checked) + option {
-        border-start-start-radius: var(--ds-select-radius);
-        border-start-end-radius: var(--ds-select-radius);
-      }
-
-      ds-select > select option:last-of-type {
-        border-end-start-radius: var(--ds-select-radius);
-        border-end-end-radius: var(--ds-select-radius);
       }
 
       ds-select > select option::checkmark {
