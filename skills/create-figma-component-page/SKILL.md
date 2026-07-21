@@ -95,13 +95,13 @@ Calculate the public variant matrix before adding an axis. If it would exceed
 30 public combinations or become impractical to browse, use a named part,
 state evidence, or a smaller interface. Do not turn hover, focus-visible,
 pressed, open, empty, validation, loading, or a Figma-only content preview into
-a public property merely because it has visual evidence. Name textual canvas
-content `Preview text`; use `Preview value` only when it represents a displayed
-numeric/control value. In the Properties table, give it type `preview` and state
-`Figma-only canvas preview; not a code API.` Record its native mapping. Never
-call this a generic `Preview`, `Text`, `Canvas content`, `Canvas value`, or
-`Content / Preview`. When Placeholder/Value is needed as canvas evidence, name
-that Figma-only variant property `Preview state`.
+a public property merely because it has visual evidence. Classify a Figma-only
+textual preview by the one native condition it depicts: `Preview value` for
+`value/defaultValue`; `Preview placeholder` for `placeholder`; or `Preview text`
+plus a Figma-only `Preview state` only when the page intentionally shows both.
+Give each row type `preview`, state `Figma-only canvas preview; not a code API.`,
+and record its exact native mapping. Never call it a generic `Preview`, `Text`,
+`Canvas content`, `Canvas value`, or `Content / Preview`.
 
 ## Create from the fixed shell
 
@@ -147,22 +147,27 @@ legends, or competing public assets.
 - State intended use and nearest inappropriate use.
 - Do not add generic section guidance or an update note. Record only information
   that affects use, the interface, or implementation.
-- Use the Properties table for genuine public properties and, where needed,
-  Figma-only preview rows. It has four columns: **Property**, **Type**,
-  **Default**, and **Description**. State allowed values and native/platform
-  mapping in Description.
+- Use the Properties table for every implementation-relevant choice. It has four
+  columns: **Property**, **Type**, **Default**, and **Description**. Type is
+  exactly one of: `property` (approved design-system API), `native` (platform
+  interface), `content` (child/slot content), or `preview` (Figma-only canvas
+  evidence). State the allowed values and exact platform/content mapping in
+  Description.
 - Use `native` as the Type for an existing platform interface such as
   `disabled`, even when Figma exposes a Boolean property to preview that native
   condition on canvas. A Figma inspector control does not create a wrapper or
   code API.
-- A preview row has type `preview` and is named `Preview text` or, only for a
-  numeric/control value, `Preview value`. Its Description starts: `Figma-only
-  canvas preview; not a code API.` State its native mapping (for example,
-  placeholder or value/defaultValue). Every visible preview must name one
-  concrete native mapping. If the page shows both placeholder and value
-  evidence, add a Figma-only `Preview state` selector and state the mapping for
-  each state. Use `native` for platform attributes a consumer supplies rather
-  than inventing a wrapper property.
+- Use `content` for visible child content such as a Button label or icon. State
+  the exact child/slot or native accessible-name mapping; do not turn it into a
+  bespoke code attribute merely because Figma exposes a Text or instance
+  property.
+- A preview row has type `preview`. Name a value-only preview `Preview value`
+  and map it to `value/defaultValue`; name a placeholder-only preview `Preview
+  placeholder` and map it to `placeholder`. If the page shows both, name the
+  text row `Preview text`, add a Figma-only `Preview state` selector, and state
+  the mapping for each state. Every preview Description starts: `Figma-only
+  canvas preview; not a code API.` Use `native` for platform attributes a
+  consumer supplies rather than inventing a wrapper property.
 - If the component needs a canvas-only Placeholder/Value selector, name that
   Figma variant property `Preview state`. Describe it with the preview row; it
   is not a code API. If it is exposed in the Figma inspector, give it its own
