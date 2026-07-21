@@ -69,9 +69,9 @@ Classify every Figma item before adding code:
 
 | Figma item | Web Components treatment |
 | --- | --- |
-| `Property` | Add a public component API only when it is a deliberate design-system choice and is not already native. |
+| `Property` | Add a public component API only when it is a deliberate design-system choice and is not already native. A Figma Boolean used to preview a native condition remains native, not a wrapper property. |
 | `native` row | Preserve/map to the real native element's standard attribute, property, event, focus, validation, or form behaviour. Never wrap it in a bespoke API. |
-| `preview` row, `Preview text`, `Preview value`, `Preview state` | Canvas evidence only. Map it to native content such as placeholder, value/defaultValue, or child options; never create a component API. |
+| `preview` row, `Preview text`, `Preview value`, `Preview state` | Canvas evidence only. Map each visible preview to the specific native condition it represents—such as placeholder, value/defaultValue, or child options. Never create a component API. |
 | `State` / `02 States` | Implement with native mechanisms, CSS pseudo-classes, or documented state coordination. Do not turn it into a public attribute unless `00 Use` approves it as a Property. |
 | `Part` | Implement as a semantic DOM part, stable named slot, or canonical child component only when that position is part of the public composition contract. |
 | `Example` / `03 Examples` | Use as composition or content evidence. It does not create a component, property, or required Storybook story. |
@@ -110,6 +110,11 @@ Stop for direction instead of inventing a fallback.
   checkbox, or other standard control with a `div`.
 - Preserve native attributes, properties, events, focus API, keyboard
   activation, constraint validation, form participation, and accessible name.
+- When 00 Use assigns validation timing to a parent Field or form, style the
+  child invalid state from owner-provided `[aria-invalid="true"]`, not bare
+  `:invalid`. The parent may set that attribute after its approved blur or
+  failed-submit timing; it must preserve existing `aria-describedby` references
+  and restore any Field-managed supporting copy when the control becomes valid.
 - Use a custom-element wrapper only for a stable visual/compositional role.
   Do not make it obscure, replace, or duplicate the native control's contract.
 - Add only approved design-system properties. Consumer conditions, temporary
@@ -162,6 +167,12 @@ Verify through public package entry points with active token theme CSS:
 - motion and `prefers-reduced-motion` when applicable;
 - package syntax check, package dry run, Storybook syntax check, and Storybook
   production build.
+
+If a browser-capable test runtime is unavailable, do not claim the build as
+proof of live DOM or interaction behaviour. Run every available static/build
+check, report the precise unverified interactions, and treat a reusable browser
+test harness as separate infrastructure work unless the task explicitly
+authorises adding it.
 
 Report the Figma-to-code mapping, public Web Components, token bindings,
 Storybook stories, files changed, verification performed, documented

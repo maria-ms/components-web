@@ -1,7 +1,7 @@
 # Maria Web Components
 
 This package currently ships `ds-button`, `ds-icon-button`, `ds-field`,
-`ds-spinner`, and `ds-text-input`.
+`ds-spinner`, `ds-text-input`, and `ds-textarea`.
 
 ## Install and register
 
@@ -133,6 +133,32 @@ textual input types such as `text`, `email`, `password`, `search`, `tel`, and
 `url`. `[aria-invalid="true"]` uses the documented invalid visual; Field sets it
 after blur or failed submit so required empty inputs do not show an error early.
 
+## Textarea
+
+`ds-textarea` styles one consumer-owned native `<textarea>`. It does not replace
+the textarea or introduce a second API.
+
+```js
+import "@maria-ms/components-web/textarea";
+```
+
+```html
+<ds-textarea>
+  <textarea name="additional-info" rows="3" placeholder="Type your message…"></textarea>
+</ds-textarea>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Disabled` | Native `disabled` on the inner `<textarea>` |
+| `Preview text` | Figma-only canvas evidence; use native `placeholder`, textarea text/defaultValue, or the `value` property instead |
+
+The native textarea owns `name`, `rows`, `cols`, value/defaultValue, placeholder,
+disabled and readonly states, accessible name, `aria-*` relationships, events,
+focus, resize, constraint validation, and form submission/reset. It retains
+browser resize behaviour. `[aria-invalid="true"]` uses the documented invalid
+visual; Field can set it after blur or failed submit.
+
 ## Field
 
 `ds-field` is the structural compound for one canonical text-like control. It
@@ -161,7 +187,7 @@ the browser's `validationMessage` (including a custom `setCustomValidity()`
 message) temporarily replaces supporting copy. There is no live region.
 
 The allowed control is one canonical Text Input, Textarea, Select Input, or
-Number Input. The current package implementation supports Text Input; the same
+Number Input. The package currently supports Text Input and Textarea; the same
 structural contract will apply when the other canonical controls are added.
 
 ## Development

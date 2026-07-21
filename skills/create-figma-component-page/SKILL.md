@@ -22,6 +22,10 @@ Before inspecting or changing Figma, ask only for:
 3. Optional Figma links or selections for an old component, visual reference,
    related component, or product screen. Accept `none`.
 
+Use the canonical template by default. Do not ask for its URL unless it is
+missing or ambiguous, or the user explicitly wants a different approved shell.
+Accept a supplied template URL as that intentional override.
+
 Infer whether it is primitive or compound, its child dependencies, interface,
 states, accessibility, motion, and responsive behaviour through research. Do
 not ask the user to define them. Summarize the answer concisely and propose the
@@ -33,8 +37,12 @@ finds a material unresolved decision; never guess one.
 Inspect, in this order:
 
 1. Figma README, Foundations, and the live variables, styles, and bindings.
-2. `COMPONENT-PAGE-TEMPLATE`. Duplicate it; never recreate the shell manually
-   or infer it from another component page.
+2. The canonical
+   [COMPONENT-PAGE-TEMPLATE](https://www.figma.com/design/quQrWVWWnKGO2y2IHMudis/Design-System-v2.0-2026?node-id=40022477-52),
+   unless the user supplied an approved alternate template URL. Duplicate it;
+   never recreate the shell manually or infer it from another component page.
+   If the canonical page is missing or ambiguous, stop and ask for the template
+   URL.
 3. The closest approved `*-SHADCN` pages, including BUTTON-SHADCN, for visual
    quality, naming, and editorial precedent only. Never inherit their interface
    or state axes without an explicit decision.
@@ -97,8 +105,9 @@ that Figma-only variant property `Preview state`.
 
 ## Create from the fixed shell
 
-Duplicate `COMPONENT-PAGE-TEMPLATE`, rename the new page
-`[COMPONENT NAME]-SHADCN`, and preserve this exact visible layer tree:
+Duplicate the canonical `COMPONENT-PAGE-TEMPLATE` above (or the user-approved
+alternate), rename the new page `[COMPONENT NAME]-SHADCN`, and preserve this
+exact visible layer tree:
 
 ```text
 [Component name] / Page
@@ -142,11 +151,18 @@ legends, or competing public assets.
   Figma-only preview rows. It has four columns: **Property**, **Type**,
   **Default**, and **Description**. State allowed values and native/platform
   mapping in Description.
+- Use `native` as the Type for an existing platform interface such as
+  `disabled`, even when Figma exposes a Boolean property to preview that native
+  condition on canvas. A Figma inspector control does not create a wrapper or
+  code API.
 - A preview row has type `preview` and is named `Preview text` or, only for a
   numeric/control value, `Preview value`. Its Description starts: `Figma-only
   canvas preview; not a code API.` State its native mapping (for example,
-  placeholder or value/defaultValue). Use `native` for platform attributes a
-  consumer supplies rather than inventing a wrapper property.
+  placeholder or value/defaultValue). Every visible preview must name one
+  concrete native mapping. If the page shows both placeholder and value
+  evidence, add a Figma-only `Preview state` selector and state the mapping for
+  each state. Use `native` for platform attributes a consumer supplies rather
+  than inventing a wrapper property.
 - If the component needs a canvas-only Placeholder/Value selector, name that
   Figma variant property `Preview state`. Describe it with the preview row; it
   is not a code API. If it is exposed in the Figma inspector, give it its own
@@ -158,6 +174,12 @@ legends, or competing public assets.
   temporary interaction treatment. Do not reuse a generic order blindly:
   compound controls must state child ownership and bound/disabled behaviour,
   while a non-interactive asset needs no precedence rule.
+- For native text-like controls, record whether the shown dimensions are fixed,
+  minimum, or content-driven, and whether native resize behaviour is preserved
+  or deliberately constrained. When a Field or form owns validation timing,
+  state that it supplies `aria-invalid` after the approved event (for example,
+  blur or failed submit); do not imply that every raw native `:invalid` state
+  is immediately visible.
 
 ### Populate 01 Component
 
