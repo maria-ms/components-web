@@ -19,18 +19,57 @@ Before inspecting or changing Figma, ask only for:
 
 1. Component name.
 2. What it helps a person do, in one sentence.
-3. Optional Figma links or selections for an old component, visual reference,
+3. Does it use other canonical components? Answer `standalone`, provide links
+   or selections for the canonical public children, or answer `unsure`. Ask for
+   instances from Assets or the child page's `01 Component`, never `02 States`
+   or `03 Examples`.
+5. Optional Figma links or selections for an old component, visual reference,
    related component, or product screen. Accept `none`.
 
 Use the canonical template by default. Do not ask for its URL unless it is
 missing or ambiguous, or the user explicitly wants a different approved shell.
 Accept a supplied template URL as that intentional override.
 
-Infer whether it is primitive or compound, its child dependencies, interface,
-states, accessibility, motion, and responsive behaviour through research. Do
-not ask the user to define them. Summarize the answer concisely and propose the
-page name `[COMPONENT NAME]-SHADCN`. Ask a follow-up question only when research
-finds a material unresolved decision; never guess one.
+Do not ask a designer to classify it as primitive or compound. Treat their
+answer about child reuse as the source of truth: never assume or select a child
+component on their behalf. Infer the interface, states, accessibility, motion,
+and responsive behaviour through research. Summarize the answer concisely and
+propose the page name `[COMPONENT NAME]-SHADCN`.
+
+When the answer is `unsure`, inspect the library and return a small candidate
+list with a recommendation. Pause for the designer to approve, reject, or amend
+the child list before duplicating the template or creating the page. Ask a
+follow-up question only for that confirmation or another material unresolved
+decision; never guess one.
+
+## Adaptive routing
+
+Do not route requests through a fixed catalogue. Classify each request by its
+native semantic target, reuse boundary, child dependencies, ownership, and
+interaction complexity:
+
+- **Page-local composition:** a one-off arrangement for a screen. Do not create
+  a component page; document it in the product work instead.
+- **Standalone or fixed compound:** a stable reusable asset. Create one
+  canonical component page.
+- **Restricted-slot compound:** a stable reusable asset with a genuine semantic
+  child position, such as Field's `Control`. Create one page and expose only
+  that restricted slot.
+
+Use the classification to choose research, not to prescribe an implementation:
+
+- For a native semantic target, use HTML and MDN first.
+- For designer-approved canonical children, inspect their Figma pages and
+  matching code and stories before designing the parent.
+- For a non-native interaction with keyboard, overlay, or selection behaviour,
+  research the closest shadcn pattern, Open UI, and WAI-ARIA APG only as needed.
+- If a reusable child is missing, propose that child first. If the user
+  explicitly authorises a component-family page, record the dependency and
+  create the parent only to the approved scope.
+
+Examples such as inputs, navigation, calendars, and layouts are research hints,
+not a component taxonomy. Do not invent a page merely because a pattern is
+familiar.
 
 ## Research and decision hierarchy
 
@@ -43,9 +82,11 @@ Inspect, in this order:
    never recreate the shell manually or infer it from another component page.
    If the canonical page is missing or ambiguous, stop and ask for the template
    URL.
-3. The closest approved `*-SHADCN` pages, including BUTTON-SHADCN, for visual
-   quality, naming, and editorial precedent only. Never inherit their interface
-   or state axes without an explicit decision.
+3. Closest approved `*-SHADCN` pages: BUTTON-SHADCN as the generic interaction
+   baseline, the nearest page in the same family, and FIELD-SHADCN when the
+   candidate may have a restricted child slot. Use them for visual quality,
+   naming, editorial convention, and construction technique only. Never inherit
+   their interface or state axes without an explicit decision.
 4. Supplied Figma sources. Treat legacy pages as visual/discovery material, not
    as authorisation for obsolete variants or APIs.
 5. `ds/tokens/dist`, `ds/components-web`, and Storybook, to establish the
@@ -63,12 +104,25 @@ Resolve conflicts in this order:
 - Use shadcn and other systems as behavioural/compositional precedent, never as
   visual values, framework APIs, or dependencies to copy.
 
+Use each source for its proper job:
+
+- The template defines **where** information and assets belong on the page.
+- Closest approved canonical pages show **how** to construct and document them.
+- Foundations and token bindings own visual values.
+- Platform standards define **what** the component means and how it behaves.
+- Existing package code and stories establish current platform capability.
+
+Do not substitute one source's authority for another's, and do not copy a
+public interface merely because it exists on a reference page.
+
 ## Propose the contract
 
 Report this compact contract before writing:
 
 - purpose, native semantic target, and out-of-scope cases;
-- primitive/compound decision and canonical child dependencies;
+- classification: standalone, page-local composition, fixed compound, or
+  restricted-slot compound; and designer-approved canonical child dependencies
+  with their Figma and code-package readiness;
 - public properties, defaults, and platform mapping;
 - named parts/content positions, reading order, and ownership of label,
   description, validation, status, and child controls;
@@ -86,10 +140,19 @@ any material unresolved semantic, state, accessibility, ownership, responsive,
 content, motion, or token decision. Never invent a token, visual value, state,
 public property, or accessibility rule.
 
-Treat a compound as a real component: compose already-canonical child instances
-and expose only its stable public interface. If a required child is missing,
-stop and propose that child first unless the user explicitly authorises a
-component-family page.
+Treat a reusable compound as a real component. It owns its layout, coordination,
+and only new stable behaviour; each child retains its native semantics,
+accessibility, visual states, and child interface. Expose only the compound's
+stable public interface—never mirror all child properties.
+
+Build a designer-approved compound from real instances of the approved canonical
+child components. A fixed compound uses configured child instances. A
+restricted-slot compound may have one instance-swap property only for a genuine
+named semantic slot; it is not a generic "put anything here" escape hatch. If
+a required reusable child is missing, stop and propose that child first unless
+the user explicitly authorises a component-family page. If the arrangement is
+not reusable outside one screen, it is page-local and must not receive a
+component page.
 
 Calculate the public variant matrix before adding an axis. If it would exceed
 30 public combinations or become impractical to browse, use a named part,
@@ -199,6 +262,11 @@ legends, or competing public assets.
 - Use meaningful logical layer names such as Container, Control, Label,
   Leading content, Trailing content, Description, and Validation only when the
   part exists. Preserve reading order and avoid left/right names.
+- For a compound, nest real canonical child instances here; never redraw,
+  detach, or copy their layers. A fixed compound shows its configured children.
+  A restricted-slot compound exposes only the approved instance-swap property
+  for its named semantic slot. Keep layout and compound-owned parts around the
+  child instances, and do not surface child-local controls as parent properties.
 - Bind visual layers to existing variables and styles. Never replace a live
   binding with a typed visual value or infer a token from an apparent match.
   Record an approved raw exception in 00 Use.
@@ -207,6 +275,9 @@ legends, or competing public assets.
 
 - Show only approved visual-state evidence, using instances of the 01 Component
   asset. State evidence is never a competing public component set.
+- For a compound, show only states it owns or coordinates. Show a child-local
+  condition through the nested child instance; do not duplicate that condition
+  as a new parent state unless the parent has an explicit response to it.
 - For a native control with browser-owned parts, define the control and each
   browser-owned part's states separately. Do not infer that a child uses the
   parent’s focus treatment. Record the approved keyboard-focus treatment and
@@ -241,8 +312,11 @@ Re-read the created page through Figma MCP and inspect a screenshot. Confirm:
   state precedence is recorded in 00 Use → Rules when applicable;
 - States and Examples use real canonical instances or are explicitly marked as
   fixture-only compositions;
-- child references, property references, layer names, and reading order are
-  clear;
+- every nested child in a compound is a real canonical public Figma instance,
+  not copied from State or Example evidence; check its target code-package
+  availability and report an unavailable child as an implementation dependency;
+- child references, property references, layer names, ownership, and reading
+  order are clear;
 - variables/styles are bound and every raw-value exception is explicit.
 
 Report page/component-set URLs and IDs, public properties, named parts, state and
