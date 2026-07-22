@@ -1,8 +1,8 @@
 # Maria Web Components
 
 This package currently ships `ds-button`, `ds-icon-button`, `ds-checkbox`,
-`ds-field`, `ds-number-input`, `ds-radio`, `ds-select`, `ds-spinner`,
-`ds-text-input`, and `ds-textarea`.
+`ds-field`, `ds-link`, `ds-number-input`, `ds-radio`, `ds-select`,
+`ds-spinner`, `ds-text-input`, and `ds-textarea`.
 
 ## Install and register
 
@@ -57,7 +57,35 @@ the native element or invent a second button API.
 The inner native button owns every native concern: `type`, `name`, `value`,
 `form`, `disabled`, `aria-*`, popover/command attributes, event listeners and
 its child composition. Use `type="button"` unless the intended form action is
-submission. The system has no approved Link component or Link Button API yet.
+submission.
+
+## Link
+
+`ds-link` styles one consumer-owned native `<a>`. Use it for a real
+destination; use `ds-button` for an in-place action.
+
+```js
+import "@maria-ms/components-web/link";
+```
+
+```html
+<ds-link tone="primary" size="small">
+  <a href="/accessibility">Read the accessibility guide.</a>
+</ds-link>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Tone` | `primary` (default) or `muted` on `ds-link` |
+| `Size` | `x-small` (default), `small`, `medium`, or `large` on `ds-link` |
+| `Label` | Real anchor text, which supplies the accessible name |
+| `href`, `target`, `rel` | Native attributes on the inner `<a>` |
+
+The native anchor owns all standard link attributes and properties, events,
+keyboard activation, focus, and accessible name. Do not use it for an
+in-place action or put interactive content inside it. Link has no disabled
+state. Hover and keyboard focus underline the destination text; focus-visible
+also supplies the token-backed focus ring.
 
 ## Icon Button
 

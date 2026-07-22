@@ -1,6 +1,7 @@
 export { Button, IconButton } from "./button/button.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { Field } from "./field/field.mjs";
+export { Link } from "./link/link.mjs";
 export { NumberInput } from "./number-input/number-input.mjs";
 export { Radio } from "./radio/radio.mjs";
 export { Select } from "./select/select.mjs";
