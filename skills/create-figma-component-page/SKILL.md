@@ -9,6 +9,18 @@ Create Figma pages only. Do not implement code, alter Foundations/tokens, or
 modify existing canonical component pages unless the request expressly says to
 revise one.
 
+## Figma page vs. canvas root
+
+Use these terms precisely:
+
+- **Figma Page**: the top-level page in the file sidebar, named
+  `[COMPONENT NAME]-SHADCN`.
+- **Canvas root**: the single frame on that page, named
+  `[Component name] / Page`.
+
+Never treat a canvas root as a Figma Page. Never leave a new component canvas
+on Readme, Foundations, the template page, or the active page by accident.
+
 Before every Figma write, load and follow `figma-use` and
 `figma-generate-library`. Stop and report the limitation if Figma MCP is not
 available or cannot write to the supplied Design System file.
@@ -23,7 +35,7 @@ Before inspecting or changing Figma, ask only for:
    or selections for the canonical public children, or answer `unsure`. Ask for
    instances from Assets or the child page's `01 Component`, never `02 States`
    or `03 Examples`.
-5. Optional Figma links or selections for an old component, visual reference,
+4. Optional Figma links or selections for an old component, visual reference,
    related component, or product screen. Accept `none`.
 
 Use the canonical template by default. Do not ask for its URL unless it is
@@ -168,9 +180,25 @@ and record its exact native mapping. Never call it a generic `Preview`, `Text`,
 
 ## Create from the fixed shell
 
-Duplicate the canonical `COMPONENT-PAGE-TEMPLATE` above (or the user-approved
-alternate), rename the new page `[COMPONENT NAME]-SHADCN`, and preserve this
-exact visible layer tree:
+Create the target **Figma Page** first. Its name is
+`[COMPONENT NAME]-SHADCN`. Then set that page as the current page exactly once.
+Duplicate the canonical template's `Component / Page` **frame** (or the
+user-approved alternate), explicitly append the clone to the target Figma Page,
+and rename the cloned frame `[Component name] / Page`. Do not rely on
+`clone()` inheriting the correct parent or on whatever Figma page happens to be
+active.
+
+Before populating any content, verify all of the following through Figma MCP:
+
+```text
+target Figma Page name = [COMPONENT NAME]-SHADCN
+canvas root name       = [Component name] / Page
+canvas root parent     = target Figma Page
+target page children   = exactly one canvas root
+Readme/template pages  = unchanged
+```
+
+Only then preserve this exact visible **canvas-root** layer tree:
 
 ```text
 [Component name] / Page
@@ -201,9 +229,9 @@ exact visible layer tree:
         └── Examples
 ```
 
-Keep exactly one visible `[Component name] / Page` root and one canonical public
-component set. Do not create duplicate page shells, legacy matrices, loose
-legends, or competing public assets.
+Keep exactly one visible `[Component name] / Page` root on the target Figma
+Page and one canonical public component set. Do not create duplicate page
+shells, legacy matrices, loose legends, or competing public assets.
 
 ### Populate 00 Use
 
@@ -304,6 +332,9 @@ legends, or competing public assets.
 
 Re-read the created page through Figma MCP and inspect a screenshot. Confirm:
 
+- correct top-level Figma Page: `[COMPONENT NAME]-SHADCN`; the canvas root's
+  direct parent is that page; it is the page's only canvas root; Readme and the
+  template page do not contain the new canvas root;
 - exact shell hierarchy, one visible root, no stale placeholder, loose legend,
   duplicate asset, cropped content, or overlap;
 - every public Figma property is an approved Property and every Property is
