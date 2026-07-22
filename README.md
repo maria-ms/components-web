@@ -1,8 +1,8 @@
 # Maria Web Components
 
 This package currently ships `ds-button`, `ds-icon-button`, `ds-checkbox`,
-`ds-field`, `ds-radio`, `ds-select`, `ds-spinner`, `ds-text-input`, and
-`ds-textarea`.
+`ds-field`, `ds-number-input`, `ds-radio`, `ds-select`, `ds-spinner`,
+`ds-text-input`, and `ds-textarea`.
 
 ## Install and register
 
@@ -133,6 +133,34 @@ constraint validation, and form submission/reset behaviour. It accepts native
 textual input types such as `text`, `email`, `password`, `search`, `tel`, and
 `url`. `[aria-invalid="true"]` uses the documented invalid visual; Field sets it
 after blur or failed submit so required empty inputs do not show an error early.
+
+## Number Input
+
+`ds-number-input` styles one consumer-owned native `<input type="number">`.
+It does not replace the input or introduce a second numeric API.
+
+```js
+import "@maria-ms/components-web/number-input";
+```
+
+```html
+<ds-number-input size="medium">
+  <input type="number" name="quantity" min="1" step="1" placeholder="0" />
+</ds-number-input>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-number-input` |
+| `Disabled` | Native `disabled` on the inner number input |
+| `Preview state` / `Preview value` | Figma-only canvas evidence; use native `placeholder`, `value`, or `defaultValue` instead |
+
+The native number input owns `name`, `value/defaultValue`, `min`, `max`, `step`,
+`required`, `readonly`, `disabled`, accessible name, `aria-*` relationships,
+events, focus, constraint validation, and form submission/reset. Browser-owned
+stepping remains native and intentionally has no separate design-system API or
+visual contract. `[aria-invalid="true"]` supplies the documented invalid visual;
+Field or the form decides when to set it.
 
 ## Textarea
 
