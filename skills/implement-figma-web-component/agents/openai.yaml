@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement Figma Web Components"
-  short_description: "Port an approved Figma contract to the web package"
-  default_prompt: "Use $implement-figma-web-component to port an accepted Figma component page to components-web and minimal Storybook evidence."
+  short_description: "Port an approved Figma contract to native Web Components"
+  default_prompt: "Use $implement-figma-web-component to implement an accepted Figma component page in components-web with minimal Storybook evidence."

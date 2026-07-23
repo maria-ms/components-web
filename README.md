@@ -2,7 +2,7 @@
 
 This package currently ships `ds-button`, `ds-icon-button`, `ds-checkbox`,
 `ds-field`, `ds-link`, `ds-number-input`, `ds-radio`, `ds-select`,
-`ds-spinner`, `ds-text-input`, and `ds-textarea`.
+`ds-spinner`, `ds-switch`, `ds-text-input`, and `ds-textarea`.
 
 ## Install and register
 
@@ -300,6 +300,45 @@ appearance after the owning Field or form has chosen to show validation.
 
 Checkbox is intentionally unlabeled. Put its associated native `<label>` and
 any supporting/error text in Choice Field, Field, or the surrounding form.
+
+## Switch
+
+`ds-switch` styles one consumer-owned native `<input type="checkbox">` as an
+immediate on/off setting. It does not replace native checkbox form behaviour.
+
+```js
+import "@maria-ms/components-web/switch";
+```
+
+```html
+<label>
+  <ds-switch size="medium">
+    <input type="checkbox" switch name="notifications" value="enabled" />
+  </ds-switch>
+  Email notifications
+</label>
+```
+
+| Figma property | Web contract |
+| --- | --- |
+| `Size` | `small` (default), `medium`, or `large` on `ds-switch` |
+| `Checked` | Native `checked` / `defaultChecked` on the inner checkbox; not a `ds-switch` attribute |
+| `Disabled` | Native `disabled` on the inner checkbox; not a `ds-switch` attribute |
+| `Accessible name` | An associated native label or `aria-label` on the inner checkbox |
+
+The native checkbox owns `name`, `value`, `checked`, `defaultChecked`,
+`required`, `disabled`, its accessible name, events, focus, constraint
+validation, and form submission/reset. Add the native `switch` attribute: in
+supporting browsers it exposes switch semantics, while other browsers retain
+checkbox semantics. Switch has no indeterminate state.
+
+The thumb and track colours transition over 160ms with
+`cubic-bezier(0.2, 0, 0, 1)`. Under `prefers-reduced-motion: reduce`, the
+state changes immediately.
+
+Switch is intentionally unlabeled. Its parent supplies the native label and
+any surrounding product copy; do not use it for independent selections or a
+choice saved later—use Checkbox instead.
 
 ## Radio
 

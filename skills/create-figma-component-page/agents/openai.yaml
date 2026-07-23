@@ -1,4 +1,4 @@
 interface:
   display_name: "Create Figma Component Page"
-  short_description: "Create a validated component contract in Figma"
-  default_prompt: "Use $create-figma-component-page to create a canonical Figma page for a design-system component."
+  short_description: "Create a canonical, implementation-ready Figma component page"
+  default_prompt: "Use $create-figma-component-page to create a canonical Figma component page from the approved template."

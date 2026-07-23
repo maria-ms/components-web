@@ -6,5 +6,6 @@ export { NumberInput } from "./number-input/number-input.mjs";
 export { Radio } from "./radio/radio.mjs";
 export { Select } from "./select/select.mjs";
 export { Spinner } from "./spinner/spinner.mjs";
+export { Switch } from "./switch/switch.mjs";
 export { TextInput } from "./text-input/text-input.mjs";
 export { Textarea } from "./textarea/textarea.mjs";
