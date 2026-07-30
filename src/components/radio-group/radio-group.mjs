@@ -1,58 +1,7 @@
 const tagName = "ds-radio-group";
-const styleId = "ds-radio-group-styles";
+const canUseDOM = typeof document !== "undefined" && typeof customElements !== "undefined";
+const ElementBase = globalThis.HTMLElement ?? class {};
 let generatedId = 0;
-
-if (!document.getElementById(styleId)) {
-  const style = document.createElement("style");
-
-  style.id = styleId;
-  style.textContent = `
-    ds-radio-group {
-      display: block;
-      inline-size: fit-content;
-      max-inline-size: 100%;
-    }
-
-    ds-radio-group > fieldset {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      inline-size: 100%;
-      min-inline-size: 0;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      gap: var(--ds-semantic-spacing-xs);
-    }
-
-    ds-radio-group > fieldset > legend,
-    ds-radio-group > fieldset > [data-description],
-    ds-radio-group > fieldset > [data-error] {
-      display: block;
-      inline-size: 100%;
-      margin: 0;
-      padding: 0;
-      color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body);
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    ds-radio-group > fieldset > [data-description] {
-      color: var(--ds-semantic-color-foreground-muted-2);
-    }
-
-    ds-radio-group > fieldset > [data-error] {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
-    ds-radio-group > fieldset > ds-choice-field {
-      inline-size: 100%;
-    }
-  `;
-  document.head.append(style);
-}
 
 const nextId = (part) => {
   generatedId += 1;
@@ -65,8 +14,9 @@ const nextId = (part) => {
  * Consumers own the semantic fieldset, legend, same-name radio inputs, and
  * group error copy. The custom element only associates visible descriptive
  * copy and exposes native group validation without recreating radio behaviour.
+ * Import `@maria-ms/components-web/styles.css` for its token styles.
  */
-export class RadioGroup extends HTMLElement {
+export class RadioGroup extends ElementBase {
   #fieldset;
   #description;
   #error;
@@ -100,12 +50,8 @@ export class RadioGroup extends HTMLElement {
     });
   };
 
-  constructor() {
-    super();
-    this.#observer = new MutationObserver(() => this.#synchronize());
-  }
-
   connectedCallback() {
+    this.#observer = new MutationObserver(() => this.#synchronize());
     this.addEventListener("change", this.#onChange);
     this.addEventListener("focusout", this.#onFocusOut);
     this.addEventListener("invalid", this.#onInvalid, true);
@@ -122,7 +68,8 @@ export class RadioGroup extends HTMLElement {
     this.removeEventListener("change", this.#onChange);
     this.removeEventListener("focusout", this.#onFocusOut);
     this.removeEventListener("invalid", this.#onInvalid, true);
-    this.#observer.disconnect();
+    this.#observer?.disconnect();
+    this.#observer = undefined;
     this.#setForm(null);
     this.#clearDescriptions();
   }
@@ -141,12 +88,20 @@ export class RadioGroup extends HTMLElement {
     this.#error = this.#fieldset.querySelector(":scope > [data-error]");
     this.#setForm(this.#radios()[0]?.form || null);
 
+    const isDisabled = this.#fieldset.disabled;
     const showError =
-      this.#fieldset.getAttribute("aria-invalid") === "true" ||
-      (this.#hasBeenValidated && this.#radios().some((radio) => !radio.validity.valid));
+      !isDisabled &&
+      (this.#fieldset.getAttribute("aria-invalid") === "true" ||
+        (this.#hasBeenValidated && this.#radios().some((radio) => !radio.validity.valid)));
 
-    if (this.#error) this.#error.hidden = !showError;
-    this.dataset.state = showError ? "error" : "default";
+    // `hidden` is observed so consumer changes to the error copy update the
+    // group association. Do not reflect the same value on every pass: doing
+    // so would generate another observed mutation and can create a loop.
+    const errorHidden = !showError;
+    if (this.#error && this.#error.hidden !== errorHidden) {
+      this.#error.hidden = errorHidden;
+    }
+    this.dataset.state = isDisabled ? "disabled" : showError ? "error" : "default";
     this.#associateDescriptions();
   }
 
@@ -206,4 +161,4 @@ export class RadioGroup extends HTMLElement {
   }
 }
 
-if (!customElements.get(tagName)) customElements.define(tagName, RadioGroup);
+if (canUseDOM && !customElements.get(tagName)) customElements.define(tagName, RadioGroup);

@@ -1,0 +1,52 @@
+ds-choice-field {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  column-gap: var(--ds-semantic-spacing-sm);
+  row-gap: var(--ds-semantic-spacing-xs);
+}
+
+ds-choice-field > [slot="control"] {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: start;
+  flex: 0 0 auto;
+}
+
+ds-choice-field > [slot="label"],
+ds-choice-field > [slot="message"] {
+  display: block;
+  grid-column: 2;
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--ds-semantic-color-foreground-default);
+  font-family: var(--ds-primitive-font-family-body);
+  font-size: var(--ds-semantic-typography-body-small-font-size);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+  line-height: var(--ds-semantic-typography-body-small-line-height);
+}
+
+ds-choice-field > [slot="label"] {
+  grid-row: 1;
+}
+
+ds-choice-field > [slot="message"] {
+  grid-row: 2;
+  color: var(--ds-semantic-color-foreground-muted-2);
+}
+
+ds-choice-field[data-state="error"] > [slot="message"] {
+  color: var(--ds-semantic-color-foreground-destructive-elevated);
+}
+
+ds-choice-field[data-state="disabled"] > [slot="label"] {
+  color: var(--ds-semantic-color-foreground-disabled-elevated);
+}
+
+ds-choice-field[data-state="disabled"] > [slot="message"] {
+  color: var(--ds-semantic-color-foreground-disabled-muted);
+}

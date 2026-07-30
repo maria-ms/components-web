@@ -19,6 +19,7 @@
   "exports": {
     ".": "./src/index.mjs",
     "./button": "./src/components/button/button.mjs",
+    "./icon-button": "./src/components/button/button.mjs",
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./choice-field": "./src/components/choice-field/choice-field.mjs",
     "./field": "./src/components/field/field.mjs",

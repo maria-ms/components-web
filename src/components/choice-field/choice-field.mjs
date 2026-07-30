@@ -1,79 +1,7 @@
 const tagName = "ds-choice-field";
-const styleId = "ds-choice-field-styles";
+const canUseDOM = typeof document !== "undefined" && typeof customElements !== "undefined";
+const ElementBase = globalThis.HTMLElement ?? class {};
 let generatedId = 0;
-
-if (!document.getElementById(styleId)) {
-  const style = document.createElement("style");
-
-  style.id = styleId;
-  style.textContent = `
-    ds-choice-field > [slot="control"] {
-      align-self: start;
-      flex: 0 0 auto;
-    }
-
-    ds-choice-field > [slot="label"],
-    ds-choice-field > [slot="message"] {
-      display: block;
-      inline-size: 100%;
-      margin: 0;
-      color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body);
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    ds-choice-field > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-muted-2);
-    }
-
-    ds-choice-field[data-state="error"] > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
-    ds-choice-field[data-state="disabled"] > [slot="label"] {
-      color: var(--ds-semantic-color-foreground-disabled-elevated);
-    }
-
-    ds-choice-field[data-state="disabled"] > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-disabled-muted);
-    }
-  `;
-  document.head.append(style);
-}
-
-const template = document.createElement("template");
-
-template.innerHTML = `
-  <style>
-    :host {
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: start;
-      inline-size: fit-content;
-      max-inline-size: 100%;
-      column-gap: var(--ds-semantic-spacing-sm);
-    }
-
-    #content {
-      display: flex;
-      min-inline-size: 0;
-      flex-direction: column;
-      gap: var(--ds-semantic-spacing-xs);
-    }
-
-    slot {
-      display: contents;
-    }
-  </style>
-  <slot name="control"></slot>
-  <div id="content">
-    <slot name="label"></slot>
-    <slot name="message"></slot>
-  </div>
-`;
 
 const choiceControlSelector = 'input[type="checkbox"], input[type="radio"]';
 const supportedControlTags = new Set(["DS-CHECKBOX", "DS-RADIO", "DS-SWITCH"]);
@@ -86,14 +14,12 @@ const nextId = (part) => {
 /**
  * Label, message, and association layout for one consumer-owned choice control.
  *
- * The slotted Checkbox, Radio, or Switch retains its native input, form,
+ * The marked Checkbox, Radio, or Switch retains its native input, form,
  * validation, event, and focus behaviour. This wrapper has no Figma-State API:
  * it reflects the nested input's disabled or aria-invalid state for presentation.
+ * Import `@maria-ms/components-web/styles.css` for its token styles.
  */
-export class ChoiceField extends HTMLElement {
-  #labelSlot;
-  #controlSlot;
-  #messageSlot;
+export class ChoiceField extends ElementBase {
   #label;
   #control;
   #message;
@@ -101,21 +27,12 @@ export class ChoiceField extends HTMLElement {
   #descriptionControl;
   #descriptionId;
 
-  #onSlotChange = () => this.#synchronize();
-
   constructor() {
     super();
-    this.attachShadow({ mode: "open" }).append(template.content.cloneNode(true));
-    this.#labelSlot = this.shadowRoot.querySelector('slot[name="label"]');
-    this.#controlSlot = this.shadowRoot.querySelector('slot[name="control"]');
-    this.#messageSlot = this.shadowRoot.querySelector('slot[name="message"]');
-    this.#observer = new MutationObserver(() => this.#synchronize());
   }
 
   connectedCallback() {
-    this.#labelSlot.addEventListener("slotchange", this.#onSlotChange);
-    this.#controlSlot.addEventListener("slotchange", this.#onSlotChange);
-    this.#messageSlot.addEventListener("slotchange", this.#onSlotChange);
+    this.#observer = new MutationObserver(() => this.#synchronize());
     this.#observer.observe(this, {
       subtree: true,
       childList: true,
@@ -126,15 +43,15 @@ export class ChoiceField extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.#labelSlot.removeEventListener("slotchange", this.#onSlotChange);
-    this.#controlSlot.removeEventListener("slotchange", this.#onSlotChange);
-    this.#messageSlot.removeEventListener("slotchange", this.#onSlotChange);
-    this.#observer.disconnect();
+    this.#observer?.disconnect();
+    this.#observer = undefined;
     this.#clearMessageDescription();
   }
 
-  #slotElement(slot) {
-    return slot.assignedElements({ flatten: true })[0] || null;
+  #part(slotName) {
+    return Array.from(this.children).find(
+      (child) => child instanceof Element && child.getAttribute("slot") === slotName,
+    ) || null;
   }
 
   #nativeControl(controlPart) {
@@ -146,9 +63,9 @@ export class ChoiceField extends HTMLElement {
 
   #synchronize() {
     this.#clearMessageDescription();
-    this.#label = this.#slotElement(this.#labelSlot);
-    this.#message = this.#slotElement(this.#messageSlot);
-    this.#control = this.#nativeControl(this.#slotElement(this.#controlSlot));
+    this.#label = this.#part("label");
+    this.#message = this.#part("message");
+    this.#control = this.#nativeControl(this.#part("control"));
     this.#associateParts();
     this.#synchronizeState();
   }
@@ -213,4 +130,4 @@ export class ChoiceField extends HTMLElement {
   }
 }
 
-if (!customElements.get(tagName)) customElements.define(tagName, ChoiceField);
+if (canUseDOM && !customElements.get(tagName)) customElements.define(tagName, ChoiceField);
