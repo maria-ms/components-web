@@ -107,7 +107,7 @@ if (!document.getElementById(styleId)) {
     }
 
     ds-switch:has(> input[type="checkbox"]:not(:disabled):focus-visible)::before {
-      border-color: var(--ds-semantic-color-border-focus);
+      border-color: var(--ds-semantic-color-border-focus-muted);
       box-shadow:
         var(--ds-semantic-shadow-xs-offset-x)
         var(--ds-semantic-shadow-xs-offset-y)

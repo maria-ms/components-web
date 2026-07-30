@@ -10,7 +10,7 @@ if (!document.getElementById(styleId)) {
       --ds-select-block-size: var(--ds-component-input-height-md);
       --ds-select-inline-size: var(--ds-component-input-width-lg);
       --ds-select-radius: var(--ds-component-input-radius-md);
-      --ds-select-focus-border-color: var(--ds-semantic-color-border-focus);
+      --ds-select-focus-border-color: var(--ds-semantic-color-border-focus-muted);
 
       box-sizing: border-box;
       display: inline-block;
@@ -49,7 +49,7 @@ if (!document.getElementById(styleId)) {
       color: var(--ds-semantic-color-foreground-default);
       font-family: var(--ds-primitive-font-family-body);
       font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
       line-height: var(--ds-semantic-typography-body-small-line-height);
       outline: 0;
       box-shadow: none;

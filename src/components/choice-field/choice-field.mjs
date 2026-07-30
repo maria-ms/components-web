@@ -20,7 +20,7 @@ if (!document.getElementById(styleId)) {
       color: var(--ds-semantic-color-foreground-default);
       font-family: var(--ds-primitive-font-family-body);
       font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
       line-height: var(--ds-semantic-typography-body-small-line-height);
     }
 

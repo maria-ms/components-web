@@ -43,7 +43,7 @@ if (!document.getElementById(styleId)) {
       color: var(--ds-semantic-color-foreground-default);
       font-family: var(--ds-primitive-font-family-body);
       font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight);
+      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
       line-height: var(--ds-semantic-typography-body-small-line-height);
       outline: 0;
       box-shadow: none;
@@ -62,7 +62,7 @@ if (!document.getElementById(styleId)) {
     }
 
     ds-number-input > input[type="number"]:not(:disabled):focus-visible {
-      border-color: var(--ds-semantic-color-border-focus);
+      border-color: var(--ds-semantic-color-border-focus-muted);
       box-shadow:
         var(--ds-semantic-shadow-xs-offset-x)
         var(--ds-semantic-shadow-xs-offset-y)
