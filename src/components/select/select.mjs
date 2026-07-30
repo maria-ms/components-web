@@ -7,9 +7,9 @@ if (!document.getElementById(styleId)) {
   style.id = styleId;
   style.textContent = `
     ds-select {
-      --ds-select-block-size: var(--ds-component-input-height-sm);
+      --ds-select-block-size: var(--ds-component-input-height-md);
       --ds-select-inline-size: var(--ds-component-input-width-lg);
-      --ds-select-radius: var(--ds-component-input-radius-sm);
+      --ds-select-radius: var(--ds-component-input-radius-md);
       --ds-select-focus-border-color: var(--ds-semantic-color-border-focus);
 
       box-sizing: border-box;
@@ -21,6 +21,11 @@ if (!document.getElementById(styleId)) {
     ds-select[size="medium"] {
       --ds-select-block-size: var(--ds-component-input-height-md);
       --ds-select-radius: var(--ds-component-input-radius-md);
+    }
+
+    ds-select[size="small"] {
+      --ds-select-block-size: var(--ds-component-input-height-sm);
+      --ds-select-radius: var(--ds-component-input-radius-sm);
     }
 
     ds-select[size="large"] {
@@ -37,7 +42,9 @@ if (!document.getElementById(styleId)) {
       margin: 0;
       border: var(--ds-semantic-border-width-default) solid var(--ds-component-input-color-border-default);
       border-radius: var(--ds-select-radius);
-      padding: var(--ds-semantic-spacing-xs);
+      /* Figma uses a 20px text line centred in the 24px Small control. */
+      padding-block: 0;
+      padding-inline: var(--ds-semantic-spacing-xs);
       background: var(--ds-component-input-color-background-default);
       color: var(--ds-semantic-color-foreground-default);
       font-family: var(--ds-primitive-font-family-body);
@@ -70,6 +77,11 @@ if (!document.getElementById(styleId)) {
         var(--ds-semantic-border-focus-primary-color);
     }
 
+    /*
+     * The Field/form validation owner sets aria-invalid when feedback should
+     * be shown. Native validity remains intact, but raw :invalid is not styled
+     * early before that owner has chosen to expose an error.
+     */
     ds-select > select:not(:disabled)[aria-invalid="true"] {
       border-color: var(--ds-semantic-color-border-destructive-default);
       background: var(--ds-semantic-color-background-destructive-subtle);
@@ -158,7 +170,9 @@ if (!document.getElementById(styleId)) {
         inline-size: var(--ds-select-inline-size);
         min-inline-size: 0;
         max-inline-size: 100%;
-        margin-block-start: var(--ds-semantic-spacing-xs);
+        /* The customizable-select picker has an implicit trigger anchor. */
+        top: calc(anchor(bottom) + var(--ds-semantic-spacing-xs));
+        left: anchor(left);
         border: var(--ds-semantic-border-width-default) solid var(--ds-component-input-color-border-default);
         border-radius: var(--ds-select-radius);
         padding: var(--ds-primitive-space-02);
