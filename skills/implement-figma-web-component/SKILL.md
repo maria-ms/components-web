@@ -44,11 +44,14 @@ Put focus effects on the painted interactive child and keep any halo carrier
 unclipped. Reconcile the Storybook story when it no longer represents the
 contract or shipped component; expose only real package or native controls.
 
+Web components must be SSR-safe: keep styles in `<component>.css`, export them
+from `styles.css`, and register the custom element only in the browser.
+
 ## 3. Verify
 
-Run the smallest relevant package checks, plus the Storybook check when its
-story changed. Verify the native boundary, accessible name/relationship,
-allowed child composition, and token modes where applicable.
+Run a server import, the smallest relevant package checks, and the Storybook
+check when its story changed. Verify the native boundary, accessible
+name/relationship, allowed child composition, and token modes where applicable.
 
 Report the contract, Figma-only mappings, actual package API, files changed,
 checks run, and unresolved gaps.

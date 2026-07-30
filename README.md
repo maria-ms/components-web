@@ -14,8 +14,8 @@ import "@maria-ms/components-web/text-input";
 ```
 
 Set `data-theme="light"` or `data-theme="dark"` on the application root.
-The CSS entry supplies visual styles; component module imports register custom
-elements in a browser and are safe to import during server rendering.
+Import the CSS entry once; component modules are SSR-safe and register custom
+elements only in the browser.
 
 ## Sources of truth
 

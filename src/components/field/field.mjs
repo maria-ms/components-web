@@ -1,67 +1,7 @@
 const tagName = "ds-field";
-const styleId = "ds-field-styles";
+const canUseDOM = typeof document !== "undefined" && typeof customElements !== "undefined";
+const ElementBase = globalThis.HTMLElement ?? class {};
 let generatedId = 0;
-
-if (!document.getElementById(styleId)) {
-  const style = document.createElement("style");
-
-  style.id = styleId;
-  style.textContent = `
-    ds-field > [slot="label"],
-    ds-field > [slot="message"] {
-      display: block;
-      inline-size: 100%;
-      margin: 0;
-      color: var(--ds-semantic-color-foreground-default);
-      font-family: var(--ds-primitive-font-family-body);
-      font-size: var(--ds-semantic-typography-body-small-font-size);
-      font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
-      line-height: var(--ds-semantic-typography-body-small-line-height);
-    }
-
-    ds-field > [slot="control"] {
-      inline-size: 100%;
-      min-inline-size: 0;
-    }
-
-    ds-field > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-muted-2);
-    }
-
-    ds-field[data-state="invalid"] > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-destructive-elevated);
-    }
-
-    ds-field[data-state="disabled"] > [slot="label"],
-    ds-field[data-state="disabled"] > [slot="message"] {
-      color: var(--ds-semantic-color-foreground-disabled-muted);
-    }
-  `;
-  document.head.append(style);
-}
-
-const template = document.createElement("template");
-
-template.innerHTML = `
-  <style>
-    :host {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      inline-size: var(--ds-component-input-width-lg);
-      max-inline-size: 100%;
-      gap: var(--ds-semantic-spacing-xs);
-    }
-
-    slot {
-      display: contents;
-    }
-  </style>
-  <slot name="label"></slot>
-  <slot name="control"></slot>
-  <slot name="message"></slot>
-`;
 
 const controlSelector = "input, select, textarea";
 
@@ -73,14 +13,13 @@ const nextId = (part) => {
 /**
  * Structural form-field compound for one canonical text-like control.
  *
- * Consumers provide native Label, Control, and Message parts in named slots.
+ * Consumers provide native Label, Control, and Message parts marked by their
+ * named slot attributes.
  * Field owns their associations and validation timing; the child control retains
  * its native form, value, focus, event, and constraint-validation contracts.
+ * Import `@maria-ms/components-web/styles.css` for its token styles.
  */
-export class Field extends HTMLElement {
-  #labelSlot;
-  #controlSlot;
-  #messageSlot;
+export class Field extends ElementBase {
   #label;
   #control;
   #message;
@@ -93,8 +32,6 @@ export class Field extends HTMLElement {
   #renderedNativeError = false;
   #managedAriaInvalid = false;
   #hasBeenValidated = false;
-
-  #onSlotChange = () => this.#synchronize();
 
   #onFocusOut = (event) => {
     if (event.target !== this.#control) return;
@@ -122,21 +59,15 @@ export class Field extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" }).append(template.content.cloneNode(true));
-    this.#labelSlot = this.shadowRoot.querySelector('slot[name="label"]');
-    this.#controlSlot = this.shadowRoot.querySelector('slot[name="control"]');
-    this.#messageSlot = this.shadowRoot.querySelector('slot[name="message"]');
-    this.#observer = new MutationObserver(() => this.#synchronize());
   }
 
   connectedCallback() {
-    this.#labelSlot.addEventListener("slotchange", this.#onSlotChange);
-    this.#controlSlot.addEventListener("slotchange", this.#onSlotChange);
-    this.#messageSlot.addEventListener("slotchange", this.#onSlotChange);
+    this.#observer = new MutationObserver(() => this.#synchronize());
     this.addEventListener("focusout", this.#onFocusOut);
     this.addEventListener("input", this.#onInput);
     this.addEventListener("invalid", this.#onInvalid, true);
     this.#observer.observe(this, {
+      childList: true,
       subtree: true,
       attributes: true,
       attributeFilter: ["aria-invalid", "disabled", "hidden", "id"],
@@ -145,18 +76,18 @@ export class Field extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.#labelSlot.removeEventListener("slotchange", this.#onSlotChange);
-    this.#controlSlot.removeEventListener("slotchange", this.#onSlotChange);
-    this.#messageSlot.removeEventListener("slotchange", this.#onSlotChange);
     this.removeEventListener("focusout", this.#onFocusOut);
     this.removeEventListener("input", this.#onInput);
     this.removeEventListener("invalid", this.#onInvalid, true);
-    this.#observer.disconnect();
+    this.#observer?.disconnect();
+    this.#observer = undefined;
     this.#setForm(null);
   }
 
-  #slotElement(slot) {
-    return slot.assignedElements({ flatten: true })[0] || null;
+  #part(slotName) {
+    return Array.from(this.children).find(
+      (child) => child instanceof Element && child.getAttribute("slot") === slotName,
+    ) || null;
   }
 
   #nativeControl(controlPart) {
@@ -168,9 +99,9 @@ export class Field extends HTMLElement {
   }
 
   #synchronize() {
-    const label = this.#slotElement(this.#labelSlot);
-    const controlPart = this.#slotElement(this.#controlSlot);
-    const message = this.#slotElement(this.#messageSlot);
+    const label = this.#part("label");
+    const controlPart = this.#part("control");
+    const message = this.#part("message");
     const control = this.#nativeControl(controlPart);
 
     this.#clearMessageDescription();
@@ -316,4 +247,4 @@ export class Field extends HTMLElement {
   }
 }
 
-if (!customElements.get(tagName)) customElements.define(tagName, Field);
+if (canUseDOM && !customElements.get(tagName)) customElements.define(tagName, Field);
