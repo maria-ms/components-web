@@ -1,0 +1,10 @@
+html:
+  element: button
+  content: decorative icon
+aria:
+  aria-label: required non-empty accessible name
+figma:
+  preview: [State]
+rules:
+  - Never use an unlabeled icon-only action.
+  - Use Button when visible text is needed.

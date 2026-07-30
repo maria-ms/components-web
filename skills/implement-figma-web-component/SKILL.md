@@ -16,8 +16,11 @@ If no approved public Figma component name or URL is supplied, ask exactly:
 
 Then read, without writing:
 
-1. `ds/component-contracts/component-registry.yaml`.
-2. Its linked `components/<contract>.yaml`: `html`, `aria`, `figma`, and `rules` only.
+1. The approved Figma asset name and its colocated Web contract:
+   `ds/components-web/src/components/<component>/contract.yaml`.
+   `Button / Icon-only` uses `button/icon-button.contract.yaml`; `Select / Option`
+   uses `select/option.contract.yaml`.
+2. Its `html`, `aria`, `figma`, and `rules` only.
 3. The live public master in `Asset source / [category]`.
 4. Existing component source, exports, tests, and matching Storybook story.
 

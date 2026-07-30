@@ -1,0 +1,11 @@
+html:
+  element: input
+  type: checkbox
+  property: indeterminate
+aria:
+  aria-invalid: individual validation feedback
+figma:
+  preview: [State]
+rules:
+  - Preserve native checkbox semantics; indeterminate is a post-render property, not a submitted third value.
+  - Individual error pairs Choice Field Error with Checkbox Invalid.

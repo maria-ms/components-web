@@ -1,0 +1,10 @@
+html:
+  element: input
+  types: [text, email, password, search, tel, url]
+aria:
+  aria-invalid: validation feedback
+figma:
+  preview: [State, Content, Displayed text]
+rules:
+  - Preserve native input behaviour and validation.
+  - Field or the form decides when invalid feedback appears.

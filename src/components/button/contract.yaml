@@ -1,0 +1,8 @@
+html:
+  element: button
+  content: text with optional decorative icon
+figma:
+  preview: [State]
+rules:
+  - Use Link for navigation, not Button.
+  - Visible text names the action; decorative icons are hidden from assistive technology.

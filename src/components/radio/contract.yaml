@@ -1,0 +1,8 @@
+html:
+  element: input
+  type: radio
+figma:
+  preview: [State]
+rules:
+  - Same-name Radios remain mutually exclusive through native behaviour.
+  - Radio has no individual Invalid state; Radio Group owns missing-selection validation.

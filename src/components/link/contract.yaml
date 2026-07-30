@@ -1,0 +1,8 @@
+html:
+  element: a
+  content: descriptive link text
+figma:
+  preview: [State, Hover]
+rules:
+  - Use only for a real destination; use Button for an in-place action.
+  - Do not put interactive content inside the anchor.

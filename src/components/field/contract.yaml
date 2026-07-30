@@ -1,0 +1,11 @@
+html:
+  pattern: label + one supported form control + optional message
+aria:
+  aria-describedby: visible supporting or error message
+figma:
+  preview: [State, Show message]
+  slots:
+    Control: [Text Input, Textarea, Select, Number Input]
+rules:
+  - Accept exactly one supported form control.
+  - The child owns its native value, validity, focus, disabled state, and Size.

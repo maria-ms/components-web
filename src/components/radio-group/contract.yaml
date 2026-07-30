@@ -1,0 +1,12 @@
+html:
+  element: fieldset
+  children: [legend, "same-name input[type=radio]"]
+aria:
+  aria-describedby: group error when present
+figma:
+  preview: [State, Show description]
+  slots:
+    Options: [Choice Field with Radio]
+rules:
+  - Radio Group owns missing-selection error, never Radio or Choice Field.
+  - Group and Options hug content; the outer layout decides width.

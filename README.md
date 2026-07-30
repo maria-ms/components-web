@@ -22,8 +22,7 @@ elements only in the browser.
 | Need | Source |
 | --- | --- |
 | Visual values, public Figma properties, Slots, and theme evidence | Public Figma master in `Asset source / [category]` |
-| Native HTML, ARIA relationships, Figma-only previews, and limits | `../component-contracts/components/` |
-| Figma key → contract → package entry | `../component-contracts/component-registry.yaml` |
+| Native HTML, ARIA relationships, Figma-only previews, and limits | The component's colocated `contract.yaml` |
 | CSS custom-property values | `@maria-ms/tokens` |
 | DOM, package API, CSS, and tests | This package |
 
@@ -31,6 +30,11 @@ Figma `State`, `Content`, displayed text, and picker-open settings are design
 preview controls unless the linked contract explicitly says otherwise. In code,
 use the native element's actual `disabled`, value, validity, focus, and child
 content instead of reproducing preview properties.
+
+Each component folder owns its Web contract. `Button / Icon-only` uses
+`button/icon-button.contract.yaml`; `Select / Option` uses
+`select/option.contract.yaml`. The contracts describe the Web platform only,
+not a cross-platform API.
 
 ## Shipped components
 

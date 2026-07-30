@@ -39,6 +39,10 @@ ds-radio-group > fieldset > [data-error] {
   color: var(--ds-semantic-color-foreground-destructive-elevated);
 }
 
+ds-radio-group > fieldset > [data-error][hidden] {
+  display: none;
+}
+
 ds-radio-group > fieldset > legend + [data-description] {
   margin-block-start: var(--ds-semantic-spacing-2xs);
 }

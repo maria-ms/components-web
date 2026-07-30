@@ -1,0 +1,8 @@
+html:
+  element: option
+  parent: select
+figma:
+  preview: [State]
+rules:
+  - Use only in Select Options; it is not a standalone runtime component.
+  - Hover is a Figma-only browser preview.

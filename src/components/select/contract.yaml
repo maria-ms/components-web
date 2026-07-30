@@ -1,0 +1,13 @@
+html:
+  element: select
+  children: [option, optgroup]
+aria:
+  aria-invalid: validation feedback
+figma:
+  preview: [State, Displayed label, Open]
+  slots:
+    Options: [Select / Option]
+rules:
+  - Use native single-select; rich or searchable options require a separate Combobox/Listbox.
+  - Options are text-only.
+  - At most one option is selected.

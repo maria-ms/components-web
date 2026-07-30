@@ -1,0 +1,10 @@
+html:
+  element: input
+  type: number
+aria:
+  aria-invalid: validation feedback
+figma:
+  preview: [State, Content, Displayed value]
+rules:
+  - Preserve native number-input behaviour.
+  - Do not add a custom stepper or quantity-selector API without a separate component.

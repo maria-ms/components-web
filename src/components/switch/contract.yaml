@@ -1,0 +1,10 @@
+html:
+  element: input
+  type: checkbox
+aria:
+  aria-invalid: individual validation feedback
+figma:
+  preview: [State]
+rules:
+  - Preserve checkbox form semantics; Switch is only its visual treatment.
+  - Individual error pairs Choice Field Error with Switch Invalid.

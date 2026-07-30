@@ -1,0 +1,7 @@
+html:
+  element: decorative svg
+aria:
+  aria-hidden: true
+rules:
+  - Parent content owns visible and announced loading status.
+  - Respect reduced motion while retaining a recognisable static indicator.

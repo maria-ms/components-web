@@ -1,0 +1,11 @@
+html:
+  pattern: label + one choice control + optional message
+aria:
+  aria-describedby: visible supporting or error message
+figma:
+  preview: [State, Show message]
+  slots:
+    Control: [Checkbox, Radio, Switch]
+rules:
+  - Accept exactly one choice control.
+  - Radio Group, not Choice Field, owns a missing-radio-selection error.
