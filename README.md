@@ -36,19 +36,20 @@ content instead of reproducing preview properties.
 | `ds-button` | `<button>` |
 | `ds-icon-button` | `<button aria-label="…">` with decorative icon |
 | `ds-checkbox` | `<input type="checkbox">` |
+| `ds-choice-field` | label, one Checkbox, Radio, or Switch, optional message |
 | `ds-field` | label, one supported control, optional message |
 | `ds-link` | `<a href="…">` |
 | `ds-number-input` | `<input type="number">` |
 | `ds-radio` | `<input type="radio">` |
+| `ds-radio-group` | one native `<fieldset>` with same-name Radios |
 | `ds-select` | `<select>` with native `<option>` / `<optgroup>` children |
 | `ds-spinner` | decorative indicator; parent owns status text/announcement |
 | `ds-switch` | `<input type="checkbox" switch>` |
 | `ds-text-input` | textual `<input>` |
 | `ds-textarea` | `<textarea>` |
 
-`Choice Field` and `Radio Group` have Figma masters and shared contracts but
-do not yet have package implementations. `Select / Option` intentionally maps
-to native `<option>`, not a standalone web component.
+`Select / Option` intentionally maps to native `<option>`, not a standalone
+web component.
 
 ## Example
 

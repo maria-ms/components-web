@@ -117,11 +117,11 @@ if (!document.getElementById(styleId)) {
         var(--ds-semantic-shadow-xs-blur)
         var(--ds-semantic-shadow-xs-spread)
         var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-border-focus-primary-thin-offset-x)
-        var(--ds-semantic-border-focus-primary-thin-offset-y)
-        var(--ds-semantic-border-focus-primary-thin-blur)
-        var(--ds-semantic-border-focus-primary-thin-spread)
-        var(--ds-semantic-border-focus-primary-thin-color);
+        var(--ds-semantic-border-focus-primary-offset-x)
+        var(--ds-semantic-border-focus-primary-offset-y)
+        var(--ds-semantic-border-focus-primary-blur)
+        var(--ds-semantic-border-focus-primary-spread)
+        var(--ds-semantic-border-focus-primary-color);
     }
 
     ds-checkbox:has(> input[type="checkbox"]:not(:disabled):not(:checked):not(:indeterminate):focus-visible)
@@ -138,11 +138,11 @@ if (!document.getElementById(styleId)) {
         var(--ds-semantic-shadow-xs-blur)
         var(--ds-semantic-shadow-xs-spread)
         var(--ds-semantic-shadow-xs-color),
-        var(--ds-semantic-border-focus-destructive-thin-offset-x)
-        var(--ds-semantic-border-focus-destructive-thin-offset-y)
-        var(--ds-semantic-border-focus-destructive-thin-blur)
-        var(--ds-semantic-border-focus-destructive-thin-spread)
-        var(--ds-semantic-border-focus-destructive-thin-color);
+        var(--ds-semantic-border-focus-destructive-offset-x)
+        var(--ds-semantic-border-focus-destructive-offset-y)
+        var(--ds-semantic-border-focus-destructive-blur)
+        var(--ds-semantic-border-focus-destructive-spread)
+        var(--ds-semantic-border-focus-destructive-color);
     }
 
     ds-checkbox:has(> input[type="checkbox"]:disabled) {

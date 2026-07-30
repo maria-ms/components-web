@@ -54,15 +54,16 @@ if (!document.getElementById(styleId)) {
 
     ds-radio > input[type="radio"]:not(:disabled):focus-visible {
       box-shadow:
+        var(--ds-semantic-shadow-xs-offset-x)
+        var(--ds-semantic-shadow-xs-offset-y)
+        var(--ds-semantic-shadow-xs-blur)
+        var(--ds-semantic-shadow-xs-spread)
+        var(--ds-semantic-shadow-xs-color),
         var(--ds-semantic-border-focus-primary-offset-x)
         var(--ds-semantic-border-focus-primary-offset-y)
         var(--ds-semantic-border-focus-primary-blur)
         var(--ds-semantic-border-focus-primary-spread)
         var(--ds-semantic-border-focus-primary-color);
-    }
-
-    ds-radio > input[type="radio"]:not(:disabled):not(:checked):focus-visible {
-      border-color: var(--ds-component-checkbox-color-border-focus);
     }
 
     ds-radio > input[type="radio"]:disabled {
