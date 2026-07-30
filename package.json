@@ -31,6 +31,7 @@
     "./switch": "./src/components/switch/switch.mjs",
     "./text-input": "./src/components/text-input/text-input.mjs",
     "./textarea": "./src/components/textarea/textarea.mjs",
+    "./styles.css": "./src/styles.css",
     "./package.json": "./package.json"
   },
   "sideEffects": true,

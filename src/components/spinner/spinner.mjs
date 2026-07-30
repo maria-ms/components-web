@@ -1,57 +1,7 @@
 const tagName = "ds-spinner";
-const styleId = "ds-spinner-styles";
-
-if (!document.getElementById(styleId)) {
-  const style = document.createElement("style");
-
-  style.id = styleId;
-  style.textContent = `
-    ds-spinner {
-      display: inline-flex;
-      width: var(--ds-component-icon-size-sm);
-      height: var(--ds-component-icon-size-sm);
-      align-items: center;
-      justify-content: center;
-      color: inherit;
-      vertical-align: middle;
-    }
-
-    ds-spinner[size="medium"] {
-      width: var(--ds-component-icon-size-md);
-      height: var(--ds-component-icon-size-md);
-    }
-
-    ds-spinner[size="large"] {
-      width: var(--ds-component-icon-size-lg);
-      height: var(--ds-component-icon-size-lg);
-    }
-
-    ds-spinner > svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      animation: ds-spinner-rotate 1s linear infinite;
-      transform-origin: center;
-    }
-
-    ds-spinner > svg path {
-      stroke-width: var(--ds-semantic-border-width-default);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      ds-spinner > svg {
-        animation: none;
-      }
-    }
-
-    @keyframes ds-spinner-rotate {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  `;
-  document.head.append(style);
-}
+const canUseDOM =
+  typeof document !== "undefined" && typeof customElements !== "undefined";
+const ElementBase = globalThis.HTMLElement ?? class {};
 
 const svg = `
   <svg aria-hidden="true" viewBox="0 0 16.5 16.5" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,11 +12,13 @@ const svg = `
 /**
  * Decorative loading indicator. The parent owns status text and announcements.
  */
-export class Spinner extends HTMLElement {
+export class Spinner extends ElementBase {
   connectedCallback() {
     this.setAttribute("aria-hidden", "true");
     if (!this.querySelector("svg")) this.innerHTML = svg;
   }
 }
 
-if (!customElements.get(tagName)) customElements.define(tagName, Spinner);
+if (canUseDOM && !customElements.get(tagName)) {
+  customElements.define(tagName, Spinner);
+}

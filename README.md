@@ -9,10 +9,13 @@ behaviour; the `ds-*` element supplies the token-backed visual contract.
 ```js
 import "@maria-ms/tokens/css/light";
 import "@maria-ms/tokens/css/dark";
+import "@maria-ms/components-web/styles.css";
 import "@maria-ms/components-web/text-input";
 ```
 
 Set `data-theme="light"` or `data-theme="dark"` on the application root.
+The CSS entry supplies visual styles; component module imports register custom
+elements in a browser and are safe to import during server rendering.
 
 ## Sources of truth
 
