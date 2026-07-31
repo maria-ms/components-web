@@ -29,9 +29,14 @@ const createIndicator = () => {
  * `indeterminate` remains the native input property; it is not an attribute.
  */
 export class Checkbox extends ElementBase {
-  constructor() {
-    super();
-    this.append(createIndicator());
+  connectedCallback() {
+    const hasIndicator = Array.from(this.children).some((child) =>
+      child.classList.contains(indicatorClass),
+    );
+
+    if (!hasIndicator) {
+      this.prepend(createIndicator());
+    }
   }
 }
 
