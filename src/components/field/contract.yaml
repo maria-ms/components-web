@@ -8,4 +8,5 @@ figma:
     Control: [Text Input, Textarea, Select, Number Input]
 rules:
   - Accept exactly one supported form control.
+  - Figma Control is restricted to approved assets; on the Web it contains exactly one native input, select, or textarea.
   - The child owns its native value, validity, focus, disabled state, and Size.
