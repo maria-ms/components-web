@@ -5,41 +5,44 @@ description: Create or revise a Maria reusable Figma component, its public maste
 
 # Create a Maria Figma component
 
-Before every Figma write, load `figma:figma-use` and
-`figma:figma-generate-library`. Work in small sequential writes and validate
-after each one. This skill creates Figma; it does not implement Web code or
-change tokens.
+Before every Figma Plugin API call, load `figma:figma-use`. Before every Figma
+write, also load `figma:figma-generate-library`. Follow those system skills for
+tool mechanics; this skill supplies Maria-specific decisions. Work in small
+sequential writes and validate after each one. This skill creates Figma; it does
+not implement Web code or change tokens.
 
 ## 1. Start with a designer brief
 
-If any answer is missing, ask only for:
+Start with the supplied name, Figma URL, product frame, or description. Research
+before asking a questionnaire. For a revision or migration, use the exact URL.
 
-1. Component name and intended Asset category, if known.
-2. The user job: what people do or choose with it.
-3. The choices designers need to configure in product mockups.
-4. Existing public components it must contain or work beside.
-5. A product-frame reference or a short example of intended use.
+Ask before research only when neither a component name nor a reference is
+provided. After research, ask at most one concise question at a time, and only
+when its answer materially changes the public interface or composition model.
+Make a clearly labelled recommendation when a safe default exists.
 
-For a revision or migration, item 1 must include the exact Figma component or
-page URL.
-
-Do not ask designers to choose HTML, ARIA, variant axes, token names, or Figma
-node structure. Derive those and present the recommendation.
+Derive the Asset category, native boundary, Figma properties, Slots, token use,
+and page structure. Do not ask designers to choose HTML, ARIA, variant axes,
+token names, Figma node structure, or nearby reference components.
 
 ## 2. Research before writing
 
 Read only. Inspect:
 
 1. The live `COMPONENT-PAGE-TEMPLATE`.
-2. Two closest Maria component pages and their public masters.
+2. Two closest live Maria `*-SHADCN` Pages, including their documentation,
+   Asset source frames, and public masters.
 3. Existing variables, styles, icons, and public assets that the component can
    reuse.
 4. The colocated `components-web` contract when this is a revision of a shipped
    component.
 5. The closest existing `contract.yaml` as a shape reference when a new
    component is intended for Web.
-6. The relevant MDN element documentation for native semantics and the relevant
-   shadcn component page for common composition patterns.
+6. The relevant MDN element documentation for native semantics.
+7. The relevant shadcn registry component through the available shadcn MCP:
+   search it, inspect its details or examples when found, and use it only as a
+   comparison for common composition patterns. Fall back to the official shadcn
+   documentation only when the MCP cannot provide the component.
 
 Source order:
 
@@ -59,6 +62,7 @@ Before creating or changing nodes, return exactly:
 
 ```text
 Decision: Create | Revise | Reuse
+Target Figma Page(s):
 Native boundary and non-goals:
 Public Figma interface and defaults:
 Slots:
@@ -74,7 +78,41 @@ card, screenshot, or shadcn example.
 
 ## 4. Build the public master
 
-Use only public masters inside:
+### Own one Figma Page
+
+For every public component in the approved proposal, create or use one Figma
+Page named `UPPERCASE-COMPONENT-NAME-SHADCN`. For example, `Accordion` uses
+`ACCORDION-SHADCN`; a separately public `Accordion / Item` uses
+`ACCORDION-ITEM-SHADCN`. Do not treat related components as a page family.
+
+Before any node write:
+
+1. Find Figma Pages with each exact target name.
+2. Create a target Page only when it does not exist; stop when a target name is
+   duplicated.
+3. Call `figma.setCurrentPageAsync(targetPage)` and assert the current page is
+   that page before creating, duplicating, moving, or editing a node.
+
+Put every created or moved frame for that component on its target Page. Never
+use the template page, a reference component page, or an unrelated page as a
+write target. The live template is copied only as a shell into the target Page.
+
+For a revision, use the existing approved canonical `*-SHADCN` Page. A legacy
+reference on another Page remains read-only unless the user explicitly approves
+its migration by URL.
+
+Every normal component Page has exactly these top-level frames:
+
+```text
+[Component] / Page
+Asset source / [category]
+```
+
+Its Asset source contains that Page's public master only. A parent uses another
+component through a linked Slot instance; it does not own or copy the child's
+master or documentation page.
+
+Use the Page's public master only inside:
 
 ```text
 Asset source / [category]
@@ -83,8 +121,7 @@ Asset source / [category]
     [Public component set]
 ```
 
-A related family may share one Asset source frame but keeps separate
-documentation pages. Documentation uses linked instances only.
+Documentation uses linked instances only.
 
 - For a revision, preserve the component key. Do not detach, rebuild, or
   replace existing instances; migrate them and verify they stay linked.
@@ -115,8 +152,8 @@ documentation pages. Documentation uses linked instances only.
 
 ## 5. Build the page from the live template
 
-Follow `COMPONENT-PAGE-TEMPLATE`; do not recreate its shell or add components
-inside `[Component] / Page`.
+Follow `COMPONENT-PAGE-TEMPLATE` by copying its shell onto the target Figma
+Page; do not recreate it by hand or add components inside `[Component] / Page`.
 
 ```text
 [Component] / Page                    Documentation only
@@ -153,6 +190,11 @@ Verify the live Figma file, not just the write report:
   detached/broken instances;
 - public master only in Asset source and zero COMPONENT/COMPONENT_SET nodes in
   the documentation page;
+- every target Figma Page has its exact `*-SHADCN` name and every newly created
+  or moved node is on its component's Page; no node was created or moved on
+  another Page;
+- every normal component Page has only `[Component] / Page` and `Asset source /
+  [category]` as top-level frames, with one public master in its Asset source;
 - variable-bound visuals, visible unclipped focus halos, and Light/Dark modes;
 - source and documentation auto-layout with no overflow, overlap, or blank
   space;
@@ -170,5 +212,6 @@ Public interface:
 Compact contract:
 Validation:
 Changed node IDs:
+Target Figma Page(s):
 Evidence: Asset source | Light Appearance | Dark Appearance
 ```
