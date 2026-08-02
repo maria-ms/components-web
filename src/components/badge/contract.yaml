@@ -1,0 +1,11 @@
+html:
+  element: non-interactive inline container
+  content: required text with optional decorative svg
+aria:
+  icon: aria-hidden=true
+figma:
+  properties: [Text, Leading icon visible, Leading icon, Color, Size]
+rules:
+  - Non-interactive; use Button or Link for actions.
+  - The optional icon is supplementary; text carries meaning.
+  - Blue is a non-semantic hue for categorisation or metadata.

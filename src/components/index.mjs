@@ -1,4 +1,5 @@
 export { Button, IconButton } from "./button/button.mjs";
+export { Badge } from "./badge/badge.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { ChoiceField } from "./choice-field/choice-field.mjs";
 export { Field } from "./field/field.mjs";

@@ -40,6 +40,7 @@ not a cross-platform API.
 
 | Element | Consumer-owned native content |
 | --- | --- |
+| `ds-badge` | non-interactive text with optional decorative SVG |
 | `ds-button` | `<button>` |
 | `ds-icon-button` | `<button aria-label="…">` with decorative icon |
 | `ds-checkbox` | `<input type="checkbox">` |
