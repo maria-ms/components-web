@@ -55,16 +55,19 @@ hard-coded substitute or fake a native semantic.
 
 ## 3. Propose, then wait
 
-Before creating or changing nodes, return a compact proposal containing:
+Before creating or changing nodes, return exactly:
 
-- native boundary and non-goals;
-- public Figma properties, defaults, and which are Figma previews;
-- Slots and their eligible public masters, if any;
-- label, description, error, and disabled-state ownership;
-- whether to create, revise, or reuse an existing public master;
-- closest Maria references and any shadcn/MDN finding that affected the choice;
-- source-matrix plan, Appearance proof, and product Examples;
-- any unresolved decision.
+```text
+Decision: Create | Revise | Reuse
+Native boundary and non-goals:
+Public Figma interface and defaults:
+Slots:
+Ownership:
+References that affected the recommendation:
+Source matrix, Appearance, and Examples:
+Compact contract draft:
+Open decision: none | [one question]
+```
 
 Wait for explicit approval. Do not infer a public property from an Appearance
 card, screenshot, or shadcn example.
@@ -160,5 +163,12 @@ only applicable `html`, `aria`, `figma`, and `rules` keys; omit empty keys and
 keep every rule to one durable constraint. Do not create framework API guidance
 in Figma.
 
-Return the public interface, contract facts, changed node IDs, and screenshots
-of the Asset source plus Light and Dark Appearance cards.
+Return exactly:
+
+```text
+Public interface:
+Compact contract:
+Validation:
+Changed node IDs:
+Evidence: Asset source | Light Appearance | Dark Appearance
+```

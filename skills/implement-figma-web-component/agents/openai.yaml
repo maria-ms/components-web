@@ -1,4 +1,4 @@
 interface:
-  display_name: "Implement Figma Web Components"
-  short_description: "Audit Figma components before implementation"
-  default_prompt: "Use $implement-figma-web-component to audit an approved Figma asset and recommend whether to create or reconcile its Web Component."
+  display_name: "Implement Figma Web Component"
+  short_description: "Audit and reconcile a Figma Web Component"
+  default_prompt: "Use $implement-figma-web-component for this approved Maria Figma component: [Figma URL]."

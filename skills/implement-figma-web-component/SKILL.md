@@ -28,12 +28,21 @@ Then read, without writing:
 5. Relevant MDN documentation when the native boundary is new or changed, and
    the relevant shadcn page only when a composition pattern needs comparison.
 
-Report whether the component is new, aligned, or needs reconciliation. Include
-the public Figma interface and Slots, the native/ARIA boundary, every concrete
-package or Storybook mismatch, and one recommended next action. Then stop for
-explicit approval. If a new component has no contract, report that as the
-recommended first change and include a proposed compact contract. Do not write
-the contract, invent an API, or implement during audit.
+Report exactly:
+
+```text
+Status: New | Aligned | Needs reconciliation
+Figma interface and Slots:
+Native/ARIA boundary:
+Compact contract: existing | proposed draft
+Concrete package or Storybook mismatch:
+Recommended action:
+Approval needed: yes
+```
+
+Then stop for explicit approval. If a new component has no contract, the
+recommended action is to create the proposed compact contract first. Do not
+write it, invent an API, or implement during audit.
 
 ## 2. Reconcile after approval
 
@@ -88,5 +97,13 @@ or story changes: the browser suite mounts every Playground against the public
 package. Verify the native boundary, accessible name/relationship, allowed child
 composition, and token modes where applicable.
 
-Report the contract, Figma-only mappings, actual package API, files changed,
-checks run, and unresolved gaps.
+Report exactly:
+
+```text
+Compact contract:
+Figma-only mappings:
+Actual public package API:
+Files changed:
+Checks:
+Unresolved gaps: none | [list]
+```
