@@ -1,4 +1,4 @@
 interface:
   display_name: "Create Figma Component"
   short_description: "Create a Maria Figma component safely"
-  default_prompt: "Use $create-figma-component-page to propose a new Maria component from this design brief."
+  default_prompt: "Use $create-figma-component-page. First ask me for the compact designer brief; do not create or propose a component from its name alone."

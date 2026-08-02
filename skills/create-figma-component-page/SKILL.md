@@ -13,17 +13,29 @@ not implement Web code or change tokens.
 
 ## 1. Start with a designer brief
 
-Start with the supplied name, Figma URL, product frame, or description. Research
-before asking a questionnaire. For a revision or migration, use the exact URL.
+Before research or any Figma work, collect one compact designer brief. If it is
+not already present, ask for these four answers in one message:
 
-Ask before research only when neither a component name nor a reference is
-provided. After research, ask at most one concise question at a time, and only
-when its answer materially changes the public interface or composition model.
-Make a clearly labelled recommendation when a safe default exists.
+1. Component name.
+2. User job: what a person does with it.
+3. Designer configuration: what must be editable, repeatable, or composable in
+   a product mockup.
+4. Existing reference: a product screen, legacy Figma page, or closest component
+   if one exists; otherwise say `none`.
+
+Do not start from a name alone. Do not turn a vague request into a public
+component by inference. For a revision or migration, the reference must be its
+exact Figma URL.
+
+After the brief, research and make a recommendation. Ask at most one further
+concise question at a time, only when its answer materially changes the public
+interface or composition model. Make a clearly labelled recommendation when a
+safe default exists.
 
 Derive the Asset category, native boundary, Figma properties, Slots, token use,
 and page structure. Do not ask designers to choose HTML, ARIA, variant axes,
-token names, Figma node structure, or nearby reference components.
+token names, Figma node structure, or nearby reference components. Discover
+existing Maria pages, public assets, icons, styles, and tokens yourself.
 
 ## 2. Research before writing
 
