@@ -1,9 +1,7 @@
 ds-accordion {
   box-sizing: border-box;
   display: block;
-  /* Figma binds the public Accordion master to semantic/container/sm. */
-  inline-size: var(--ds-semantic-container-sm);
-  max-inline-size: 100%;
+  inline-size: 100%;
   min-inline-size: 0;
   padding: var(--ds-semantic-spacing-md);
   overflow: visible;
