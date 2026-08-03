@@ -92,10 +92,15 @@ card, screenshot, or shadcn example.
 
 ### Own one Figma Page
 
-For every public component in the approved proposal, create or use one Figma
-Page named `UPPERCASE-COMPONENT-NAME-SHADCN`. For example, `Accordion` uses
-`ACCORDION-SHADCN`; a separately public `Accordion / Item` uses
-`ACCORDION-ITEM-SHADCN`. Do not treat related components as a page family.
+By default, create or use one Figma Page per public component, named
+`UPPERCASE-COMPONENT-NAME-SHADCN`. Do not treat related components as a page
+family.
+
+A public child master that is restricted to one parent Slot may live in that
+parent's `*-SHADCN` Asset source, with its own description and key, but no
+standalone documentation page. Use this narrow exception only when the child
+is not intended for any other parent or standalone use; restrict the parent
+Slot to that child master and keep the child as a separately selectable Asset.
 
 Before any node write:
 
@@ -120,9 +125,10 @@ Every normal component Page has exactly these top-level frames:
 Asset source / [category]
 ```
 
-Its Asset source contains that Page's public master only. A parent uses another
-component through a linked Slot instance; it does not own or copy the child's
-master or documentation page.
+Its Asset source contains that Page's public master only, except for an
+approved parent-restricted public child master. Outside that narrow exception,
+a parent uses another component through a linked Slot instance; it does not
+own or copy the child's master or documentation page.
 
 Use the Page's public master only inside:
 
@@ -131,6 +137,7 @@ Asset source / [category]
   Source header
   Public component sets
     [Public component set]
+    [Parent-restricted public child master, if approved]
 ```
 
 Documentation uses linked instances only.
@@ -206,7 +213,8 @@ Verify the live Figma file, not just the write report:
   or moved node is on its component's Page; no node was created or moved on
   another Page;
 - every normal component Page has only `[Component] / Page` and `Asset source /
-  [category]` as top-level frames, with one public master in its Asset source;
+  [category]` as top-level frames, with one parent public master plus only any
+  approved parent-restricted child masters in its Asset source;
 - variable-bound visuals, visible unclipped focus halos, and Light/Dark modes;
 - source and documentation auto-layout with no overflow, overlap, or blank
   space;

@@ -1,3 +1,4 @@
+export { Accordion } from "./accordion/accordion.mjs";
 export { Button, IconButton } from "./button/button.mjs";
 export { Badge } from "./badge/badge.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";

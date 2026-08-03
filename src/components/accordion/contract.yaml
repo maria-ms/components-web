@@ -1,0 +1,11 @@
+html:
+  children: [details]
+aria:
+  native: details and summary disclosure semantics
+figma:
+  slots:
+    Items: [Accordion / Item]
+rules:
+  - Accordion keeps zero or one direct Item open.
+  - Accordion owns dividers; the final Item has none.
+  - Accordion is semantic/container/sm wide and may shrink in a narrower outer layout; opening an Item changes height only.

@@ -1,0 +1,12 @@
+html:
+  element: details
+  children: [summary, text]
+aria:
+  native: summary names and controls its disclosure
+figma:
+  preview: [Open, State, Show divider]
+rules:
+  - Use only inside Accordion Items.
+  - Header maps to summary; Body is text-only in v1.
+  - Open, State, and Show divider are Figma previews, not Web Component APIs.
+  - Focus styling belongs on summary:focus-visible.
