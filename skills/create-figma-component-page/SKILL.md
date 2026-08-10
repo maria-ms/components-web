@@ -1,122 +1,119 @@
 ---
 name: create-figma-component-page
-description: Create or revise a Maria reusable Figma component, its public master, and its designer-facing page. Use when a designer wants to add, migrate, or change a component in the Maria Figma library before Web implementation.
+description: Create or revise a Maria reusable Figma component, its public master, and its designer-facing page before Web implementation. Use when a designer wants to add, migrate, or change a reusable component in the Maria Figma library.
 ---
 
 # Create a Maria Figma component
 
+Create or revise Figma only. Do not implement Web code or change tokens.
+
 Before every Figma Plugin API call, load `figma:figma-use`. Before every Figma
-write, also load `figma:figma-generate-library`. Follow those system skills for
-tool mechanics; this skill supplies Maria-specific decisions. Work in small
-sequential writes and validate after each one. This skill creates Figma; it does
-not implement Web code or change tokens.
+write, also load `figma:figma-generate-library`. Follow those skills for tool
+mechanics. Work in small writes and validate each result visually and
+structurally.
 
-## 1. Start with a designer brief
+## 1. Collect the brief
 
-Before research or any Figma work, collect one compact designer brief. If it is
-not already present, ask for these four answers in one message:
+Before research or Figma work, collect this compact brief if it is not already
+provided:
 
 1. Component name.
 2. User job: what a person does with it.
-3. Designer configuration: what must be editable, repeatable, or composable in
-   a product mockup.
-4. Existing reference: a product screen, legacy Figma page, or closest component
-   if one exists; otherwise say `none`.
+3. Designer needs: what must be editable, repeatable, or composable in a mockup.
+4. Existing reference: product screen, legacy Figma URL, or closest component;
+   otherwise `none`.
 
-Do not start from a name alone. Do not turn a vague request into a public
-component by inference. For a revision or migration, the reference must be its
-exact Figma URL.
+For a revision or migration, require the exact Figma URL.
 
-After the brief, research and make a recommendation. Ask at most one further
-concise question at a time, only when its answer materially changes the public
-interface or composition model. Make a clearly labelled recommendation when a
-safe default exists.
+Do not create a public component from a name alone. Ask at most one further
+question only when its answer changes the public interface or composition model.
+Otherwise make a recommendation.
 
-Derive the Asset category, native boundary, Figma properties, Slots, token use,
-and page structure. Do not ask designers to choose HTML, ARIA, variant axes,
-token names, Figma node structure, or nearby reference components. Discover
-existing Maria pages, public assets, icons, styles, and tokens yourself.
+Derive HTML semantics, Asset category, variants, Slots, tokens, and Page
+structure. Do not ask designers to choose HTML, ARIA, token names, Figma node
+structure, or reference components.
 
 ## 2. Research before writing
 
 Read only. Inspect:
 
 1. The live `COMPONENT-PAGE-TEMPLATE`.
-2. Two closest live Maria `*-SHADCN` Pages, including their documentation,
-   Asset source frames, and public masters.
-3. Existing variables, styles, icons, and public assets that the component can
-   reuse.
-4. The colocated `components-web` contract when this is a revision of a shipped
-   component.
-5. The closest existing `contract.yaml` as a shape reference when a new
-   component is intended for Web.
-6. The relevant MDN element documentation for native semantics.
-7. The relevant shadcn registry component through the available shadcn MCP:
-   search it, inspect its details or examples when found, and use it only as a
-   comparison for common composition patterns. Fall back to the official shadcn
-   documentation only when the MCP cannot provide the component.
+2. Two closest live Maria `*-SHADCN` Pages.
+3. Existing Maria public assets, icons, variables, and styles.
+4. The target component's colocated `contract.yaml`, if shipped.
+5. The closest contract as a shape reference if this is new.
+6. Relevant MDN documentation for the native semantic boundary.
+7. The relevant shadcn registry component, if available, as comparison only.
 
-Source order:
+Use this precedence:
 
-1. The approved designer brief and product context define the user job.
-2. MDN determines the native HTML and accessibility boundary.
-3. Existing Maria masters, tokens, contracts, and the page template.
-4. shadcn as a comparison source only.
+1. Approved brief and product context.
+2. MDN native semantics and accessibility.
+3. Existing Maria masters, tokens, contracts, and template.
+4. shadcn comparison.
 
-Do not copy shadcn names, APIs, variants, tokens, or documentation. If any
-sources disagree about semantics, ownership, allowed children, or a required
-token, report the conflict and ask for a decision. Do not create a local
-hard-coded substitute or fake a native semantic.
+Do not copy shadcn names, APIs, variants, tokens, or documentation. If sources
+conflict on semantics, ownership, allowed children, or a required token, report
+the conflict and ask for a decision.
 
-## 3. Propose, then wait
+## 3. Decide before building
 
-Before creating or changing nodes, return exactly:
+Before proposing properties, variants, or Slots, identify:
+
+- **Ownership** — what belongs to this component, its parent, or its children.
+- **Authoring** — what a designer deliberately chooses.
+- **Derived behavior** — what follows from state, content, composition, or
+  context.
+- **Evidence** — what documentation must show but designers do not configure.
+- **Composition** — allowed children, cardinality, repetition, shared behavior,
+  and sizing ownership.
+
+Expose only deliberate designer choices as public properties. Keep derived
+behavior and documentation evidence internal.
+
+A Slot represents one stable semantic child position. It is not an arbitrary
+content container. Define allowed children, cardinality, and whether repeated
+children are valid. Do not mirror child controls, size, or state on a parent.
+
+When Figma cannot model a runtime-derived relationship dynamically, preserve the
+correct public interface and use internal visual evidence. Do not add a fake
+public property to compensate.
+
+Before writing, return exactly:
 
 ```text
 Decision: Create | Revise | Reuse
-Target Figma Page(s):
+Target Figma Page:
 Native boundary and non-goals:
 Public Figma interface and defaults:
-Slots:
-Ownership:
-References that affected the recommendation:
+Derived behavior and evidence:
+Slots, ownership, and layout responsibility:
 Source matrix, Appearance, and Examples:
+References that affected the recommendation:
 Compact contract draft:
 Open decision: none | [one question]
 ```
 
-Wait for explicit approval. Do not infer a public property from an Appearance
-card, screenshot, or shadcn example.
+Wait for explicit approval.
 
 ## 4. Build the public master
 
-### Own one Figma Page
+Use one Figma Page per normal public component:
 
-By default, create or use one Figma Page per public component, named
-`UPPERCASE-COMPONENT-NAME-SHADCN`. Do not treat related components as a page
-family.
+```text
+UPPERCASE-COMPONENT-NAME-SHADCN
+```
 
-A public child master that is restricted to one parent Slot may live in that
-parent's `*-SHADCN` Asset source, with its own description and key, but no
-standalone documentation page. Use this narrow exception only when the child
-is not intended for any other parent or standalone use; restrict the parent
-Slot to that child master and keep the child as a separately selectable Asset.
+A public child master restricted to one parent Slot may live in that parent's
+Asset source only when it has no standalone or cross-component use. It keeps its
+own key and description but has no standalone documentation Page.
 
-Before any node write:
+Before writing:
 
-1. Find Figma Pages with each exact target name.
-2. Create a target Page only when it does not exist; stop when a target name is
-   duplicated.
-3. Call `figma.setCurrentPageAsync(targetPage)` and assert the current page is
-   that page before creating, duplicating, moving, or editing a node.
-
-Put every created or moved frame for that component on its target Page. Never
-use the template page, a reference component page, or an unrelated page as a
-write target. The live template is copied only as a shell into the target Page.
-
-For a revision, use the existing approved canonical `*-SHADCN` Page. A legacy
-reference on another Page remains read-only unless the user explicitly approves
-its migration by URL.
+1. Find Pages with the exact target name.
+2. Create the target Page only if it does not exist.
+3. Stop if the target Page name is duplicated.
+4. Assert the target Page is current before creating, moving, or editing nodes.
 
 Every normal component Page has exactly these top-level frames:
 
@@ -125,57 +122,54 @@ Every normal component Page has exactly these top-level frames:
 Asset source / [category]
 ```
 
-Its Asset source contains that Page's public master only, except for an
-approved parent-restricted public child master. Outside that narrow exception,
-a parent uses another component through a linked Slot instance; it does not
-own or copy the child's master or documentation page.
-
-Use the Page's public master only inside:
+Place public masters only in:
 
 ```text
 Asset source / [category]
   Source header
   Public component sets
     [Public component set]
-    [Parent-restricted public child master, if approved]
+    [Approved parent-restricted child master, if any]
 ```
 
 Documentation uses linked instances only.
 
-- For a revision, preserve the component key. Do not detach, rebuild, or
-  replace existing instances; migrate them and verify they stay linked.
-- Use a property for a deliberate designer choice; use TEXT, BOOLEAN,
-  INSTANCE_SWAP, and SLOT for their actual Figma purposes.
-- A Slot represents one stable semantic child position. Restrict it to approved
-  public masters. Never mirror a child's properties, size, or state on its
-  parent.
-- `State` is a Figma visual-preview property, not a Web API. Use it only for
-  documented visual configurations. Do not make Hover a public State.
-- For control primitives, order applicable State values: `Default →
-  Focus-visible → Invalid → Invalid + focus-visible → Disabled`. Field and
-  Choice Field use `Default → Error → Disabled` instead. Do not keep a separate
-  Disabled axis when State includes Disabled.
-- For a new set, create variant values in that order. If Figma's existing
-  property menu cannot be reordered through the Plugin API, report the one
-  exact manual reorder instead of claiming it changed.
-- Treat displayed content, picker-open, and similar simulation controls as
-  previews unless the approved brief makes them real design configuration.
-- Bind visual values to existing variables/styles. If a needed token does not
-  exist, stop for a token decision; do not hard-code a new visual value.
-- Use Figma Grid or auto-layout for every variant matrix, never manual variant
-  coordinates. When Size exists, show Small → Medium → Large across each row.
-- Put focus effects on the painted interactive child. Every ancestor that must
-  show the halo is unclipped.
-- Add a short Assets-panel description: native boundary, intended use, and Slot
-  limit where relevant.
+Apply these rules:
 
-## 5. Build the page from the live template
+- Preserve the component key on revisions. Do not detach, rebuild, or replace
+  existing instances.
+- Use TEXT, BOOLEAN, INSTANCE_SWAP, and SLOT only for their actual Figma
+  purposes.
+- `State` is a Figma visual-preview property, not a Web API. Do not make Hover
+  a public State.
+- For controls, create State values in this order:
 
-Follow `COMPONENT-PAGE-TEMPLATE` by copying its shell onto the target Figma
-Page; do not recreate it by hand or add components inside `[Component] / Page`.
+  ```text
+  Default → Focus-visible → Invalid → Invalid + focus-visible → Disabled
+  ```
+
+  Field and Choice Field use:
+
+  ```text
+  Default → Error → Disabled
+  ```
+
+- Bind visuals to existing variables and styles. Stop for a token decision if a
+  needed token does not exist.
+- Use Grid or auto layout for variant matrices; never manual variant positions.
+  When Size exists, show Small → Medium → Large across each row.
+- Put focus effects on the painted interactive child. Ancestors that must show
+  a halo are unclipped.
+- Add a short Asset-panel description: native boundary, intended use, and Slot
+  restriction where relevant.
+
+## 5. Build the documentation page
+
+Copy the live `COMPONENT-PAGE-TEMPLATE` shell onto the target Page. Do not
+recreate it by hand or place component masters inside `[Component] / Page`.
 
 ```text
-[Component] / Page                    Documentation only
+[Component] / Page
   Page metadata
   Page content
     Page title
@@ -192,38 +186,47 @@ Page; do not recreate it by hand or add components inside `[Component] / Page`.
       Design guardrails
 ```
 
-- `01 Appearance` is Light/Dark proof of relevant visual configurations. Show
-  browser Hover as evidence only, not as a public State.
-- `02 Examples` is a small set of meaningful product assemblies made with linked
-  public assets.
-- `03` is concise designer handoff: purpose, non-obvious configuration,
-  composition boundary, and 2–5 durable guardrails. Do not add a property table
-  by default or repeat menus, tokens, DOM/CSS, framework props, or sample text.
+- `01 Appearance` proves relevant visual configurations in Light and Dark.
+  Browser Hover is evidence only.
+- `02 Examples` proves meaningful product composition with linked public assets.
+  Repeatable Slots require populated repeated-child evidence, not empty Slots,
+  one-child placeholders, or decorative orphan layers.
+- Documentation layout is parent-owned: horizontal wrappers fill available
+  width; siblings share it through auto layout; examples fill their parent and
+  hug vertically.
+- Default documentation text is left-aligned unless another alignment is
+  intentional.
+- `03 Using this component` contains purpose, non-obvious configuration,
+  composition boundary, and two to five durable guardrails. Do not duplicate
+  menus, tokens, DOM/CSS, framework APIs, or sample content.
 
 ## 6. Validate and hand off
 
-Verify the live Figma file, not just the write report:
+Verify the live Figma file, not the write report:
 
-- exact public properties, defaults, matrix combinations, and Slots;
-- preserved component key on a revision, correct linked instances, and zero
-  detached/broken instances;
-- public master only in Asset source and zero COMPONENT/COMPONENT_SET nodes in
-  the documentation page;
-- every target Figma Page has its exact `*-SHADCN` name and every newly created
-  or moved node is on its component's Page; no node was created or moved on
-  another Page;
-- every normal component Page has only `[Component] / Page` and `Asset source /
-  [category]` as top-level frames, with one parent public master plus only any
-  approved parent-restricted child masters in its Asset source;
-- variable-bound visuals, visible unclipped focus halos, and Light/Dark modes;
-- source and documentation auto-layout with no overflow, overlap, or blank
-  space;
-- no unrelated components, tokens, styles, or pages changed.
+- public properties, defaults, variants, and Slot eligibility;
+- component keys preserved on revisions;
+- linked instances intact and zero detached or broken instances;
+- public masters only in Asset source;
+- zero COMPONENT or COMPONENT_SET nodes in the documentation frame;
+- correct target Page name and top-level structure;
+- every created or moved node on the target Page;
+- variable-bound visuals, Light/Dark modes, and unclipped focus effects;
+- populated linked evidence for every relevant public capability;
+- no overflow, clipping, overlap, empty example Slots, orphan layers,
+  unintended fixed sizing, or stale layer names;
+- no unrelated components, tokens, styles, or Pages changed.
 
-When Web implementation is intended, include a proposed compact contract using
-only applicable `html`, `aria`, `figma`, and `rules` keys; omit empty keys and
-keep every rule to one durable constraint. Do not create framework API guidance
-in Figma.
+Capture and inspect:
+
+1. Public Asset source.
+2. Full documentation page.
+3. Light and Dark Appearance.
+4. Every changed compound example.
+
+When Web implementation is intended, include a compact proposed contract using
+only applicable `html`, `aria`, `figma`, and `rules` keys. Omit empty keys and
+keep each rule to one durable constraint.
 
 Return exactly:
 
@@ -232,6 +235,6 @@ Public interface:
 Compact contract:
 Validation:
 Changed node IDs:
-Target Figma Page(s):
-Evidence: Asset source | Light Appearance | Dark Appearance
+Target Figma Page:
+Evidence: Asset source | Documentation | Appearance | Examples
 ```
