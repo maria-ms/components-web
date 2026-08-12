@@ -33,7 +33,7 @@ Derive HTML semantics, Asset category, variants, Slots, tokens, and Page
 structure. Do not ask designers to choose HTML, ARIA, token names, Figma node
 structure, or reference components.
 
-## 2. Research before writing
+## 2. Research current authoritative guidance before writing
 
 Read only. Inspect:
 
@@ -44,17 +44,23 @@ Read only. Inspect:
 5. The closest contract as a shape reference if this is new.
 6. Relevant MDN documentation for the native semantic boundary.
 7. The relevant shadcn registry component, if available, as comparison only.
+8. Official Figma guidance only when Figma capability or authoring behaviour
+   affects the proposed interface.
 
 Use this precedence:
 
 1. Approved brief and product context.
-2. MDN native semantics and accessibility.
+2. Native HTML and current MDN guidance; use WAI-ARIA guidance only when
+   native HTML does not cover the pattern.
 3. Existing Maria masters, tokens, contracts, and template.
-4. shadcn comparison.
+4. Official Figma guidance for Figma-specific capability constraints.
+5. shadcn comparison.
 
+Do not adopt an external pattern merely because it is newer, and do not replace
+native semantics with a custom ARIA pattern when native HTML covers the job.
 Do not copy shadcn names, APIs, variants, tokens, or documentation. If sources
-conflict on semantics, ownership, allowed children, or a required token, report
-the conflict and ask for a decision.
+conflict on semantics, ownership, allowed children, required tokens, or Figma
+capability, report the conflict and ask for a decision.
 
 ## 3. Decide before building
 
@@ -158,6 +164,11 @@ Apply these rules:
   needed token does not exist.
 - Use Grid or auto layout for variant matrices; never manual variant positions.
   When Size exists, show Small → Medium → Large across each row.
+- When programmatically appending a linked child into a Slot, set its layout
+  deliberately. For a vertical Slot that fills horizontally, set the appended
+  child to `layoutAlign: "STRETCH"` after insertion. Do not assume
+  `stretchChildOnInsert` is applied by the Plugin API. Verify inserted child
+  width equals Slot width.
 - Put focus effects on the painted interactive child. Ancestors that must show
   a halo are unclipped.
 - Add a short Asset-panel description: native boundary, intended use, and Slot
@@ -213,6 +224,8 @@ Verify the live Figma file, not the write report:
 - every created or moved node on the target Page;
 - variable-bound visuals, Light/Dark modes, and unclipped focus effects;
 - populated linked evidence for every relevant public capability;
+- for every Fill-width Slot, one inserted eligible child resolves to the Slot
+  width;
 - no overflow, clipping, overlap, empty example Slots, orphan layers,
   unintended fixed sizing, or stale layer names;
 - no unrelated components, tokens, styles, or Pages changed.
