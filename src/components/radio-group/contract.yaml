@@ -9,4 +9,4 @@ figma:
     Options: [Choice Field with Radio]
 rules:
   - Radio Group owns missing-selection error, never Radio or Choice Field.
-  - Group and Options hug content; the outer layout decides width.
+  - Parent owns inline size; Radio Group, its Options area, and Choice Field rows fill available inline size while Radios remain intrinsic.

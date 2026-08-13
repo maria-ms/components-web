@@ -1,14 +1,16 @@
 ds-radio-group {
+  box-sizing: border-box;
   display: block;
-  inline-size: fit-content;
+  inline-size: 100%;
   max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 ds-radio-group > fieldset {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  inline-size: fit-content;
+  inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
   margin: 0;
@@ -61,8 +63,9 @@ ds-radio-group > fieldset > ds-choice-field + [data-error] {
 }
 
 ds-radio-group > fieldset > ds-choice-field {
-  inline-size: fit-content;
+  inline-size: 100%;
   max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 ds-radio-group > fieldset:disabled > legend {
