@@ -9,3 +9,4 @@ figma:
 rules:
   - Accept exactly one choice control.
   - Radio Group, not Choice Field, owns a missing-radio-selection error.
+  - Parent owns inline size; Choice Field fills available inline size while its choice control remains intrinsic and its content column fills remaining space.

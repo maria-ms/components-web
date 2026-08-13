@@ -3,8 +3,9 @@ ds-choice-field {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  inline-size: fit-content;
+  inline-size: 100%;
   max-inline-size: 100%;
+  min-inline-size: 0;
   column-gap: var(--ds-semantic-spacing-sm);
   row-gap: var(--ds-semantic-spacing-xs);
 }
@@ -13,7 +14,6 @@ ds-choice-field > [slot="control"] {
   grid-column: 1;
   grid-row: 1 / span 2;
   align-self: start;
-  flex: 0 0 auto;
 }
 
 ds-choice-field > [slot="label"],
