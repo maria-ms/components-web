@@ -8,3 +8,4 @@ figma:
 rules:
   - Preserve native number-input behaviour.
   - Do not add a custom stepper or quantity-selector API without a separate component.
+  - Parent owns inline size; this control fills available inline size.

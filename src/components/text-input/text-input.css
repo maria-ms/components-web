@@ -1,11 +1,11 @@
 ds-text-input {
   --ds-text-input-block-size: var(--ds-component-input-height-sm);
-  --ds-text-input-inline-size: var(--ds-component-input-width-lg);
   --ds-text-input-radius: var(--ds-component-input-radius-sm);
   --ds-text-input-placeholder-color: var(--ds-semantic-color-foreground-muted-2);
 
   box-sizing: border-box;
-  display: inline-block;
+  display: block;
+  inline-size: 100%;
   max-inline-size: 100%;
   vertical-align: middle;
 }
@@ -23,7 +23,7 @@ ds-text-input[size="large"] {
 ds-text-input > input {
   box-sizing: border-box;
   display: block;
-  inline-size: var(--ds-text-input-inline-size);
+  inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
   block-size: var(--ds-text-input-block-size);

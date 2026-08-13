@@ -8,3 +8,4 @@ figma:
 rules:
   - Preserve native input behaviour and validation.
   - Field or the form decides when invalid feedback appears.
+  - Parent owns inline size; this control fills available inline size.

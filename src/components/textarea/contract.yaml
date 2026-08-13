@@ -7,3 +7,4 @@ figma:
 rules:
   - Preserve native textarea behaviour, including browser resize, until a public decision changes it.
   - Field or the form decides when invalid feedback appears.
+  - Parent owns inline size; this control fills available inline size.
