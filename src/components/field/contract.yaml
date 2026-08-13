@@ -10,3 +10,4 @@ rules:
   - Accept exactly one supported form control.
   - Figma Control is restricted to approved assets; on the Web it contains exactly one native input, select, or textarea.
   - The child owns its native value, validity, focus, disabled state, and Size.
+  - Parent owns inline size; Field and its one slotted control fill available inline size.

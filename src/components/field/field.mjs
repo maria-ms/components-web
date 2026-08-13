@@ -1,9 +1,8 @@
 const tagName = "ds-field";
 const canUseDOM = typeof document !== "undefined" && typeof customElements !== "undefined";
 const ElementBase = globalThis.HTMLElement ?? class {};
+const nativeControlSelector = "input, select, textarea";
 let generatedId = 0;
-
-const controlSelector = "input, select, textarea";
 
 const nextId = (part) => {
   generatedId += 1;
@@ -11,77 +10,33 @@ const nextId = (part) => {
 };
 
 /**
- * Structural form-field compound for one canonical text-like control.
+ * Structural form-field compound for one native text-like control.
  *
- * Consumers provide native Label, Control, and Message parts marked by their
- * named slot attributes.
- * Field owns their associations and validation timing; the child control retains
- * its native form, value, focus, event, and constraint-validation contracts.
- * Import `@maria-ms/components-web/styles.css` for its token styles.
+ * Consumers provide the label, control, and optional message as light-DOM
+ * parts. Field associates those parts and reflects explicit child state;
+ * consumers retain ownership of value, validation timing, and message text.
+ * Import `@maria-ms/components-web/styles.css` for token styles.
  */
 export class Field extends ElementBase {
-  #label;
-  #control;
-  #message;
-  #form;
   #observer;
-  #createdMessage;
-  #descriptionControl;
+  #describedControl;
   #descriptionId;
-  #supportingMessage = "";
-  #renderedNativeError = false;
-  #managedAriaInvalid = false;
-  #hasBeenValidated = false;
-
-  #onFocusOut = (event) => {
-    if (event.target !== this.#control) return;
-    this.#hasBeenValidated = true;
-    this.#synchronizeState();
-  };
-
-  #onInput = (event) => {
-    if (event.target !== this.#control) return;
-    this.#synchronizeState();
-  };
-
-  #onInvalid = (event) => {
-    if (event.target !== this.#control) return;
-    this.#hasBeenValidated = true;
-    this.#synchronizeState();
-  };
-
-  #onFormReset = () => {
-    queueMicrotask(() => {
-      this.#hasBeenValidated = false;
-      this.#synchronizeState();
-    });
-  };
-
-  constructor() {
-    super();
-  }
 
   connectedCallback() {
     this.#observer = new MutationObserver(() => this.#synchronize());
-    this.addEventListener("focusout", this.#onFocusOut);
-    this.addEventListener("input", this.#onInput);
-    this.addEventListener("invalid", this.#onInvalid, true);
     this.#observer.observe(this, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["aria-invalid", "disabled", "hidden", "id"],
+      attributeFilter: ["aria-invalid", "disabled", "hidden", "id", "slot"],
     });
     this.#synchronize();
   }
 
   disconnectedCallback() {
-    this.removeEventListener("focusout", this.#onFocusOut);
-    this.removeEventListener("input", this.#onInput);
-    this.removeEventListener("invalid", this.#onInvalid, true);
     this.#observer?.disconnect();
     this.#observer = undefined;
-    this.#setForm(null);
+    this.#clearDescription();
   }
 
   #part(slotName) {
@@ -92,158 +47,65 @@ export class Field extends ElementBase {
 
   #nativeControl(controlPart) {
     if (!controlPart) return null;
-    if (controlPart.matches(controlSelector)) return controlPart;
+    if (controlPart.matches(nativeControlSelector)) return controlPart;
 
-    const controls = controlPart.querySelectorAll(controlSelector);
+    const controls = controlPart.querySelectorAll(nativeControlSelector);
     return controls.length === 1 ? controls[0] : null;
   }
 
   #synchronize() {
     const label = this.#part("label");
-    const controlPart = this.#part("control");
+    const control = this.#nativeControl(this.#part("control"));
     const message = this.#part("message");
-    const control = this.#nativeControl(controlPart);
 
-    this.#clearMessageDescription();
+    this.#clearDescription();
 
-    if (message !== this.#message) {
-      this.#message = message;
-      this.#supportingMessage = message ? message.textContent : "";
-      this.#renderedNativeError = false;
-    }
-
-    this.#label = label;
-    this.#control = control;
-    this.#setForm(control ? control.form : null);
-    this.#associateParts();
-    this.#synchronizeState();
-  }
-
-  #setForm(nextForm) {
-    if (nextForm === this.#form) return;
-    if (this.#form) this.#form.removeEventListener("reset", this.#onFormReset);
-    this.#form = nextForm;
-    if (this.#form) this.#form.addEventListener("reset", this.#onFormReset);
-  }
-
-  #associateParts() {
-    if (!this.#control) return;
-
-    if (!this.#control.id) this.#control.id = nextId("control");
-
-    if (this.#label instanceof HTMLLabelElement) {
-      this.#label.htmlFor = this.#control.id;
-    }
-
-    if (this.#message && !this.#message.hidden) {
-      if (!this.#message.id) this.#message.id = nextId("message");
-      const describedBy = new Set(
-        (this.#control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean),
-      );
-
-      describedBy.add(this.#message.id);
-      this.#control.setAttribute("aria-describedby", [...describedBy].join(" "));
-      this.#descriptionControl = this.#control;
-      this.#descriptionId = this.#message.id;
-    }
-  }
-
-  #clearMessageDescription() {
-    if (!this.#descriptionControl || !this.#descriptionId) return;
-
-    const describedBy = (this.#descriptionControl.getAttribute("aria-describedby") || "")
-      .split(/\s+/)
-      .filter((id) => id && id !== this.#descriptionId);
-
-    if (describedBy.length) {
-      this.#descriptionControl.setAttribute("aria-describedby", describedBy.join(" "));
-    } else {
-      this.#descriptionControl.removeAttribute("aria-describedby");
-    }
-
-    this.#descriptionControl = undefined;
-    this.#descriptionId = undefined;
-  }
-
-  #synchronizeState() {
-    if (!this.#control) {
+    if (!control) {
       this.removeAttribute("data-state");
       return;
     }
 
-    if (this.#control.disabled) {
-      this.dataset.state = "disabled";
-      this.#restoreSupportingMessage();
-      this.#clearManagedAriaInvalid();
-      return;
+    if (!control.id) control.id = nextId("control");
+
+    if (label instanceof HTMLLabelElement) {
+      label.htmlFor = control.id;
     }
 
-    const nativeInvalid = this.#control.validity && !this.#control.validity.valid;
-    const applicationInvalid =
-      this.#control.getAttribute("aria-invalid") === "true" && !this.#managedAriaInvalid;
-    const showInvalid = (this.#hasBeenValidated && nativeInvalid) || applicationInvalid;
+    if (message && !message.hidden) {
+      if (!message.id) message.id = nextId("message");
 
-    if (!showInvalid) {
-      this.dataset.state = "default";
-      this.#restoreSupportingMessage();
-      if (!nativeInvalid) this.#clearManagedAriaInvalid();
-      return;
+      const describedBy = new Set(
+        (control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean),
+      );
+
+      describedBy.add(message.id);
+      control.setAttribute("aria-describedby", [...describedBy].join(" "));
+      this.#describedControl = control;
+      this.#descriptionId = message.id;
     }
 
-    this.dataset.state = "invalid";
-
-    if (nativeInvalid) {
-      if (this.#control.getAttribute("aria-invalid") !== "true") {
-        this.#control.setAttribute("aria-invalid", "true");
-        this.#managedAriaInvalid = true;
-      }
-      this.#renderNativeError();
-    }
+    this.dataset.state = control.disabled
+      ? "disabled"
+      : control.getAttribute("aria-invalid") === "true"
+        ? "invalid"
+        : "default";
   }
 
-  #renderNativeError() {
-    const message = this.#message || this.#createErrorMessage();
-    if (!message || !this.#control.validationMessage) return;
+  #clearDescription() {
+    if (!this.#describedControl || !this.#descriptionId) return;
 
-    if (!this.#renderedNativeError) {
-      this.#supportingMessage = message.textContent;
-      this.#renderedNativeError = true;
-    }
-    message.textContent = this.#control.validationMessage;
-    this.#associateParts();
-  }
+    const describedBy = (this.#describedControl.getAttribute("aria-describedby") || "")
+      .split(/\s+/)
+      .filter((id) => id && id !== this.#descriptionId);
 
-  #createErrorMessage() {
-    const message = document.createElement("p");
-
-    message.slot = "message";
-    this.#message = message;
-    this.#createdMessage = message;
-    this.#supportingMessage = "";
-    this.append(message);
-    return message;
-  }
-
-  #restoreSupportingMessage() {
-    if (!this.#renderedNativeError || !this.#message) return;
-
-    if (this.#message === this.#createdMessage) {
-      this.#createdMessage.remove();
-      this.#createdMessage = undefined;
-      this.#message = null;
-      this.#supportingMessage = "";
-      this.#renderedNativeError = false;
-      return;
+    if (describedBy.length) {
+      this.#describedControl.setAttribute("aria-describedby", describedBy.join(" "));
+    } else {
+      this.#describedControl.removeAttribute("aria-describedby");
     }
 
-    this.#message.textContent = this.#supportingMessage;
-    this.#renderedNativeError = false;
-  }
-
-  #clearManagedAriaInvalid() {
-    if (!this.#managedAriaInvalid || !this.#control) return;
-    this.#control.removeAttribute("aria-invalid");
-    this.#managedAriaInvalid = false;
+    this.#describedControl = undefined;
+    this.#descriptionId = undefined;
   }
 }
 
