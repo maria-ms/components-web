@@ -11,3 +11,4 @@ rules:
   - Use native single-select; rich or searchable options require a separate Combobox/Listbox.
   - Options are text-only.
   - At most one option is selected.
+  - Parent owns inline size; Select and its enhanced native picker match the available inline size.
