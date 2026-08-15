@@ -6,6 +6,7 @@ export { ChoiceField } from "./choice-field/choice-field.mjs";
 export { Field } from "./field/field.mjs";
 export { Link } from "./link/link.mjs";
 export { NumberInput } from "./number-input/number-input.mjs";
+export { Progress } from "./progress/progress.mjs";
 export { Radio } from "./radio/radio.mjs";
 export { RadioGroup } from "./radio-group/radio-group.mjs";
 export { Select } from "./select/select.mjs";

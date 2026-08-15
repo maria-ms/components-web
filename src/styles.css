@@ -6,6 +6,7 @@
 @import "./components/field/field.css";
 @import "./components/link/link.css";
 @import "./components/number-input/number-input.css";
+@import "./components/progress/progress.css";
 @import "./components/radio/radio.css";
 @import "./components/radio-group/radio-group.css";
 @import "./components/select/select.css";

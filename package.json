@@ -27,6 +27,7 @@
     "./field": "./src/components/field/field.mjs",
     "./link": "./src/components/link/link.mjs",
     "./number-input": "./src/components/number-input/number-input.mjs",
+    "./progress": "./src/components/progress/progress.mjs",
     "./radio": "./src/components/radio/radio.mjs",
     "./radio-group": "./src/components/radio-group/radio-group.mjs",
     "./select": "./src/components/select/select.mjs",

@@ -77,6 +77,13 @@ Before proposing properties, variants, or Slots, identify:
 Expose only deliberate designer choices as public properties. Keep derived
 behavior and documentation evidence internal.
 
+Classify geometry before building. A component is either intrinsic or
+parent-fill. A source matrix may use a tidy reference width, but that width
+does not become a composition constraint. For a parent-fill component, its
+internal painted control or Slot must resolve to the width supplied by its
+parent while its block size remains content- or size-driven. The parent owns
+outer width; the component owns only internal spacing and vertical geometry.
+
 A Slot represents one stable semantic child position. It is not an arbitrary
 content container. Define allowed children, cardinality, and whether repeated
 children are valid. Do not mirror child controls, size, or state on a parent.
@@ -84,6 +91,11 @@ children are valid. Do not mirror child controls, size, or state on a parent.
 When Figma cannot model a runtime-derived relationship dynamically, preserve the
 correct public interface and use internal visual evidence. Do not add a fake
 public property to compensate.
+
+When behavior depends on siblings or a parent container—such as dividers,
+single-open behavior, or group-level validation—the parent owns it. Do not add
+a child property to simulate it. State the Figma limitation plainly in `03`
+when designers can configure evidence that code derives at runtime.
 
 Before writing, return exactly:
 
@@ -164,11 +176,16 @@ Apply these rules:
   needed token does not exist.
 - Use Grid or auto layout for variant matrices; never manual variant positions.
   When Size exists, show Small → Medium → Large across each row.
-- When programmatically appending a linked child into a Slot, set its layout
-  deliberately. For a vertical Slot that fills horizontally, set the appended
-  child to `layoutAlign: "STRETCH"` after insertion. Do not assume
-  `stretchChildOnInsert` is applied by the Plugin API. Verify inserted child
-  width equals Slot width.
+- For a parent-fill master, keep the source matrix at its tidy reference width,
+  then prove in a temporary wider Auto Layout parent that its internal Control
+  or Slot fills the instance width while height and focus treatment remain
+  correct.
+- When programmatically appending a linked child into a vertical fill-width
+  Slot, set the child to `layoutAlign: "STRETCH"` deliberately, then verify it
+  equals the Slot width. This proves resulting geometry only: Plugin API
+  append does not emulate an Assets-panel insertion. Verify
+  `stretchChildOnInsert` separately; if native UI insertion cannot be tested,
+  report one manual acceptance check instead of claiming it passed.
 - Put focus effects on the painted interactive child. Ancestors that must show
   a halo are unclipped.
 - Add a short Asset-panel description: native boundary, intended use, and Slot
@@ -224,8 +241,9 @@ Verify the live Figma file, not the write report:
 - every created or moved node on the target Page;
 - variable-bound visuals, Light/Dark modes, and unclipped focus effects;
 - populated linked evidence for every relevant public capability;
-- for every Fill-width Slot, one inserted eligible child resolves to the Slot
-  width;
+- for every Fill-width Slot, restriction and stretch configuration are correct;
+  an explicitly stretched API proof child resolves to the Slot width; and any
+  unavailable native Assets-panel insertion check is reported as manual;
 - no overflow, clipping, overlap, empty example Slots, orphan layers,
   unintended fixed sizing, or stale layer names;
 - no unrelated components, tokens, styles, or Pages changed.
@@ -245,6 +263,8 @@ Return exactly:
 
 ```text
 Public interface:
+Geometry ownership:
+Slot validation:
 Compact contract:
 Validation:
 Changed node IDs:

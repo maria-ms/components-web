@@ -1,0 +1,70 @@
+ds-progress {
+  --ds-progress-block-size: var(--ds-component-progress-height-sm);
+  --ds-progress-track-color: var(--ds-semantic-color-background-muted-2);
+  --ds-progress-indicator-color: var(--ds-semantic-color-background-primary-default);
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+ds-progress[size="medium"] {
+  --ds-progress-block-size: var(--ds-component-progress-height-md);
+}
+
+ds-progress[size="large"] {
+  --ds-progress-block-size: var(--ds-component-progress-height-lg);
+}
+
+ds-progress > progress {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  block-size: var(--ds-progress-block-size);
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--ds-semantic-radius-full);
+  background: var(--ds-progress-track-color);
+  color: var(--ds-progress-indicator-color);
+  accent-color: var(--ds-progress-indicator-color);
+}
+
+ds-progress > progress::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--ds-progress-track-color);
+}
+
+ds-progress > progress::-webkit-progress-value {
+  border-radius: var(--ds-semantic-radius-xl);
+  background: var(--ds-progress-indicator-color);
+}
+
+ds-progress > progress::-moz-progress-bar {
+  border-radius: var(--ds-semantic-radius-xl);
+  background: var(--ds-progress-indicator-color);
+}
+
+@media (forced-colors: active) {
+  ds-progress > progress {
+    background: Canvas;
+    color: Highlight;
+    accent-color: Highlight;
+    outline: var(--ds-semantic-border-width-default) solid CanvasText;
+  }
+
+  ds-progress > progress::-webkit-progress-bar {
+    background: Canvas;
+  }
+
+  ds-progress > progress::-webkit-progress-value,
+  ds-progress > progress::-moz-progress-bar {
+    background: Highlight;
+  }
+}
