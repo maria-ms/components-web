@@ -13,5 +13,6 @@
 @import "./components/select/select.css";
 @import "./components/spinner/spinner.css";
 @import "./components/switch/switch.css";
+@import "./components/tabs/tabs.css";
 @import "./components/text-input/text-input.css";
 @import "./components/textarea/textarea.css";

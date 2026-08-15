@@ -34,6 +34,7 @@
     "./select": "./src/components/select/select.mjs",
     "./spinner": "./src/components/spinner/spinner.mjs",
     "./switch": "./src/components/switch/switch.mjs",
+    "./tabs": "./src/components/tabs/tabs.mjs",
     "./text-input": "./src/components/text-input/text-input.mjs",
     "./textarea": "./src/components/textarea/textarea.mjs",
     "./styles.css": "./src/styles.css",

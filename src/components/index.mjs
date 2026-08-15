@@ -13,5 +13,6 @@ export { RadioGroup } from "./radio-group/radio-group.mjs";
 export { Select } from "./select/select.mjs";
 export { Spinner } from "./spinner/spinner.mjs";
 export { Switch } from "./switch/switch.mjs";
+export { Tabs } from "./tabs/tabs.mjs";
 export { TextInput } from "./text-input/text-input.mjs";
 export { Textarea } from "./textarea/textarea.mjs";

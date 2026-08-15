@@ -1,0 +1,149 @@
+ds-tabs {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  gap: var(--ds-semantic-spacing-md);
+  overflow: visible;
+  font-family: var(--ds-primitive-font-family-body);
+}
+
+ds-tabs > [role="tablist"] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--ds-component-input-height-md);
+  gap: var(--ds-semantic-spacing-xs);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border-block-end: var(--ds-semantic-border-width-default) solid
+    var(--ds-semantic-color-border-muted);
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"] {
+  --ds-tabs-indicator-color: transparent;
+
+  appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  block-size: var(--ds-component-input-height-md);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-block-end: var(--ds-semantic-border-width-default) solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ds-semantic-color-foreground-muted-1);
+  font: inherit;
+  font-size: var(--ds-semantic-typography-body-small-font-size);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+  line-height: var(--ds-semantic-typography-body-small-line-height);
+  letter-spacing: var(--ds-semantic-typography-body-small-letter-spacing);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"]:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"] {
+  color: var(--ds-semantic-color-foreground-primary-elevated);
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"]:not(
+    :disabled
+  ):not(:focus-visible) {
+  --ds-tabs-indicator-color: var(--ds-semantic-color-border-primary);
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"]::after {
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(var(--ds-semantic-border-width-default) * -2);
+  block-size: var(--ds-semantic-border-width-default);
+  background: var(--ds-tabs-indicator-color);
+  content: "";
+  pointer-events: none;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible {
+  --ds-tabs-indicator-color: var(--ds-semantic-color-border-focus-muted);
+
+  z-index: 1;
+  outline: none;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-block-end: calc(var(--ds-semantic-border-width-default) * -1);
+  inset-inline: 0;
+  box-sizing: border-box;
+  border: var(--ds-semantic-border-width-default) solid
+    var(--ds-semantic-color-border-focus-muted);
+  border-block-end: 0;
+  content: "";
+  pointer-events: none;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"]:disabled {
+  color: var(--ds-semantic-color-foreground-disabled-muted);
+  cursor: not-allowed;
+}
+
+ds-tabs > [role="tabpanel"] {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  overflow: visible;
+}
+
+ds-tabs > [role="tabpanel"][hidden] {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  ds-tabs > [role="tablist"] {
+    border-color: CanvasText;
+  }
+
+  ds-tabs > [role="tablist"] > button[role="tab"] {
+    color: CanvasText;
+  }
+
+  ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"]:not(
+      :disabled
+    ):not(:focus-visible) {
+    --ds-tabs-indicator-color: Highlight;
+
+    color: Highlight;
+  }
+
+  ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible {
+    --ds-tabs-indicator-color: CanvasText;
+  }
+
+  ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible::before {
+    border-color: CanvasText;
+  }
+
+  ds-tabs > [role="tablist"] > button[role="tab"]:disabled {
+    color: GrayText;
+  }
+}
