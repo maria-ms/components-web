@@ -3,6 +3,7 @@ export { Button, IconButton } from "./button/button.mjs";
 export { Badge } from "./badge/badge.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { ChoiceField } from "./choice-field/choice-field.mjs";
+export { Dialog } from "./dialog/dialog.mjs";
 export { Field } from "./field/field.mjs";
 export { Link } from "./link/link.mjs";
 export { NumberInput } from "./number-input/number-input.mjs";

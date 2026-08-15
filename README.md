@@ -45,6 +45,7 @@ not a cross-platform API.
 | `ds-icon-button` | `<button aria-label="…">` with decorative icon |
 | `ds-checkbox` | `<input type="checkbox">` |
 | `ds-choice-field` | label, one Checkbox, Radio, or Switch, optional message |
+| `ds-dialog` | one native `<dialog>` with labelled heading, optional description, content, and actions |
 | `ds-field` | label, one supported control, optional message |
 | `ds-link` | `<a href="…">` |
 | `ds-number-input` | `<input type="number">` |

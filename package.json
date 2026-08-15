@@ -24,6 +24,7 @@
     "./icon-button": "./src/components/button/button.mjs",
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./choice-field": "./src/components/choice-field/choice-field.mjs",
+    "./dialog": "./src/components/dialog/dialog.mjs",
     "./field": "./src/components/field/field.mjs",
     "./link": "./src/components/link/link.mjs",
     "./number-input": "./src/components/number-input/number-input.mjs",
@@ -44,6 +45,7 @@
     "provenance": true
   },
   "scripts": {
+    "check": "for file in src/index.mjs src/components/*/*.mjs; do node --check \"$file\"; done",
     "skills:link": "node scripts/link-skills.mjs",
     "skills:unlink": "node scripts/unlink-skills.mjs",
     "prepack": "npm run check",

@@ -1,0 +1,18 @@
+html:
+  element: dialog
+  children: [header, content, actions]
+aria:
+  aria-labelledby: required visible title
+  aria-describedby: visible description when present
+figma:
+  preview: [Show description, close focus]
+  slots:
+    Content: linked public components
+    Actions: [Button]
+rules:
+  - The screen opens the native dialog with showModal(); the browser owns modal focus, Escape, top-layer placement, and background inertness.
+  - The screen chooses the initial focus target with autofocus and observes the native close event to synchronize its own state.
+  - Use one direct native dialog with an explicit labelledby relationship and, when present, describedby relationship.
+  - Dialog owns its panel, backdrop, heading layout, and close control; product content and action meaning remain consumer-owned.
+  - Content and Actions fill the inner width; block content fills while action Buttons hug and end-align.
+  - Use an empty native button with type=button, data-dialog-close, and a non-empty aria-label inside ds-icon-button for the fixed close control.
