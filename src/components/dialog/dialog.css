@@ -1,18 +1,9 @@
-ds-dialog {
-  box-sizing: border-box;
-  display: block;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  min-inline-size: 0;
-}
-
 ds-dialog > dialog {
   box-sizing: border-box;
   inline-size: min(
     var(--ds-semantic-container-sm),
     calc(100dvi - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md))
   );
-  max-inline-size: calc(100dvi - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md));
   max-block-size: calc(100dvb - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md));
   margin: auto;
   border: var(--ds-semantic-border-width-default) solid
@@ -34,10 +25,6 @@ ds-dialog > dialog {
       var(--ds-semantic-shadow-sm-2-spread)
       var(--ds-semantic-shadow-sm-2-color);
   font-family: var(--ds-primitive-font-family-body);
-}
-
-ds-dialog > dialog:not([open]) {
-  display: none;
 }
 
 ds-dialog > dialog[open] {
