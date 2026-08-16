@@ -11,19 +11,19 @@ ds-dialog > dialog {
   border-radius: var(--ds-semantic-radius-md);
   padding: var(--ds-semantic-spacing-md);
   overflow: auto;
-  background: var(--ds-semantic-color-surface-default);
+  background: var(--ds-component-card-color-background-default);
   color: var(--ds-semantic-color-foreground-default);
   box-shadow:
-    var(--ds-semantic-shadow-sm-1-offset-x)
-      var(--ds-semantic-shadow-sm-1-offset-y)
-      var(--ds-semantic-shadow-sm-1-blur)
-      var(--ds-semantic-shadow-sm-1-spread)
-      var(--ds-semantic-shadow-sm-1-color),
     var(--ds-semantic-shadow-sm-2-offset-x)
       var(--ds-semantic-shadow-sm-2-offset-y)
-      var(--ds-semantic-shadow-sm-2-blur)
+      calc(var(--ds-semantic-shadow-sm-2-blur) / 2)
       var(--ds-semantic-shadow-sm-2-spread)
-      var(--ds-semantic-shadow-sm-2-color);
+      var(--ds-semantic-shadow-sm-2-color),
+    var(--ds-semantic-shadow-sm-1-offset-x)
+      var(--ds-semantic-shadow-sm-1-offset-y)
+      calc(var(--ds-semantic-shadow-sm-1-blur) / 2)
+      var(--ds-semantic-shadow-sm-1-spread)
+      var(--ds-semantic-shadow-sm-1-color);
   font-family: var(--ds-primitive-font-family-body);
 }
 
@@ -69,16 +69,16 @@ ds-dialog > dialog [data-dialog-title] {
   font-size: var(--ds-semantic-typography-body-base-font-size);
   font-weight: var(--ds-semantic-typography-body-base-font-weight-semibold);
   line-height: var(--ds-semantic-typography-body-base-line-height);
-  letter-spacing: var(--ds-semantic-typography-body-base-letter-spacing);
+  letter-spacing: var(--ds-primitive-font-letter-spacing-loose);
 }
 
 ds-dialog > dialog [data-dialog-description] {
-  color: var(--ds-semantic-color-foreground-muted-2);
+  color: var(--ds-semantic-color-foreground-muted-1);
   font-family: var(--ds-primitive-font-family-body);
   font-size: var(--ds-semantic-typography-body-small-font-size);
   font-weight: var(--ds-semantic-typography-body-small-font-weight-regular);
   line-height: var(--ds-semantic-typography-body-small-line-height);
-  letter-spacing: var(--ds-semantic-typography-body-small-letter-spacing);
+  letter-spacing: var(--ds-primitive-font-letter-spacing-base);
 }
 
 ds-dialog > dialog [data-dialog-content] {
