@@ -1,0 +1,54 @@
+html:
+  element: table
+  structure: [caption, thead, tbody, tr, th, td]
+  custom-host: "An outer custom host may own the table, but descendants inside table remain native HTML table elements."
+  column-header: 'th[scope="col"]'
+  row-header: 'th[scope="row"] when that cell identifies the row'
+  sortable-header: 'th > button[type="button"]'
+aria:
+  aria-sort: 'Only the active sorted th exposes "ascending" or "descending"; omit it on all other headers.'
+  selection: "Use named native checkboxes: “Select all [records]” in the header and “Select [record]” in each row; set input.indeterminate = true for partial selection."
+  actions: "The action column has a visually hidden “Actions” header; every icon-only action has a contextual accessible name, such as “Actions for ORD-1048”."
+  progress: "Every progress indicator has a row-specific accessible label, such as “Fulfilment progress for ORD-1048”."
+  updates: 'Set aria-busy="true" on the updating region until data changes complete; define one live announcement for a newly surfaced load failure.'
+figma:
+  public-assets:
+    [
+      Data Table,
+      Table / Header Row,
+      Table / Row,
+      Table / Header Cell,
+      Table / Cell,
+      Table / Sortable Header Cell,
+    ]
+  slots:
+    Data Table: [Caption, Header rows, Rows]
+    Table / Header Row: [Cells]
+    Table / Row: [Cells]
+    Table / Header Cell: [Content]
+    Table / Cell: [Content]
+    Table / Sortable Header Cell: [Content]
+  slot-sizing: "Table, row, and cell slots fill their parent; inserted content may hug its own content unless that composition intentionally needs to stretch."
+  geometry: "Data Table, Header Row, and Row are parent-fill in product compositions; the 720px source-master width is a reference only."
+  column-tracks: "Product composition owns matching header/body tracks: keep utility columns Fixed, set one information column to Fill, and use a full-span Fill cell for visual colspan evidence."
+  sortable-header-preview: [Sort, State]
+rules:
+  - The public Web Component accepts one JSON-serializable model property (caption, rowKey, columns, rows, optional selection, sort, and state) plus a separate cellRenderers property for arbitrary component composition. Do not encode DOM, callbacks, or component kinds in the JSON model.
+  - Plain cells contain text, finite numbers, booleans, or empty values. Use a named cellRenderer for every object, array, or rich component composition; a hidden header cannot also be sortable.
+  - Selection and sort controls immediately update their serializable UI state and emit an event. The host owns data reordering after ds-sort-change because rich Cell values do not have one universal sort order.
+  - Require exactly one Fill column and fixed numeric widths for the remaining data columns. The component derives its selection-column track and every state-row colspan.
+  - Keep every standard product table as a native HTML table; do not apply role="grid".
+  - Treat Figma Data Table, Row, and Cell as composition APIs, not custom elements rendered inside table markup.
+  - Render a concise Caption for the table’s purpose.
+  - Render every column header as th[scope="col"].
+  - Render a primary body cell as th[scope="row"] only when it identifies that row; render other body cells as td.
+  - Put the sort button inside its th and expose aria-sort="ascending" or aria-sort="descending" on exactly one sorted header.
+  - Keep selection native: use named Checkboxes, set input.indeterminate = true for partial selection, and use a local selected-row surface; do not put aria-selected on tr.
+  - Render a visually hidden “Actions” header for an action column and contextual accessible names for every icon-only action.
+  - Give every progress indicator a row-specific accessible label.
+  - While table data updates, expose aria-busy="true" on the updating region and clear it when complete; announce each newly surfaced load failure through one live region.
+  - Let a Row grow to its Cell content; rich Cell content may stack text and existing components without clipping or a second divider.
+  - Treat empty, loading, and error as mutually exclusive tbody treatments: retain the Caption and headers, then render one td with colspan equal to the visible column count.
+  - The built-in error treatment is one full-span Cell containing a destructive “Load error” Badge, the error message, and an optional outline action Button.
+  - When the table minimum width exceeds its container, wrap it in a horizontal scroll region; preserve its native table semantics and column widths.
+  - Defer grouped headers, table footers, spreadsheet-style editing, and ARIA-grid keyboard interaction to explicit future scopes.

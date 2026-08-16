@@ -25,6 +25,8 @@
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./choice-field": "./src/components/choice-field/choice-field.mjs",
     "./dialog": "./src/components/dialog/dialog.mjs",
+    "./data-table": "./src/components/data-table/data-table.mjs",
+    "./data-table.schema.json": "./src/components/data-table/data-table.schema.json",
     "./field": "./src/components/field/field.mjs",
     "./link": "./src/components/link/link.mjs",
     "./number-input": "./src/components/number-input/number-input.mjs",

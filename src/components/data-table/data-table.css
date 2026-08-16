@@ -1,0 +1,244 @@
+ds-data-table {
+  --ds-data-table-background: var(--ds-semantic-color-surface-default);
+  --ds-data-table-border-color: var(--ds-semantic-color-border-default);
+  --ds-data-table-foreground: var(--ds-semantic-color-foreground-default);
+  --ds-data-table-header-foreground: var(
+    --ds-semantic-color-foreground-default
+  );
+  --ds-data-table-selected-background: var(
+    --ds-semantic-color-background-muted-2
+  );
+  --ds-data-table-cell-padding: var(--ds-semantic-spacing-xs);
+  --ds-data-table-cell-gap: var(--ds-semantic-spacing-2xs);
+  --ds-data-table-selection-width: var(--ds-component-table-cell-height);
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--ds-data-table-foreground);
+  font-family: var(--ds-primitive-font-family-body);
+  font-size: var(--ds-semantic-typography-body-small-font-size);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-root);
+  letter-spacing: var(--ds-semantic-typography-body-small-letter-spacing);
+  line-height: var(--ds-semantic-typography-body-small-line-height);
+}
+
+ds-data-table > .ds-data-table__scroll {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+ds-data-table > .ds-data-table__scroll:focus-visible {
+  outline: var(--ds-semantic-border-width-thin) solid
+    var(--ds-semantic-color-border-focus-elevated);
+  outline-offset: var(--ds-semantic-spacing-2xs);
+}
+
+ds-data-table table {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: var(--ds-data-table-background);
+  color: inherit;
+}
+
+ds-data-table col.ds-data-table__selection-column {
+  width: var(--ds-data-table-selection-width);
+}
+
+ds-data-table caption {
+  box-sizing: border-box;
+  min-block-size: calc(
+    var(--ds-semantic-typography-body-base-line-height) +
+      (var(--ds-semantic-spacing-3xs) * 2)
+  );
+  padding-block: 0;
+  padding-inline: 0;
+  color: var(--ds-data-table-foreground);
+  font-family: var(--ds-primitive-font-family-body);
+  font-size: var(--ds-semantic-typography-body-base-font-size);
+  font-weight: var(--ds-semantic-typography-body-base-font-weight-semibold);
+  letter-spacing: var(--ds-semantic-typography-body-base-letter-spacing);
+  line-height: calc(
+    var(--ds-semantic-typography-body-base-line-height) +
+      (var(--ds-semantic-spacing-3xs) * 2)
+  );
+  text-align: start;
+}
+
+ds-data-table tr {
+  border-block-end: var(--ds-semantic-border-width-thin) solid
+    var(--ds-data-table-border-color);
+  background: var(--ds-data-table-background);
+}
+
+ds-data-table tbody > tr[data-selected="true"] {
+  background: var(--ds-data-table-selected-background);
+}
+
+ds-data-table th,
+ds-data-table td {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  padding: var(--ds-data-table-cell-padding);
+  vertical-align: middle;
+  background: inherit;
+}
+
+ds-data-table thead th {
+  block-size: var(--ds-component-table-header-height-md);
+  color: var(--ds-data-table-header-foreground);
+  font: inherit;
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+  text-align: start;
+}
+
+ds-data-table tbody > tr:not([data-table-state]) > :is(th, td) {
+  block-size: var(--ds-component-table-cell-height);
+  font: inherit;
+  text-align: start;
+}
+
+ds-data-table [data-align="center"] {
+  text-align: center;
+}
+
+ds-data-table [data-align="end"] {
+  text-align: end;
+}
+
+ds-data-table .ds-data-table__cell-content {
+  box-sizing: border-box;
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--ds-data-table-cell-gap);
+}
+
+/* A medium Link retains its own 40px pointer target. Let it occupy the Cell
+ * gutter rather than forcing the Figma-prescribed 48px Row to grow. */
+ds-data-table .ds-data-table__cell-content > ds-link {
+  margin-block: calc(var(--ds-semantic-spacing-2xs) * -1);
+}
+
+ds-data-table [data-align="center"] > .ds-data-table__cell-content {
+  justify-content: center;
+}
+
+ds-data-table [data-align="end"] > .ds-data-table__cell-content {
+  justify-content: flex-end;
+}
+
+ds-data-table .ds-data-table__value {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+ds-data-table th.ds-data-table__selection-cell,
+ds-data-table td.ds-data-table__selection-cell {
+  padding-inline: var(--ds-data-table-cell-padding);
+  text-align: start;
+}
+
+ds-data-table .ds-data-table__sort-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--ds-data-table-cell-gap);
+  margin: 0;
+  border: 0;
+  border-radius: var(--ds-semantic-radius-sm);
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+ds-data-table .ds-data-table__sort-button:focus-visible {
+  outline: var(--ds-semantic-border-width-thin) solid
+    var(--ds-semantic-color-border-focus-elevated);
+  outline-offset: var(--ds-semantic-spacing-2xs);
+}
+
+ds-data-table .ds-data-table__sort-icon {
+  display: block;
+  flex: 0 0 auto;
+  inline-size: var(--ds-component-icon-size-sm);
+  block-size: var(--ds-component-icon-size-sm);
+  background: currentColor;
+  mask: center / contain no-repeat;
+  -webkit-mask: center / contain no-repeat;
+}
+
+ds-data-table .ds-data-table__sort-icon[data-sort-icon="unsorted"] {
+  mask-image: url("./sort-unsorted.svg");
+  -webkit-mask-image: url("./sort-unsorted.svg");
+}
+
+ds-data-table .ds-data-table__sort-icon[data-sort-icon="ascending"] {
+  mask-image: url("./sort-ascending.svg");
+  -webkit-mask-image: url("./sort-ascending.svg");
+}
+
+ds-data-table .ds-data-table__sort-icon[data-sort-icon="descending"] {
+  mask-image: url("./sort-descending.svg");
+  -webkit-mask-image: url("./sort-descending.svg");
+}
+
+ds-data-table .ds-data-table__visually-hidden,
+ds-data-table > .ds-data-table__live-region {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+ds-data-table tbody > tr[data-table-state] > td {
+  block-size: var(--ds-component-table-cell-height);
+  color: var(--ds-data-table-header-foreground);
+}
+
+ds-data-table .ds-data-table__state-content {
+  display: flex;
+  min-block-size: calc(
+    var(--ds-component-table-cell-height) -
+      (var(--ds-data-table-cell-padding) * 2)
+  );
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-data-table-cell-gap);
+  text-align: center;
+}
+
+@media (forced-colors: active) {
+  ds-data-table table,
+  ds-data-table tr {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  ds-data-table tr,
+  ds-data-table tbody > tr[data-selected="true"] {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  ds-data-table .ds-data-table__sort-button:focus-visible,
+  ds-data-table > .ds-data-table__scroll:focus-visible {
+    outline-color: Highlight;
+  }
+}

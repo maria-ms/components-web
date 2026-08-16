@@ -1,7 +1,7 @@
 ds-badge {
-  --badge-background: var(--ds-component-tag-color-background-neutral-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-neutral);
-  --badge-block-size: var(--ds-component-tag-height-sm);
+  --badge-background: var(--ds-component-badge-color-background-neutral-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-neutral);
+  --badge-block-size: var(--ds-component-badge-height-sm);
   --badge-icon-size: var(--ds-component-icon-size-xs);
 
   box-sizing: border-box;
@@ -25,40 +25,40 @@ ds-badge {
 }
 
 ds-badge[size="medium"] {
-  --badge-block-size: var(--ds-component-tag-height-md);
+  --badge-block-size: var(--ds-component-badge-height-md);
   --badge-icon-size: calc(
     (var(--ds-component-icon-size-xs) + var(--ds-component-icon-size-sm)) / 2
   );
 }
 
 ds-badge[size="large"] {
-  --badge-block-size: var(--ds-component-tag-height-lg);
+  --badge-block-size: var(--ds-component-badge-height-lg);
   --badge-icon-size: var(--ds-component-icon-size-sm);
 }
 
 ds-badge[color="primary"] {
-  --badge-background: var(--ds-component-tag-color-background-primary-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-primary);
+  --badge-background: var(--ds-component-badge-color-background-primary-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-primary);
 }
 
 ds-badge[color="success"] {
-  --badge-background: var(--ds-component-tag-color-background-success-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-success);
+  --badge-background: var(--ds-component-badge-color-background-success-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-success);
 }
 
 ds-badge[color="warning"] {
-  --badge-background: var(--ds-component-tag-color-background-warning-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-warning);
+  --badge-background: var(--ds-component-badge-color-background-warning-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-warning);
 }
 
 ds-badge[color="destructive"] {
-  --badge-background: var(--ds-component-tag-color-background-destructive-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-destructive);
+  --badge-background: var(--ds-component-badge-color-background-destructive-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-destructive);
 }
 
 ds-badge[color="blue"] {
-  --badge-background: var(--ds-component-tag-color-background-blue-default);
-  --badge-foreground: var(--ds-component-tag-color-foreground-blue);
+  --badge-background: var(--ds-component-badge-color-background-info-default);
+  --badge-foreground: var(--ds-component-badge-color-foreground-info);
 }
 
 ds-badge > svg {

@@ -4,6 +4,7 @@ export { Badge } from "./badge/badge.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { ChoiceField } from "./choice-field/choice-field.mjs";
 export { Dialog } from "./dialog/dialog.mjs";
+export { DataTable, validateDataTableModel } from "./data-table/data-table.mjs";
 export { Field } from "./field/field.mjs";
 export { Link } from "./link/link.mjs";
 export { NumberInput } from "./number-input/number-input.mjs";
