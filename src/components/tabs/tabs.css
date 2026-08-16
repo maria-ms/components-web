@@ -1,4 +1,9 @@
 ds-tabs {
+  --ds-tabs-trigger-block-size: var(
+    --ds-component-tab-height,
+    var(--ds-primitive-space-07)
+  );
+
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -18,7 +23,7 @@ ds-tabs > [role="tablist"] {
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
-  min-block-size: var(--ds-component-input-height-md);
+  block-size: var(--ds-tabs-trigger-block-size);
   gap: var(--ds-semantic-spacing-xs);
   margin: 0;
   padding: 0;
@@ -28,8 +33,6 @@ ds-tabs > [role="tablist"] {
 }
 
 ds-tabs > [role="tablist"] > button[role="tab"] {
-  --ds-tabs-indicator-color: transparent;
-
   appearance: none;
   box-sizing: border-box;
   display: inline-flex;
@@ -38,15 +41,14 @@ ds-tabs > [role="tablist"] > button[role="tab"] {
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  block-size: var(--ds-component-input-height-md);
+  block-size: var(--ds-tabs-trigger-block-size);
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: clip;
   border: 0;
-  border-block-end: var(--ds-semantic-border-width-default) solid transparent;
   border-radius: 0;
   background: transparent;
-  color: var(--ds-semantic-color-foreground-muted-1);
+  color: var(--ds-semantic-color-foreground-muted-2);
   font: inherit;
   font-size: var(--ds-semantic-typography-body-small-font-size);
   font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
@@ -67,37 +69,41 @@ ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"] {
 ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"]:not(
     :disabled
   ):not(:focus-visible) {
-  --ds-tabs-indicator-color: var(--ds-semantic-color-border-primary);
+  --ds-tabs-indicator-color: var(--ds-semantic-color-border-focus-muted);
 }
 
 ds-tabs > [role="tablist"] > button[role="tab"]::after {
   position: absolute;
   inset-inline: 0;
-  bottom: calc(var(--ds-semantic-border-width-default) * -2);
+  inset-block-end: 0;
   block-size: var(--ds-semantic-border-width-default);
-  background: var(--ds-tabs-indicator-color);
+  background: transparent;
   content: "";
   pointer-events: none;
+}
+
+ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"]:not(
+    :disabled
+  ):not(:focus-visible)::after {
+  background: var(--ds-tabs-indicator-color);
 }
 
 ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible {
-  --ds-tabs-indicator-color: var(--ds-semantic-color-border-focus-muted);
-
   z-index: 1;
+  border-radius: var(--ds-semantic-radius-sm);
+  background: var(--ds-semantic-color-surface-default);
+  box-shadow:
+    var(--ds-semantic-shadow-xs-offset-x)
+      var(--ds-semantic-shadow-xs-offset-y)
+      var(--ds-semantic-shadow-xs-blur)
+      var(--ds-semantic-shadow-xs-spread)
+      var(--ds-semantic-shadow-xs-color),
+    var(--ds-semantic-border-focus-primary-thin-offset-x)
+      var(--ds-semantic-border-focus-primary-thin-offset-y)
+      var(--ds-semantic-border-focus-primary-thin-blur)
+      var(--ds-semantic-border-focus-primary-thin-spread)
+      var(--ds-semantic-border-focus-primary-thin-color);
   outline: none;
-}
-
-ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible::before {
-  position: absolute;
-  inset-block-start: 0;
-  inset-block-end: calc(var(--ds-semantic-border-width-default) * -1);
-  inset-inline: 0;
-  box-sizing: border-box;
-  border: var(--ds-semantic-border-width-default) solid
-    var(--ds-semantic-color-border-focus-muted);
-  border-block-end: 0;
-  content: "";
-  pointer-events: none;
 }
 
 ds-tabs > [role="tablist"] > button[role="tab"]:disabled {
@@ -129,18 +135,15 @@ ds-tabs > [role="tabpanel"][hidden] {
 
   ds-tabs > [role="tablist"] > button[role="tab"][aria-selected="true"]:not(
       :disabled
-    ):not(:focus-visible) {
-    --ds-tabs-indicator-color: Highlight;
-
+    ):not(:focus-visible)::after {
+    background: Highlight;
     color: Highlight;
   }
 
   ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible {
-    --ds-tabs-indicator-color: CanvasText;
-  }
-
-  ds-tabs > [role="tablist"] > button[role="tab"]:focus-visible::before {
-    border-color: CanvasText;
+    box-shadow: none;
+    outline: var(--ds-semantic-border-width-default) solid CanvasText;
+    outline-offset: var(--ds-primitive-space-01);
   }
 
   ds-tabs > [role="tablist"] > button[role="tab"]:disabled {
