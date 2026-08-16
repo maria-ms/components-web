@@ -1,0 +1,17 @@
+html:
+  element: ds-breadcrumbs
+  children: [nav > ol > li]
+aria:
+  nav: aria-label or aria-labelledby
+  current: final non-link item with aria-current=page
+figma:
+  masters: [Breadcrumbs, Breadcrumb / Link Item, Breadcrumb / Current Page]
+  slots:
+    Items: [Breadcrumb / Link Item, Breadcrumb / Current Page]
+  geometry: parent-fill; Item children hug; Items wrap
+rules:
+  - Use for a hierarchical path, not primary navigation or browser history.
+  - Each ancestor is a real destination link; the final current page is not linked.
+  - Render separators decoratively after every non-final list item.
+  - Use the existing muted X-Small Link asset for ancestors; focus remains on its native anchor.
+  - Do not add host properties, events, custom keyboard behavior, collapse, menu, or separator variants in v1.

@@ -1,0 +1,66 @@
+ds-breadcrumbs {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--ds-semantic-color-foreground-default);
+  font-family: var(--ds-primitive-font-family-body);
+}
+
+ds-breadcrumbs > nav,
+ds-breadcrumbs > nav > ol {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+ds-breadcrumbs > nav > ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each list item owns its following separator. That keeps the separator with
+ * its ancestor link when the parent wraps, matching the Figma composition. */
+ds-breadcrumbs > nav > ol > li {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-block-size: calc(
+    var(--ds-semantic-typography-body-x-small-line-height) +
+      (var(--ds-semantic-spacing-xs) * 2)
+  );
+  max-inline-size: 100%;
+}
+
+ds-breadcrumbs > nav > ol > li:not(:last-child)::after {
+  display: block;
+  flex: 0 0 auto;
+  inline-size: var(--ds-component-icon-size-sm);
+  block-size: var(--ds-component-icon-size-sm);
+  content: "";
+  background: currentColor;
+  mask: url("./chevron-right.svg") center / contain no-repeat;
+  -webkit-mask: url("./chevron-right.svg") center / contain no-repeat;
+}
+
+ds-breadcrumbs > nav > ol > li:last-child {
+  color: var(--ds-semantic-color-foreground-primary-elevated);
+  font-size: var(--ds-semantic-typography-body-x-small-font-size);
+  font-weight: var(--ds-semantic-typography-body-x-small-font-weight-medium);
+  letter-spacing: normal;
+  line-height: var(--ds-semantic-typography-body-x-small-line-height);
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  ds-breadcrumbs > nav > ol > li:last-child {
+    color: CanvasText;
+  }
+}

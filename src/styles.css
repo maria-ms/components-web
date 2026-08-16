@@ -1,6 +1,7 @@
 @import "./components/accordion/accordion.css";
 @import "./components/button/button.css";
 @import "./components/badge/badge.css";
+@import "./components/breadcrumbs/breadcrumbs.css";
 @import "./components/checkbox/checkbox.css";
 @import "./components/choice-field/choice-field.css";
 @import "./components/dialog/dialog.css";

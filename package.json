@@ -20,6 +20,7 @@
     ".": "./src/index.mjs",
     "./accordion": "./src/components/accordion/accordion.mjs",
     "./badge": "./src/components/badge/badge.mjs",
+    "./breadcrumbs": "./src/components/breadcrumbs/breadcrumbs.mjs",
     "./button": "./src/components/button/button.mjs",
     "./icon-button": "./src/components/button/button.mjs",
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
