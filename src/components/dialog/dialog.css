@@ -1,7 +1,7 @@
 ds-dialog > dialog {
   box-sizing: border-box;
   inline-size: min(
-    var(--ds-semantic-container-sm),
+    var(--ds-semantic-layout-container-md),
     calc(100dvi - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md))
   );
   max-block-size: calc(100dvb - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md));

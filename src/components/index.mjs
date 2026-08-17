@@ -1,6 +1,7 @@
 export { Accordion } from "./accordion/accordion.mjs";
 export { Button, IconButton } from "./button/button.mjs";
 export { Badge } from "./badge/badge.mjs";
+export { Avatar, AvatarPresence } from "./avatar/avatar.mjs";
 export { Breadcrumbs } from "./breadcrumbs/breadcrumbs.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { ChoiceField } from "./choice-field/choice-field.mjs";

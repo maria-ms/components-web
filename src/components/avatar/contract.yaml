@@ -1,0 +1,31 @@
+html:
+  element: ds-avatar
+  attributes:
+    size: [sm, md, lg]
+  defaults:
+    size: sm
+  content:
+    image: zero or one direct picture containing its required direct img, or one direct img, in slot=image
+    fallback: zero or one direct wrapper in slot=fallback
+    presence: zero or one ds-avatar-presence in slot=presence
+  presence:
+    element: ds-avatar-presence
+    attributes:
+      status: [online, away, busy, offline]
+    defaults:
+      status: online
+aria:
+  image: the consumer-owned img supplies meaningful alt text, or alt="" when decorative
+  fallback: when active, an identifiable fallback exposes the person's accessible name; the generic placeholder is decorative
+  presence: non-interactive role=img with a status-derived name; aria-label may localise or refine it
+figma:
+  masters: [Avatar, Avatar / Presence]
+  properties: [Size, Preview, Initials, Presence, Status]
+  preview: Preview is Figma-only evidence; code owns native image selection and fallback
+  geometry: intrinsic 24px, 32px, or 40px; image and fallback fill the circle; Presence is 8px at lower right
+rules:
+  - Avatar is visual identity only; compose Button, Link, Menu, or other interaction outside it.
+  - Use native picture, source, and img markup for responsive source selection; the component never owns src, srcset, sizes, or alt.
+  - Supply img width and height whenever known so the browser can reserve intrinsic media space.
+  - Fallback replaces a missing or failed image. Prefer meaningful initials before the default placeholder.
+  - Presence accepts one Avatar Presence child and must not be the only product communication of availability.

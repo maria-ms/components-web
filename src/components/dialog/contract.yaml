@@ -14,7 +14,7 @@ rules:
   - The screen chooses the initial focus target with autofocus and observes the native close event to synchronize its own state.
   - Use one direct native dialog with an explicit labelledby relationship and, when present, describedby relationship.
   - Dialog owns its panel, backdrop, heading layout, and close control; product content and action meaning remain consumer-owned.
-  - Native dialog inline size is min(container-sm, viewport inline size minus two spacing-md gutters); block size follows content and is capped to the viewport.
+  - Native dialog inline size is min(container-md, viewport inline size minus two spacing-md gutters); block size follows content and is capped to the viewport.
   - Content and Actions fill the inner width; block content fills while action Buttons hug and end-align.
   - Dialog dismisses through an explicit close control or a platform close request such as Escape; do not rely on backdrop click.
   - Use one ds-icon-button[variant=ghost][size=small] containing an empty native button with type=button, data-dialog-close, and a non-empty aria-label for the fixed close control.
