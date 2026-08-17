@@ -1,13 +1,16 @@
 html:
   element: details
-  children: [summary, text]
+  children: [summary, body-wrapper]
 aria:
   native: summary names and controls its disclosure
 figma:
   preview: [Open, State]
+  slots:
+    Body: one unrestricted rich-content wrapper
 rules:
   - Use only inside Accordion Items.
-  - Header maps to summary; Body is text-only in v1.
+  - Header maps to summary; Body maps to one direct wrapper after summary.
+  - Body content may contain arbitrary valid flow content.
   - Open and State are Figma previews, not Web Component APIs.
   - Accordion owns dividers between its Items.
   - Focus styling belongs on summary:focus-visible.

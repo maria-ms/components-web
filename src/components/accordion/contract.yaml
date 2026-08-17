@@ -7,5 +7,6 @@ figma:
     Items: [Accordion / Item]
 rules:
   - Accordion keeps zero or one direct Item open.
+  - Each Item is one direct details child with summary followed by one Body wrapper.
   - Accordion owns dividers; the final Item has none.
   - Accordion fills its parent; Items fill the Items Slot and opening an Item changes height only.
