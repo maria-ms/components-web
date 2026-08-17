@@ -11,25 +11,53 @@ ds-tabs {
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
-  gap: var(--ds-semantic-spacing-md);
+  gap: 0;
   overflow: visible;
   font-family: var(--ds-primitive-font-family-body);
 }
 
 ds-tabs > [role="tablist"] {
+  --ds-tabs-focus-bleed: var(--ds-semantic-spacing-2xs);
+
   box-sizing: border-box;
   display: flex;
+  position: relative;
+  z-index: 1;
   align-items: center;
-  inline-size: 100%;
-  max-inline-size: 100%;
+  inline-size: calc(
+    100% + var(--ds-tabs-focus-bleed) + var(--ds-tabs-focus-bleed)
+  );
+  max-inline-size: none;
   min-inline-size: 0;
-  block-size: var(--ds-tabs-trigger-block-size);
+  block-size: calc(
+    var(--ds-tabs-trigger-block-size) + var(--ds-tabs-focus-bleed) +
+      var(--ds-tabs-focus-bleed)
+  );
   gap: var(--ds-semantic-spacing-xs);
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-  border-block-end: var(--ds-semantic-border-width-default) solid
-    var(--ds-semantic-color-border-muted);
+  margin-block: calc(var(--ds-tabs-focus-bleed) * -1);
+  margin-inline: calc(var(--ds-tabs-focus-bleed) * -1);
+  padding-block: var(--ds-tabs-focus-bleed);
+  padding-inline: var(--ds-tabs-focus-bleed);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+ds-tabs > [role="tablist"]::-webkit-scrollbar {
+  display: none;
+}
+
+ds-tabs > [role="tablist"]::before {
+  position: absolute;
+  inset-inline: var(--ds-tabs-focus-bleed);
+  inset-block-start: calc(
+    var(--ds-tabs-focus-bleed) + var(--ds-tabs-trigger-block-size) -
+      var(--ds-semantic-border-width-default)
+  );
+  block-size: var(--ds-semantic-border-width-default);
+  background: var(--ds-semantic-color-border-muted);
+  content: "";
+  pointer-events: none;
 }
 
 ds-tabs > [role="tablist"] > button[role="tab"] {
@@ -40,6 +68,7 @@ ds-tabs > [role="tablist"] > button[role="tab"] {
   position: relative;
   align-items: center;
   justify-content: center;
+  gap: var(--ds-semantic-spacing-xs);
   min-inline-size: 0;
   block-size: var(--ds-tabs-trigger-block-size);
   margin: 0;
@@ -125,8 +154,8 @@ ds-tabs > [role="tabpanel"][hidden] {
 }
 
 @media (forced-colors: active) {
-  ds-tabs > [role="tablist"] {
-    border-color: CanvasText;
+  ds-tabs > [role="tablist"]::before {
+    background: CanvasText;
   }
 
   ds-tabs > [role="tablist"] > button[role="tab"] {

@@ -14,15 +14,19 @@ figma:
   slots:
     Tabs: [Tabs / Trigger]
     Content: visible panel composition
-  preview: [State]
+    Trigger Content: non-interactive tab content
+  preview: [Selected, State]
 rules:
   - Tabs has two or more tabs and exactly one enabled selected tab.
   - Each tab explicitly pairs with one panel through aria-controls and aria-labelledby.
   - The component owns selection, roving focus, keyboard navigation, and panel visibility.
   - Manual activation is the default; automatic activation is opt-in only for local, instant panels.
-  - Parent owns inline size; Tabs and panels fill it while tabs hug their labels.
+  - Parent owns inline size; Tabs and panels fill it while triggers hug their content.
+  - Tabs adds no block gap between the tablist and panel composition; inserted panel content owns any needed spacing.
+  - Trigger Content may contain text, decorative icons, and non-interactive status such as a Badge; do not nest interactive controls.
   - A disabled tab is not focusable or selectable.
   - A tab button is type="button"; it never submits a surrounding form.
   - Initialize every non-selected panel with hidden so it cannot flash before the custom element upgrades.
   - Give a text-only panel tabindex="0" so keyboard users can reach its content.
   - Parent layout owns a stable panel region when changing panels must not move surrounding content.
+  - The tablist scrolls horizontally when triggers exceed the available inline size.
