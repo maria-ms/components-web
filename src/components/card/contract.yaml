@@ -1,0 +1,33 @@
+html:
+  element: generic container
+  children:
+    - header?
+    - content*
+    - footer?
+aria:
+  native: generic non-interactive surface; no ARIA role
+  rules:
+    - Card is a non-interactive visual surface and does not add an ARIA role.
+    - The consuming product chooses surrounding div, form, section, or article semantics from its content.
+figma:
+  masters:
+    - Card
+    - Card / Header
+    - Card / Footer
+  slots:
+    Header:
+      accepts:
+        - Card / Header
+    Content: unrestricted
+    Footer:
+      accepts:
+        - Card / Footer
+  geometry: Parent owns inline size; source width is a Figma reference only.
+rules:
+  - Author header, one or more content regions, and footer with native child elements marked data-card-header, data-card-content, and data-card-footer.
+  - Use a native heading for a visible Card title; its level belongs to the page heading hierarchy.
+  - Card Header and Card Footer are Figma composition aids that map to native header and footer regions in code.
+  - Figma Title, Description, and Show description previews are not Web Component attributes.
+  - Use a native Button for an in-place action and a native Link for navigation.
+  - Card fills its parent inline size and owns only internal layout and content-driven block size.
+  - Do not nest Cards.

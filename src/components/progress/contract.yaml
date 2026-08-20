@@ -5,9 +5,10 @@ aria:
   aria-label: accessible name when no visible label exists
   aria-labelledby: visible label
 figma:
-  preview: [Size, Value]
+  preview: [Size, Preview]
 rules:
-  - Value is a Figma preview; code uses native value and max.
+  - Preview is a Figma snapshot (0%, 25%, 50%, 75%, or 100%); code uses native value and max.
+  - Use the closest Figma Preview snapshot. Put exact product data in surrounding text or status content; do not detach or resize the internal fill.
   - Use only for determinate completion; use Spinner or Skeleton when duration is unknown.
   - Parent owns label, announced status, and inline size; Progress fills available inline size.
   - The surrounding region may own aria-busy and aria-describedby.

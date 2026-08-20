@@ -1,0 +1,25 @@
+html:
+  element: ds-pagination
+  children: [nav > ul > li]
+  direction: data-pagination-direction=previous|next on a native anchor or button
+  iconOnly: data-pagination-icon-only with an accessible name on the native control
+aria:
+  nav: aria-label or aria-labelledby
+  current: exactly one page destination has aria-current=page when Page items are present
+  page: numeric destinations have an accessible name that includes the page number
+  direction: decorative chevrons are hidden from assistive technology
+  ellipsis: non-interactive collapsed-range list item is aria-hidden
+figma:
+  masters: [Pagination, Pagination / Direction, Pagination / Page, Pagination / Ellipsis]
+  slots:
+    Items: [Pagination / Direction, Pagination / Page, Pagination / Ellipsis]
+  previews:
+    - Page State maps to CSS :focus-visible
+    - Direction State maps to native :focus-visible and :disabled
+  geometry: intrinsic; Items hug; no wrap
+rules:
+  - Use native anchors for destinations and native buttons for local state changes.
+  - Do not use disabled on an anchor; use a disabled button for an unavailable local direction.
+  - Keep page-size, result count, filters, and actions outside ds-pagination.
+  - Do not add host attributes, events, routing, page-range calculation, custom keyboard behavior, or pagination child custom elements.
+  - Use a shorter composed sequence or direction-only controls when space is constrained.
