@@ -2,8 +2,8 @@ html:
   element: dialog
   children: [header, content, actions]
 aria:
-  aria-labelledby: required visible title
-  aria-describedby: visible description when present
+  aria-labelledby: derived from one visible data-dialog-title unless the author supplies aria-label or aria-labelledby
+  aria-describedby: derived only from one plain-text data-dialog-description unless the author supplies aria-describedby
 figma:
   preview: [Show description, close focus]
   slots:
@@ -12,7 +12,9 @@ figma:
 rules:
   - The screen opens the native dialog with showModal(); the browser owns modal focus, Escape, top-layer placement, and background inertness.
   - The screen chooses the initial focus target with autofocus and observes the native close event to synchronize its own state.
-  - Use one direct native dialog with an explicit labelledby relationship and, when present, describedby relationship.
+  - Use one direct native dialog with one visible data-dialog-title. ds-dialog gives that title an ID and derives aria-labelledby unless the author supplies an explicit aria-label or aria-labelledby relationship.
+  - Use data-dialog-description only for one short, plain-text description. Rich content such as forms, lists, tables, multiple paragraphs, or interactive content stays normal dialog content and is not auto-associated with aria-describedby.
+  - Explicit aria-label, aria-labelledby, and aria-describedby relationships remain author-owned and are never replaced by ds-dialog.
   - Dialog owns its panel, backdrop, heading layout, and close control; product content and action meaning remain consumer-owned.
   - Native dialog inline size is min(container-md, viewport inline size minus two spacing-md gutters); block size follows content and is capped to the viewport.
   - Content and Actions fill the inner width; block content fills while action Buttons hug and end-align.
