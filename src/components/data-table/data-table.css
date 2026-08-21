@@ -11,6 +11,13 @@ ds-data-table {
   --ds-data-table-cell-padding: var(--ds-semantic-spacing-xs);
   --ds-data-table-cell-gap: var(--ds-semantic-spacing-2xs);
   --ds-data-table-selection-width: var(--ds-component-table-cell-height);
+  /* Keep the one Fill track usable when the parent becomes narrow. Together
+   * with fixed tracks, this 160px floor makes the native table scroll rather
+   * than compressing its primary Cell into an unusable width. It is internal
+   * component geometry, not a public model option. */
+  --ds-data-table-fill-column-min-inline-size: calc(
+    var(--ds-semantic-spacing-xl) * 5
+  );
 
   box-sizing: border-box;
   display: block;
@@ -41,8 +48,8 @@ ds-data-table > .ds-data-table__scroll:focus-visible {
 
 ds-data-table table {
   box-sizing: border-box;
-  inline-size: 100%;
-  min-inline-size: 0;
+  inline-size: max(100%, var(--ds-data-table-min-inline-size));
+  min-inline-size: var(--ds-data-table-min-inline-size);
   border-spacing: 0;
   border-collapse: collapse;
   table-layout: fixed;

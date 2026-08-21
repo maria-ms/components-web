@@ -27,6 +27,25 @@ const event = (name, detail) =>
 
 const asRowId = (value) => String(value);
 
+/**
+ * The JSON model deliberately has only one flexible column. Keep that track
+ * usable when the host is narrower than the table, while leaving the parent
+ * scroll region responsible for overflow. The CSS custom properties keep the
+ * token-owned selection width and component-owned flexible-track minimum out
+ * of the public data model.
+ */
+const tableMinimumInlineSize = ({ columns, selection }) => {
+  const tracks = columns.map((column) =>
+    typeof column.width === "number"
+      ? `${column.width}px`
+      : "var(--ds-data-table-fill-column-min-inline-size)",
+  );
+
+  if (selection) tracks.unshift("var(--ds-data-table-selection-width)");
+
+  return `calc(${tracks.join(" + ")})`;
+};
+
 const accessibleRowLabel = (row, rowHeader, rowId) => {
   const value = row[rowHeader.id];
 
@@ -336,6 +355,10 @@ export class DataTable extends ElementBase {
       scrollRegion.setAttribute("aria-busy", "true");
 
     caption.textContent = model.caption;
+    table.style.setProperty(
+      "--ds-data-table-min-inline-size",
+      tableMinimumInlineSize(model),
+    );
     table.append(caption);
 
     if (model.selection) {

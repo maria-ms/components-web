@@ -36,7 +36,8 @@ rules:
   - The public Web Component accepts one JSON-serializable model property (caption, rowKey, columns, rows, optional selection, sort, and state) plus a separate cellRenderers property for arbitrary component composition. Do not encode DOM, callbacks, or component kinds in the JSON model.
   - Plain cells contain text, finite numbers, booleans, or empty values. Use a named cellRenderer for every object, array, or rich component composition; a hidden header cannot also be sortable.
   - Selection and sort controls immediately update their serializable UI state and emit an event. The host owns data reordering after ds-sort-change because rich Cell values do not have one universal sort order.
-  - Require exactly one Fill column and fixed numeric widths for the remaining data columns. The component derives its selection-column track and every state-row colspan.
+  - Require exactly one Fill column and fixed numeric widths for the remaining data columns. The component derives its selection-column track, minimum usable table width, and every state-row colspan.
+  - Keep the one Fill column at least 160px wide. When the selection and fixed tracks plus this minimum exceed the parent, the component scrolls its native table horizontally rather than compressing Cells.
   - Keep every standard product table as a native HTML table; do not apply role="grid".
   - Treat Figma Data Table, Row, and Cell as composition APIs, not custom elements rendered inside table markup.
   - Render a concise Caption for the table’s purpose.
