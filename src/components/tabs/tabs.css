@@ -144,6 +144,7 @@ ds-tabs > [role="tabpanel"] {
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
+  padding-block-start: var(--ds-semantic-spacing-md);
   overflow: visible;
 }
 

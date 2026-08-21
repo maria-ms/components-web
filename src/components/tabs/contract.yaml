@@ -2,6 +2,7 @@ html:
   element: ds-tabs
   attributes:
     activation: [manual, automatic]
+    selected: "id of the requested direct enabled tab"
   children:
     - '[role="tablist"] > button[role="tab"]'
     - '[role="tabpanel"]'
@@ -9,6 +10,8 @@ aria:
   tablist: aria-label or aria-labelledby
   tab: [id, aria-controls, aria-selected, tabindex]
   tabpanel: [id, aria-labelledby]
+events:
+  ds-tab-change: [tabId, panelId]
 figma:
   masters: [Tabs, Tabs / Trigger]
   slots:
@@ -20,9 +23,11 @@ rules:
   - Tabs has two or more tabs and exactly one enabled selected tab.
   - Each tab explicitly pairs with one panel through aria-controls and aria-labelledby.
   - The component owns selection, roving focus, keyboard navigation, and panel visibility.
+  - selected names the desired direct enabled tab id. User activation reflects that id to selected and dispatches a bubbling, composed ds-tab-change event with tabId and panelId after selection changes. If that id is temporarily unavailable during asynchronous composition, retain it while displaying the current valid selection or the first valid tab; select the requested pair when it arrives. If the requested tab becomes disabled, select and reflect the valid fallback instead.
+  - Tabs re-synchronizes its selection and panel visibility when its direct tablist, direct panels, or direct tab buttons are replaced after connection, or when their disabled, id, role, aria-controls, or aria-labelledby values change.
   - Manual activation is the default; automatic activation is opt-in only for local, instant panels.
   - Parent owns inline size; Tabs and panels fill it while triggers hug their content.
-  - Tabs adds no block gap between the tablist and panel composition; inserted panel content owns any needed spacing.
+  - Tabs provides a 16px block gap between the tablist and panel composition; inserted panel content owns any additional spacing.
   - Trigger Content may contain text, decorative icons, and non-interactive status such as a Badge; do not nest interactive controls.
   - A disabled tab is not focusable or selectable.
   - A tab button is type="button"; it never submits a surrounding form.

@@ -2,19 +2,25 @@ const tagName = "ds-tabs";
 const canUseDOM =
   typeof document !== "undefined" && typeof customElements !== "undefined";
 const ElementBase = globalThis.HTMLElement ?? class {};
+const tabChangeEvent = (detail) =>
+  new CustomEvent("ds-tab-change", { bubbles: true, composed: true, detail });
 
 /**
  * Keyboard coordination and token styling for consumer-owned ARIA tabs.
  *
  * Consumers supply one direct tablist with native tab buttons and one direct
  * tabpanel per button. The markup owns the explicit ARIA pairings; this
- * element owns selection, roving focus, and panel visibility.
+ * element owns selection, roving focus, and panel visibility. `selected`
+ * names the desired tab id; user selection is reflected to that attribute and
+ * announced through `ds-tab-change`.
  */
 export class Tabs extends ElementBase {
+  #observer;
+
   #onClick = (event) => {
     const tab = this.#tabFromEvent(event);
 
-    if (tab && !tab.disabled) this.#activate(tab);
+    if (tab && !tab.disabled) this.#activate(tab, { emit: true });
   };
 
   #onKeydown = (event) => {
@@ -44,7 +50,7 @@ export class Tabs extends ElementBase {
       case " ":
         if (this.activation === "manual") {
           event.preventDefault();
-          this.#activate(tab);
+          this.#activate(tab, { emit: true });
         }
         return;
       default:
@@ -53,8 +59,22 @@ export class Tabs extends ElementBase {
 
     event.preventDefault();
     nextTab?.focus();
-    if (nextTab && this.activation === "automatic") this.#activate(nextTab);
+    if (nextTab && this.activation === "automatic") {
+      this.#activate(nextTab, { emit: true });
+    }
   };
+
+  #onMutations = (mutations) => {
+    const tablist = this.#tablist();
+
+    if (mutations.some((mutation) => this.#isStructuralMutation(mutation, tablist))) {
+      this.#synchronize();
+    }
+  };
+
+  static get observedAttributes() {
+    return ["selected"];
+  }
 
   get activation() {
     return this.getAttribute("activation") === "automatic" ? "automatic" : "manual";
@@ -68,15 +88,46 @@ export class Tabs extends ElementBase {
     }
   }
 
+  get selected() {
+    return this.getAttribute("selected");
+  }
+
+  set selected(value) {
+    if (value == null || value === "") {
+      this.removeAttribute("selected");
+    } else {
+      this.setAttribute("selected", String(value));
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "selected" && oldValue !== newValue && this.isConnected) {
+      this.#synchronize();
+    }
+  }
+
   connectedCallback() {
     this.addEventListener("click", this.#onClick);
     this.addEventListener("keydown", this.#onKeydown);
+
+    if (typeof MutationObserver !== "undefined") {
+      this.#observer = new MutationObserver(this.#onMutations);
+      this.#observer.observe(this, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["aria-controls", "aria-labelledby", "disabled", "id", "role"],
+      });
+    }
+
     this.#synchronize();
   }
 
   disconnectedCallback() {
     this.removeEventListener("click", this.#onClick);
     this.removeEventListener("keydown", this.#onKeydown);
+    this.#observer?.disconnect();
+    this.#observer = undefined;
   }
 
   #tablist() {
@@ -104,7 +155,9 @@ export class Tabs extends ElementBase {
     const panelId = tab.getAttribute("aria-controls");
     if (!panelId) return null;
 
-    return this.#panels().find((panel) => panel.id === panelId) || null;
+    return this.#panels().find(
+      (panel) => panel.id === panelId && panel.getAttribute("aria-labelledby") === tab.id,
+    ) || null;
   }
 
   #tabFromEvent(event) {
@@ -116,6 +169,20 @@ export class Tabs extends ElementBase {
     return tab && tab.parentElement === tablist ? tab : null;
   }
 
+  #isStructuralMutation(mutation, tablist) {
+    if (mutation.type === "childList") {
+      return mutation.target === this || mutation.target === tablist;
+    }
+
+    if (!(mutation.target instanceof Element)) return false;
+
+    return (
+      mutation.target === tablist ||
+      mutation.target.parentElement === this ||
+      mutation.target.parentElement === tablist
+    );
+  }
+
   #synchronize() {
     const tabs = this.#tabs();
 
@@ -123,17 +190,43 @@ export class Tabs extends ElementBase {
       tab.type = "button";
     });
 
+    const requestedTabById = tabs.find((tab) => tab.id === this.selected);
+    const requestedTab = requestedTabById && this.#isSelectable(requestedTabById)
+      ? requestedTabById
+      : null;
     const selectedTab = tabs.find(
-      (tab) => !tab.disabled && tab.getAttribute("aria-selected") === "true" && this.#panelFor(tab),
+      (tab) =>
+        this.#isSelectable(tab) && tab.getAttribute("aria-selected") === "true",
     );
-    const firstEnabledTab = tabs.find((tab) => !tab.disabled && this.#panelFor(tab));
+    const firstEnabledTab = tabs.find((tab) => this.#isSelectable(tab));
+    const activeTab = requestedTab || selectedTab || firstEnabledTab;
 
-    if (selectedTab || firstEnabledTab) this.#activate(selectedTab || firstEnabledTab);
+    if (!activeTab) return;
+
+    // Preserve an explicit yet temporarily unavailable selected id. This lets
+    // a parent set selection before it replaces tabs and panels asynchronously.
+    // A disabled requested tab instead reflects the valid fallback immediately.
+    const preserveRequestedId =
+      Boolean(this.selected) &&
+      !requestedTab &&
+      !(requestedTabById?.disabled && this.#panelFor(requestedTabById));
+
+    this.#activate(activeTab, {
+      reflect: !preserveRequestedId,
+    });
   }
 
-  #activate(activeTab) {
+  #isSelectable(tab) {
+    return !tab.disabled && Boolean(tab.id) && Boolean(this.#panelFor(tab));
+  }
+
+  #activate(activeTab, { emit = false, reflect = true } = {}) {
     const activePanel = this.#panelFor(activeTab);
-    if (!activePanel || activeTab.disabled) return;
+    if (!activePanel || !this.#isSelectable(activeTab)) return;
+
+    const previouslyActive = this.#tabs().find(
+      (tab) => this.#isSelectable(tab) && tab.getAttribute("aria-selected") === "true",
+    );
 
     this.#tabs().forEach((tab) => {
       const selected = tab === activeTab;
@@ -144,6 +237,14 @@ export class Tabs extends ElementBase {
     this.#panels().forEach((panel) => {
       panel.hidden = panel !== activePanel;
     });
+
+    if (reflect) this.selected = activeTab.id;
+
+    if (emit && previouslyActive !== activeTab) {
+      this.dispatchEvent(
+        tabChangeEvent({ tabId: activeTab.id, panelId: activePanel.id }),
+      );
+    }
   }
 }
 
