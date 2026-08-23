@@ -1,15 +1,16 @@
 html:
   element: details
-  children: [summary, body-wrapper]
+  children: [summary, body...]
 aria:
   native: summary names and controls its disclosure
 figma:
   preview: [Open, State]
   slots:
-    Body: one unrestricted rich-content wrapper
+    Body: unrestricted expanded-panel content
 rules:
   - Use only inside Accordion Items.
-  - Header maps to summary; Body maps to one direct wrapper after summary.
+  - Header maps to summary; Body maps to one or more direct children after summary.
+  - For multiple or rich Body elements, use one wrapper that owns their spacing.
   - Body content may contain arbitrary valid flow content.
   - Open and State are Figma previews, not Web Component APIs.
   - Accordion owns dividers between its Items.

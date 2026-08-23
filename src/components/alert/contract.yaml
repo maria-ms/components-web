@@ -1,0 +1,28 @@
+html:
+  element: ds-alert
+  children:
+    - "[data-alert-icon]?"
+    - "[data-alert-content]"
+aria:
+  native: Generic visual surface; no default ARIA role.
+  rules:
+    - Consumer selects generic, status, or alert semantics from runtime behavior.
+    - role=status is for dynamic advisory text and does not move focus.
+    - role=alert is for dynamic, urgent, text-only content.
+    - Use Alert Dialog when a response or focus is required.
+    - The optional icon is decorative and aria-hidden=true.
+figma:
+  masters:
+    - Alert
+  properties:
+    Color: [Neutral, Info, Success, Warning, Destructive]
+  slots:
+    Icon: Optional one decorative status icon.
+    Content: Exactly one unrestricted content wrapper.
+  geometry: Parent owns inline size; source dimensions are reference-only.
+rules:
+  - Alert fills its parent inline size and hugs content height.
+  - Color controls visual styling only; it does not imply ARIA semantics.
+  - Content may contain arbitrary product composition.
+  - Interactive content is valid only in a static generic callout.
+  - Do not add close, timeout, focus, title, description, or action attributes.

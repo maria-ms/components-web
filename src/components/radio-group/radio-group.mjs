@@ -4,8 +4,14 @@ const ElementBase = globalThis.HTMLElement ?? class {};
 let generatedId = 0;
 
 const nextId = (part) => {
-  generatedId += 1;
-  return `ds-radio-group-${part}-${generatedId}`;
+  let id;
+
+  do {
+    generatedId += 1;
+    id = `ds-radio-group-${part}-${generatedId}`;
+  } while (typeof document !== "undefined" && document.getElementById(id));
+
+  return id;
 };
 
 /**
@@ -18,7 +24,7 @@ const nextId = (part) => {
 export class RadioGroup extends ElementBase {
   #fieldset;
   #observer;
-  #descriptionIds = [];
+  #addedDescriptionIds = [];
 
   connectedCallback() {
     this.#observer = new MutationObserver(() => this.#synchronize());
@@ -71,18 +77,21 @@ export class RadioGroup extends ElementBase {
     const describedBy = new Set(
       (this.#fieldset.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean),
     );
+    const addedIds = ids.filter((id) => !describedBy.has(id));
 
-    ids.forEach((id) => describedBy.add(id));
-    this.#fieldset.setAttribute("aria-describedby", [...describedBy].join(" "));
-    this.#descriptionIds = ids;
+    if (addedIds.length) {
+      addedIds.forEach((id) => describedBy.add(id));
+      this.#fieldset.setAttribute("aria-describedby", [...describedBy].join(" "));
+      this.#addedDescriptionIds = addedIds;
+    }
   }
 
   #clearDescriptions() {
-    if (!this.#fieldset || !this.#descriptionIds.length) return;
+    if (!this.#fieldset || !this.#addedDescriptionIds.length) return;
 
     const describedBy = (this.#fieldset.getAttribute("aria-describedby") || "")
       .split(/\s+/)
-      .filter((id) => id && !this.#descriptionIds.includes(id));
+      .filter((id) => id && !this.#addedDescriptionIds.includes(id));
 
     if (describedBy.length) {
       this.#fieldset.setAttribute("aria-describedby", describedBy.join(" "));
@@ -90,7 +99,7 @@ export class RadioGroup extends ElementBase {
       this.#fieldset.removeAttribute("aria-describedby");
     }
 
-    this.#descriptionIds = [];
+    this.#addedDescriptionIds = [];
   }
 }
 

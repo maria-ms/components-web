@@ -140,15 +140,20 @@ Every normal component Page has exactly these top-level frames:
 Asset source / [category]
 ```
 
-Place public masters only in:
+Place public masters directly in the Asset source, immediately after its Source
+header:
 
 ```text
 Asset source / [category]
   Source header
-  Public component sets
-    [Public component set]
-    [Approved parent-restricted child master, if any]
+  [Public component set]
+  [Approved parent-restricted child master, if any]
 ```
+
+Do not create or retain a `Public component sets` or `Public component masters`
+wrapper frame. The Asset source contains only its shared `Source header` and
+direct `COMPONENT`/`COMPONENT_SET` children. The shared header is the sole
+source-level guidance; do not add a second component-list label or description.
 
 Documentation uses linked instances only.
 
@@ -235,7 +240,9 @@ Verify the live Figma file, not the write report:
 - public properties, defaults, variants, and Slot eligibility;
 - component keys preserved on revisions;
 - linked instances intact and zero detached or broken instances;
-- public masters only in Asset source;
+- public masters are direct children of Asset source, immediately after its one
+  `Source header`; no `Public component sets` or `Public component masters`
+  wrapper exists;
 - zero COMPONENT or COMPONENT_SET nodes in the documentation frame;
 - correct target Page name and top-level structure;
 - every created or moved node on the target Page;

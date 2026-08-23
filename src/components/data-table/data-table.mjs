@@ -303,6 +303,8 @@ export class DataTable extends ElementBase {
   #cellRenderers = {};
   #model = null;
   #previousStateKind = null;
+  #scrollObserver;
+  #scrollRegion;
 
   get model() {
     return this.#model;
@@ -326,8 +328,14 @@ export class DataTable extends ElementBase {
     this.#render();
   }
 
+  disconnectedCallback() {
+    this.#stopScrollObservation();
+  }
+
   #render() {
     if (!canUseDOM || !this.isConnected || !this.#model) return;
+
+    this.#stopScrollObservation();
 
     const model = this.#model;
     const isState = model.state !== undefined;
@@ -345,12 +353,6 @@ export class DataTable extends ElementBase {
     const liveRegion = document.createElement("div");
 
     scrollRegion.className = "ds-data-table__scroll";
-    scrollRegion.tabIndex = 0;
-    scrollRegion.setAttribute("role", "region");
-    scrollRegion.setAttribute(
-      "aria-label",
-      `Scrollable ${model.caption} table`,
-    );
     if (model.state?.kind === "loading")
       scrollRegion.setAttribute("aria-busy", "true");
 
@@ -499,7 +501,40 @@ export class DataTable extends ElementBase {
     }
 
     this.replaceChildren(scrollRegion, liveRegion);
+    this.#observeScrollRegion(scrollRegion, table, model.caption);
     this.#previousStateKind = model.state?.kind ?? null;
+  }
+
+  #observeScrollRegion(scrollRegion, table, caption) {
+    this.#scrollRegion = scrollRegion;
+    const synchronize = () => {
+      if (this.#scrollRegion !== scrollRegion || !scrollRegion.isConnected)
+        return;
+
+      if (scrollRegion.scrollWidth > scrollRegion.clientWidth) {
+        scrollRegion.tabIndex = 0;
+        scrollRegion.setAttribute("role", "region");
+        scrollRegion.setAttribute("aria-label", `Scrollable ${caption} table`);
+      } else {
+        scrollRegion.removeAttribute("tabindex");
+        scrollRegion.removeAttribute("role");
+        scrollRegion.removeAttribute("aria-label");
+      }
+    };
+
+    synchronize();
+
+    if (typeof ResizeObserver === "undefined") return;
+
+    this.#scrollObserver = new ResizeObserver(synchronize);
+    this.#scrollObserver.observe(scrollRegion);
+    this.#scrollObserver.observe(table);
+  }
+
+  #stopScrollObservation() {
+    this.#scrollObserver?.disconnect();
+    this.#scrollObserver = undefined;
+    this.#scrollRegion = undefined;
   }
 
   #bodyCell(column, row, rowIndex) {

@@ -6,3 +6,4 @@ figma:
 rules:
   - Use Link for navigation, not Button.
   - Visible text names the action; decorative icons are hidden from assistive technology.
+  - Set the native button type explicitly: use type="button" for ordinary actions and type="submit" only for form submission.

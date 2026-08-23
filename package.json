@@ -22,6 +22,7 @@
     "./badge": "./src/components/badge/badge.mjs",
     "./avatar": "./src/components/avatar/avatar.mjs",
     "./avatar-presence": "./src/components/avatar/avatar.mjs",
+    "./alert": "./src/components/alert/alert.mjs",
     "./breadcrumbs": "./src/components/breadcrumbs/breadcrumbs.mjs",
     "./button": "./src/components/button/button.mjs",
     "./icon-button": "./src/components/button/button.mjs",

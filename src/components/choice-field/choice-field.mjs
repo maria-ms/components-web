@@ -7,8 +7,14 @@ const choiceControlSelector = 'input[type="checkbox"], input[type="radio"]';
 const supportedControlTags = new Set(["DS-CHECKBOX", "DS-RADIO", "DS-SWITCH"]);
 
 const nextId = (part) => {
-  generatedId += 1;
-  return `ds-choice-field-${part}-${generatedId}`;
+  let id;
+
+  do {
+    generatedId += 1;
+    id = `ds-choice-field-${part}-${generatedId}`;
+  } while (typeof document !== "undefined" && document.getElementById(id));
+
+  return id;
 };
 
 /**
@@ -85,10 +91,12 @@ export class ChoiceField extends ElementBase {
         (this.#control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean),
       );
 
-      describedBy.add(this.#message.id);
-      this.#control.setAttribute("aria-describedby", [...describedBy].join(" "));
-      this.#descriptionControl = this.#control;
-      this.#descriptionId = this.#message.id;
+      if (!describedBy.has(this.#message.id)) {
+        describedBy.add(this.#message.id);
+        this.#control.setAttribute("aria-describedby", [...describedBy].join(" "));
+        this.#descriptionControl = this.#control;
+        this.#descriptionId = this.#message.id;
+      }
     }
   }
 

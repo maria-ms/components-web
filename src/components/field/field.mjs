@@ -5,8 +5,14 @@ const nativeControlSelector = "input, select, textarea";
 let generatedId = 0;
 
 const nextId = (part) => {
-  generatedId += 1;
-  return `ds-field-${part}-${generatedId}`;
+  let id;
+
+  do {
+    generatedId += 1;
+    id = `ds-field-${part}-${generatedId}`;
+  } while (typeof document !== "undefined" && document.getElementById(id));
+
+  return id;
 };
 
 /**
@@ -78,10 +84,12 @@ export class Field extends ElementBase {
         (control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean),
       );
 
-      describedBy.add(message.id);
-      control.setAttribute("aria-describedby", [...describedBy].join(" "));
-      this.#describedControl = control;
-      this.#descriptionId = message.id;
+      if (!describedBy.has(message.id)) {
+        describedBy.add(message.id);
+        control.setAttribute("aria-describedby", [...describedBy].join(" "));
+        this.#describedControl = control;
+        this.#descriptionId = message.id;
+      }
     }
 
     this.dataset.state = control.disabled

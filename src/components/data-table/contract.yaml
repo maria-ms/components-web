@@ -51,5 +51,5 @@ rules:
   - Let a Row grow to its Cell content; rich Cell content may stack text and existing components without clipping or a second divider.
   - Treat empty, loading, and error as mutually exclusive tbody treatments: retain the Caption and headers, then render one td with colspan equal to the visible column count.
   - The built-in error treatment is one full-span Cell containing a destructive “Load error” Badge, the error message, and an optional outline action Button.
-  - When the table minimum width exceeds its container, wrap it in a horizontal scroll region; preserve its native table semantics and column widths.
+  - When the table minimum width exceeds its container, wrap it in a horizontal scroll region; expose that wrapper as a labelled, focusable region only while it overflows, and otherwise leave it unfocusable. Preserve native table semantics and column widths.
   - Defer grouped headers, table footers, spreadsheet-style editing, and ARIA-grid keyboard interaction to explicit future scopes.
