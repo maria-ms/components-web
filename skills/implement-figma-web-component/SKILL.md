@@ -29,6 +29,11 @@ Before writing, inspect:
   native behaviour, or browser capabilities. Use shadcn only as a useful
   composition comparison.
 
+Validate the mapping, not just the labels: every Figma variant/property value
+must correspond to its actual visual geometry or state. Treat duplicate,
+misnamed, or visually contradictory variants as a source defect to resolve
+before mirroring them in code.
+
 Then decide the best implementation using these principles:
 
 1. **Platform first.** Use native HTML for semantics, forms, focus, keyboard
@@ -66,8 +71,15 @@ Proceed autonomously with normal implementation work:
 - Keep a single `Playground` story that demonstrates only the actual component
   interface. Neutral reference geometry is allowed; product compositions,
   product copy, fake data models, and Figma-only controls are not.
-- Add an interaction test only for deterministic, contract-defined behaviour
-  that cannot be proven by mount, unit, or integration tests.
+- When a story needs a composed trigger or child, use an existing Maria public
+  component that the Figma page permits or demonstrates. Do not introduce a
+  one-off SVG, private fixture, or substitute component merely to make the
+  story render.
+- Keep the visible story pure. Do not use a story `play` function that mutates
+  the Canvas or leaves it in a test state. Add automated interaction evidence
+  only for deterministic, contract-defined behaviour, using an isolated
+  fixture that cleans itself up and respecting the repository's current test
+  policy.
 
 ## Stop and ask only when necessary
 
@@ -97,6 +109,11 @@ cd ds/storybook-web && npm run test:storybook -- --run
 Confirm native semantics, accessible relationships, intended composition,
 parent-fill or intrinsic geometry, supported token modes, and absence of
 product-specific API.
+
+For browser-managed primitives such as Popover or Dialog, verify final author
+CSS in both supported and fallback paths: the component is absent on first
+render, opens from its authored trigger, is positioned correctly, and any
+intentional external geometry (such as an arrow) is not clipped.
 
 Report:
 

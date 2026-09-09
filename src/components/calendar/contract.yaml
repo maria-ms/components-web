@@ -1,0 +1,32 @@
+html:
+  element: ds-calendar
+  attributes:
+    selection: [single, range]
+    month: YYYY-MM
+    locale: BCP-47 locale tag
+    value: YYYY-MM-DD
+    range-start: YYYY-MM-DD
+    range-end: YYYY-MM-DD
+    min: YYYY-MM-DD
+    max: YYYY-MM-DD
+    disabled-dates: comma-separated YYYY-MM-DD values
+    today: YYYY-MM-DD
+  children: []
+aria:
+  native: Native buttons inside an APG-style grid.
+  rules:
+    - The visible month heading labels the grid and announces navigated months politely.
+    - One enabled day is in the tab sequence; Arrow keys move days or weeks, Home and End move within a week, and Page Up/Down move months (Shift changes years).
+    - Each day has a complete localized accessible name. Today uses aria-current=date; selected dates use gridcell aria-selected.
+figma:
+  masters: [Calendar]
+  properties:
+    Selection: [Single, Range]
+  slots: []
+  geometry: Intrinsic 7-column Gregorian month grid; the parent positions it.
+rules:
+  - Calendar owns month navigation, weekday headings, and all day-grid geometry. Calendar / Day is private Figma visual evidence, not public API.
+  - Calendar selects one date or one contiguous range. It is not a date input, picker overlay, scheduler, event calendar, time picker, or multi-month layout.
+  - Value and range endpoints use Gregorian ISO dates; range-start must not follow range-end. Locale changes labels and week start; it does not introduce another calendar system.
+  - ds-calendar-change emits selection, value, rangeStart, and rangeEnd after a user selection. ds-calendar-month-change emits month after navigation.
+  - Disabled dates remain native disabled buttons. Do not use Calendar as a hidden form input; a composed date-picker/form field owns form serialization.

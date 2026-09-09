@@ -7,6 +7,7 @@ export { Breadcrumbs } from "./breadcrumbs/breadcrumbs.mjs";
 export { Pagination } from "./pagination/pagination.mjs";
 export { Checkbox } from "./checkbox/checkbox.mjs";
 export { Card } from "./card/card.mjs";
+export { Calendar } from "./calendar/calendar.mjs";
 export { ChoiceField } from "./choice-field/choice-field.mjs";
 export { Dialog } from "./dialog/dialog.mjs";
 export { DataTable, validateDataTableModel } from "./data-table/data-table.mjs";

@@ -1,0 +1,234 @@
+ds-calendar {
+  --ds-calendar-day-size: calc(
+    var(--ds-primitive-space-08) + var(--ds-semantic-spacing-2xs)
+  );
+  --ds-calendar-inline-size: calc(
+    var(--ds-calendar-day-size) * 7 + var(--ds-semantic-spacing-md) * 2
+  );
+
+  box-sizing: border-box;
+  display: inline-block;
+  inline-size: var(--ds-calendar-inline-size);
+  max-inline-size: 100%;
+  overflow-x: auto;
+  vertical-align: middle;
+}
+
+ds-calendar > [data-calendar] {
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--ds-semantic-spacing-md);
+  inline-size: var(--ds-calendar-inline-size);
+  border: var(--ds-semantic-border-width-default) solid
+    var(--ds-semantic-color-border-default);
+  border-radius: var(--ds-semantic-radius-lg);
+  padding: var(--ds-semantic-spacing-md);
+  background: var(--ds-semantic-color-surface-default);
+  box-shadow:
+    var(--ds-semantic-shadow-md-2-offset-x)
+    var(--ds-semantic-shadow-md-2-offset-y)
+    calc(var(--ds-semantic-shadow-md-2-blur) / 2)
+    var(--ds-semantic-shadow-md-2-spread)
+    var(--ds-semantic-shadow-md-2-color),
+    var(--ds-semantic-shadow-md-1-offset-x)
+    var(--ds-semantic-shadow-md-1-offset-y)
+    calc(var(--ds-semantic-shadow-md-1-blur) / 2)
+    var(--ds-semantic-shadow-md-1-spread)
+    var(--ds-semantic-shadow-md-1-color);
+  color: var(--ds-semantic-color-foreground-default);
+  font-family: var(--ds-primitive-font-family-body);
+}
+
+ds-calendar > [data-calendar] > [data-calendar-header] {
+  display: grid;
+  grid-template-columns: var(--ds-component-button-icon-only-size-sm) 1fr var(--ds-component-button-icon-only-size-sm);
+  align-items: center;
+  min-block-size: var(--ds-component-button-icon-only-size-sm);
+}
+
+ds-calendar [data-calendar-month] {
+  grid-column: 2;
+  margin: 0;
+  color: var(--ds-semantic-color-foreground-default);
+  font-size: var(--ds-semantic-typography-heading-6-font-size);
+  font-weight: var(--ds-semantic-typography-heading-6-font-weight-semibold);
+  letter-spacing: var(--ds-semantic-typography-heading-6-letter-spacing);
+  line-height: var(--ds-semantic-typography-heading-6-line-height);
+  text-align: center;
+}
+
+ds-calendar [data-calendar-header] > ds-icon-button:first-child {
+  grid-column: 1;
+}
+
+ds-calendar [data-calendar-header] > ds-icon-button:last-child {
+  grid-column: 3;
+}
+
+ds-calendar [data-calendar-icon] {
+  display: block;
+  inline-size: var(--ds-component-icon-size-sm);
+  block-size: var(--ds-component-icon-size-sm);
+  background: currentColor;
+  mask: url("./chevron-left.svg") center / contain no-repeat;
+  -webkit-mask: url("./chevron-left.svg") center / contain no-repeat;
+}
+
+ds-calendar [data-calendar-icon="next"] {
+  mask-image: url("./chevron-right.svg");
+  -webkit-mask-image: url("./chevron-right.svg");
+}
+
+ds-calendar [data-calendar-grid] {
+  inline-size: calc(var(--ds-calendar-day-size) * 7);
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+ds-calendar [data-calendar-grid] th,
+ds-calendar [data-calendar-grid] td {
+  box-sizing: border-box;
+  inline-size: var(--ds-calendar-day-size);
+  block-size: var(--ds-calendar-day-size);
+  padding: 0;
+  text-align: center;
+}
+
+ds-calendar [data-calendar-grid] th {
+  block-size: var(--ds-semantic-spacing-lg);
+  color: var(--ds-semantic-color-foreground-muted-3);
+  font-size: var(--ds-primitive-font-size-small);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+  line-height: var(--ds-primitive-font-line-height-small);
+}
+
+ds-calendar [data-calendar-grid] abbr {
+  text-decoration: none;
+}
+
+ds-calendar [data-calendar-grid] td {
+  position: relative;
+}
+
+ds-calendar [data-calendar-grid] button {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  inline-size: var(--ds-calendar-day-size);
+  block-size: var(--ds-calendar-day-size);
+  margin: 0;
+  border: 0;
+  border-radius: var(--ds-semantic-radius-base);
+  padding: 0;
+  background: transparent;
+  color: var(--ds-semantic-color-foreground-default);
+  font: inherit;
+  font-size: var(--ds-primitive-font-size-small);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+  line-height: var(--ds-primitive-font-line-height-small);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+ds-calendar [data-calendar-grid] button:not(:disabled):hover {
+  background: var(--ds-semantic-color-background-muted-1);
+}
+
+ds-calendar [data-calendar-grid] button[data-outside] {
+  color: var(--ds-semantic-color-foreground-muted-3);
+}
+
+ds-calendar [data-calendar-grid] button[data-today]:not([data-selected]):not([data-range-start]):not([data-range-end]) {
+  box-shadow: inset 0 0 0 var(--ds-semantic-border-width-default)
+    var(--ds-semantic-color-background-primary-default);
+  color: var(--ds-semantic-color-foreground-primary-elevated);
+}
+
+ds-calendar [data-calendar-grid] button[data-range-middle] {
+  border-radius: 0;
+  background: var(--ds-semantic-color-background-primary-subtle);
+  color: var(--ds-semantic-color-foreground-primary-elevated);
+}
+
+ds-calendar [data-calendar-grid] button[data-range-start] {
+  border-start-start-radius: var(--ds-semantic-radius-base);
+  border-end-start-radius: var(--ds-semantic-radius-base);
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  background: var(--ds-semantic-color-background-primary-default);
+  color: var(--ds-semantic-color-foreground-inverted);
+}
+
+ds-calendar [data-calendar-grid] button[data-range-end] {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-start-end-radius: var(--ds-semantic-radius-base);
+  border-end-end-radius: var(--ds-semantic-radius-base);
+  background: var(--ds-semantic-color-background-primary-default);
+  color: var(--ds-semantic-color-foreground-inverted);
+}
+
+ds-calendar [data-calendar-grid] button[data-selected] {
+  background: var(--ds-semantic-color-background-primary-default);
+  color: var(--ds-semantic-color-foreground-inverted);
+}
+
+ds-calendar [data-calendar-grid] button[data-selected]:not(:disabled):hover,
+ds-calendar [data-calendar-grid] button[data-range-start]:not(:disabled):hover,
+ds-calendar [data-calendar-grid] button[data-range-end]:not(:disabled):hover {
+  background: var(--ds-semantic-color-background-primary-default);
+  color: var(--ds-semantic-color-foreground-inverted);
+}
+
+ds-calendar [data-calendar-grid] button[data-range-middle]:not(:disabled):hover {
+  background: var(--ds-semantic-color-background-primary-subtle);
+  color: var(--ds-semantic-color-foreground-primary-elevated);
+}
+
+ds-calendar [data-calendar-grid] button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 0;
+  box-shadow:
+    var(--ds-semantic-shadow-xs-offset-x)
+    var(--ds-semantic-shadow-xs-offset-y)
+    var(--ds-semantic-shadow-xs-blur)
+    var(--ds-semantic-shadow-xs-spread)
+    var(--ds-semantic-shadow-xs-color),
+    var(--ds-semantic-border-focus-primary-offset-x)
+    var(--ds-semantic-border-focus-primary-offset-y)
+    var(--ds-semantic-border-focus-primary-blur)
+    var(--ds-semantic-border-focus-primary-spread)
+    var(--ds-semantic-border-focus-primary-color);
+}
+
+ds-calendar [data-calendar-grid] button:disabled {
+  background: transparent;
+  color: var(--ds-semantic-color-foreground-disabled-muted);
+  cursor: not-allowed;
+}
+
+@media (forced-colors: active) {
+  ds-calendar > [data-calendar] {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  ds-calendar [data-calendar-grid] button[data-selected],
+  ds-calendar [data-calendar-grid] button[data-range-start],
+  ds-calendar [data-calendar-grid] button[data-range-end],
+  ds-calendar [data-calendar-grid] button[data-range-middle] {
+    border: var(--ds-semantic-border-width-default) solid Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  ds-calendar [data-calendar-grid] button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+}

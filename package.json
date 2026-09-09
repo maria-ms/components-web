@@ -28,6 +28,7 @@
     "./icon-button": "./src/components/button/button.mjs",
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./card": "./src/components/card/card.mjs",
+    "./calendar": "./src/components/calendar/calendar.mjs",
     "./choice-field": "./src/components/choice-field/choice-field.mjs",
     "./dialog": "./src/components/dialog/dialog.mjs",
     "./data-table": "./src/components/data-table/data-table.mjs",
