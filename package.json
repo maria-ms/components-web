@@ -46,6 +46,7 @@
     "./tabs": "./src/components/tabs/tabs.mjs",
     "./text-input": "./src/components/text-input/text-input.mjs",
     "./textarea": "./src/components/textarea/textarea.mjs",
+    "./tooltip": "./src/components/tooltip/tooltip.mjs",
     "./styles.css": "./src/styles.css",
     "./package.json": "./package.json"
   },

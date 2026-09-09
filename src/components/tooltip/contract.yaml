@@ -1,0 +1,26 @@
+html:
+  element: ds-tooltip
+  attributes:
+    text: required plain-text description
+    side: [top, right, bottom, left]
+  children:
+    - one direct enabled interactive trigger
+aria:
+  tooltip: role=tooltip
+  trigger: aria-describedby references the generated tooltip id while preserving author references
+figma:
+  masters: [Tooltip]
+  properties:
+    Side: [Top, Right, Bottom, Left]
+    Text: plain text
+  slots:
+    Trigger: exactly one enabled interactive element
+  preview: open tooltip
+rules:
+  - Tooltip supplies supplemental, non-interactive plain text only. Use Popover or Dialog for interactive floating content.
+  - The component opens on pointer hover and keyboard focus, stays visible while hovered, closes on Escape, and closes when focus and pointer leave.
+  - side is a preferred placement. The implementation may flip or clamp it to keep the tooltip in the viewport.
+  - The trigger retains its native semantics, accessible name, form behaviour, and interaction. Tooltip does not add aria-haspopup or aria-expanded.
+  - Tooltip generates and manages only its own aria-describedby id, preserving author-owned description references.
+  - Open is browser interaction, not a public attribute or property. Figma's open visual is static evidence only.
+  - Tooltip is intrinsic; the trigger owns its size and the tooltip bubble sizes to its text within the viewport.

@@ -23,3 +23,4 @@ export { Switch } from "./switch/switch.mjs";
 export { Tabs } from "./tabs/tabs.mjs";
 export { TextInput } from "./text-input/text-input.mjs";
 export { Textarea } from "./textarea/textarea.mjs";
+export { Tooltip } from "./tooltip/tooltip.mjs";

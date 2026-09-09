@@ -1,0 +1,147 @@
+ds-tooltip {
+  box-sizing: border-box;
+  display: inline-block;
+  max-inline-size: 100%;
+  position: relative;
+  vertical-align: middle;
+}
+
+ds-tooltip > [data-tooltip-content] {
+  --ds-tooltip-arrow-size: var(--ds-semantic-spacing-2xs);
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: max-content;
+  max-inline-size: min(
+    var(--ds-semantic-layout-container-xs),
+    calc(100vw - var(--ds-semantic-spacing-md) - var(--ds-semantic-spacing-md))
+  );
+  border: 0;
+  border-radius: var(--ds-semantic-radius-md);
+  margin: 0;
+  padding: var(--ds-semantic-spacing-2xs) var(--ds-semantic-spacing-xs);
+  background: var(--ds-component-tooltip-color-background);
+  box-shadow:
+    var(--ds-semantic-shadow-sm-2-offset-x)
+    var(--ds-semantic-shadow-sm-2-offset-y)
+    calc(var(--ds-semantic-shadow-sm-2-blur) / 2)
+    var(--ds-semantic-shadow-sm-2-spread)
+    var(--ds-semantic-shadow-sm-2-color),
+    var(--ds-semantic-shadow-sm-1-offset-x)
+    var(--ds-semantic-shadow-sm-1-offset-y)
+    calc(var(--ds-semantic-shadow-sm-1-blur) / 2)
+    var(--ds-semantic-shadow-sm-1-spread)
+    var(--ds-semantic-shadow-sm-1-color);
+  color: var(--ds-semantic-color-foreground-inverted);
+  font-family: var(--ds-primitive-font-family-body);
+  font-size: var(--ds-primitive-font-size-small);
+  font-weight: var(--ds-semantic-typography-body-small-font-weight-medium);
+  line-height: var(--ds-primitive-font-line-height-small);
+  /* Native Popover's user-agent overflow can clip the external arrow. */
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+  z-index: 1;
+}
+
+/* A manual Popover must be absent until showPopover() runs. Author display
+ * styles otherwise override the browser's default closed-popover rule. */
+ds-tooltip > [data-tooltip-content][popover]:not(:popover-open),
+ds-tooltip > [data-tooltip-content][hidden] {
+  display: none;
+}
+
+ds-tooltip > [data-tooltip-content]::after {
+  content: "";
+  position: absolute;
+}
+
+ds-tooltip[data-tooltip-top-layer] > [data-tooltip-content] {
+  position: fixed;
+}
+
+ds-tooltip:not([data-tooltip-top-layer]) > [data-tooltip-content][data-side="top"] {
+  inset-block-end: calc(100% + var(--ds-semantic-spacing-2xs));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+ds-tooltip:not([data-tooltip-top-layer]) > [data-tooltip-content][data-side="right"] {
+  inset-block-start: 50%;
+  inset-inline-start: calc(100% + var(--ds-semantic-spacing-2xs));
+  transform: translateY(-50%);
+}
+
+ds-tooltip:not([data-tooltip-top-layer]) > [data-tooltip-content][data-side="bottom"] {
+  inset-block-start: calc(100% + var(--ds-semantic-spacing-2xs));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+ds-tooltip:not([data-tooltip-top-layer]) > [data-tooltip-content][data-side="left"] {
+  inset-block-start: 50%;
+  inset-inline-end: calc(100% + var(--ds-semantic-spacing-2xs));
+  transform: translateY(-50%);
+}
+
+ds-tooltip > [data-tooltip-content][data-side="top"]::after {
+  border-inline: var(--ds-tooltip-arrow-size) solid transparent;
+  border-block-start: var(--ds-tooltip-arrow-size) solid
+    var(--ds-component-tooltip-color-background);
+  inset-block-start: 100%;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+ds-tooltip > [data-tooltip-content][data-side="right"]::after {
+  border-block: var(--ds-tooltip-arrow-size) solid transparent;
+  border-inline-end: var(--ds-tooltip-arrow-size) solid
+    var(--ds-component-tooltip-color-background);
+  inset-block-start: 50%;
+  inset-inline-end: 100%;
+  transform: translateY(-50%);
+}
+
+ds-tooltip > [data-tooltip-content][data-side="bottom"]::after {
+  border-inline: var(--ds-tooltip-arrow-size) solid transparent;
+  border-block-end: var(--ds-tooltip-arrow-size) solid
+    var(--ds-component-tooltip-color-background);
+  inset-block-end: 100%;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+ds-tooltip > [data-tooltip-content][data-side="left"]::after {
+  border-block: var(--ds-tooltip-arrow-size) solid transparent;
+  border-inline-start: var(--ds-tooltip-arrow-size) solid
+    var(--ds-component-tooltip-color-background);
+  inset-block-start: 50%;
+  inset-inline-start: 100%;
+  transform: translateY(-50%);
+}
+
+@media (forced-colors: active) {
+  ds-tooltip > [data-tooltip-content] {
+    border: var(--ds-semantic-border-width-default) solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  ds-tooltip > [data-tooltip-content][data-side="top"]::after {
+    border-block-start-color: Canvas;
+  }
+
+  ds-tooltip > [data-tooltip-content][data-side="right"]::after {
+    border-inline-end-color: Canvas;
+  }
+
+  ds-tooltip > [data-tooltip-content][data-side="bottom"]::after {
+    border-block-end-color: Canvas;
+  }
+
+  ds-tooltip > [data-tooltip-content][data-side="left"]::after {
+    border-inline-start-color: Canvas;
+  }
+}
