@@ -1,0 +1,21 @@
+ds-skeleton {
+  box-sizing: border-box;
+  display: block;
+  border-radius: var(--ds-semantic-radius-base);
+  background: var(--ds-semantic-color-background-muted-2);
+}
+
+ds-skeleton[shape="pill"] {
+  border-radius: var(--ds-semantic-radius-full);
+}
+
+ds-skeleton[shape="circle"] {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+@media (forced-colors: active) {
+  ds-skeleton {
+    background: CanvasText;
+  }
+}

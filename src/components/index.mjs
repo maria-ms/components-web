@@ -17,6 +17,7 @@ export { Progress } from "./progress/progress.mjs";
 export { Radio } from "./radio/radio.mjs";
 export { RadioGroup } from "./radio-group/radio-group.mjs";
 export { Select } from "./select/select.mjs";
+export { Skeleton } from "./skeleton/skeleton.mjs";
 export { Spinner } from "./spinner/spinner.mjs";
 export { Switch } from "./switch/switch.mjs";
 export { Tabs } from "./tabs/tabs.mjs";

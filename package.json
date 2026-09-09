@@ -40,6 +40,7 @@
     "./radio": "./src/components/radio/radio.mjs",
     "./radio-group": "./src/components/radio-group/radio-group.mjs",
     "./select": "./src/components/select/select.mjs",
+    "./skeleton": "./src/components/skeleton/skeleton.mjs",
     "./spinner": "./src/components/spinner/spinner.mjs",
     "./switch": "./src/components/switch/switch.mjs",
     "./tabs": "./src/components/tabs/tabs.mjs",

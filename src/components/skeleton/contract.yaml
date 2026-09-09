@@ -1,0 +1,21 @@
+html:
+  element: ds-skeleton
+  attributes:
+    shape: [block, pill, circle]
+  children: []
+aria:
+  aria-hidden: true
+  rules:
+    - The parent loading region owns aria-busy, visible status text, and announcements.
+figma:
+  masters: [Skeleton]
+  properties:
+    Shape: [Block, Pill, Circle]
+  slots: []
+  geometry: Author-owned dimensions; source sizes are reference-only.
+rules:
+  - Skeleton is decorative and non-interactive.
+  - Shape controls only surface geometry.
+  - Use multiple instances to represent expected content geometry.
+  - Do not add loading, label, count, size, or animation APIs.
+  - Circle requires equal inline and block dimensions.

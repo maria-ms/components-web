@@ -17,6 +17,7 @@
 @import "./components/radio/radio.css";
 @import "./components/radio-group/radio-group.css";
 @import "./components/select/select.css";
+@import "./components/skeleton/skeleton.css";
 @import "./components/spinner/spinner.css";
 @import "./components/switch/switch.css";
 @import "./components/tabs/tabs.css";
