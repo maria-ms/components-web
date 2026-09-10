@@ -48,6 +48,7 @@
     "./text-input": "./src/components/text-input/text-input.mjs",
     "./textarea": "./src/components/textarea/textarea.mjs",
     "./tooltip": "./src/components/tooltip/tooltip.mjs",
+    "./figma-registry.json": "./src/figma-registry.json",
     "./styles.css": "./src/styles.css",
     "./package.json": "./package.json"
   },
@@ -57,7 +58,7 @@
     "provenance": true
   },
   "scripts": {
-    "check": "for file in src/index.mjs src/components/*/*.mjs; do node --check \"$file\"; done",
+    "check": "for file in src/index.mjs src/components/*/*.mjs; do node --check \"$file\"; done && node scripts/check-figma-registry.mjs",
     "skills:link": "node scripts/link-skills.mjs",
     "skills:unlink": "node scripts/unlink-skills.mjs",
     "prepack": "npm run check",

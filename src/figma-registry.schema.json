@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Maria Figma component registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "version",
+    "figmaFileKey",
+    "byFigmaComponentKey"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./figma-registry.schema.json"
+    },
+    "version": {
+      "const": 1
+    },
+    "figmaFileKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "byFigmaComponentKey": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      }
+    }
+  }
+}
