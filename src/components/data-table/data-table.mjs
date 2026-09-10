@@ -27,25 +27,6 @@ const event = (name, detail) =>
 
 const asRowId = (value) => String(value);
 
-/**
- * The JSON model deliberately has only one flexible column. Keep that track
- * usable when the host is narrower than the table, while leaving the parent
- * scroll region responsible for overflow. The CSS custom properties keep the
- * token-owned selection width and component-owned flexible-track minimum out
- * of the public data model.
- */
-const tableMinimumInlineSize = ({ columns, selection }) => {
-  const tracks = columns.map((column) =>
-    typeof column.width === "number"
-      ? `${column.width}px`
-      : "var(--ds-data-table-fill-column-min-inline-size)",
-  );
-
-  if (selection) tracks.unshift("var(--ds-data-table-selection-width)");
-
-  return `calc(${tracks.join(" + ")})`;
-};
-
 const accessibleRowLabel = (row, rowHeader, rowId) => {
   const value = row[rowHeader.id];
 
@@ -98,7 +79,6 @@ export const validateDataTableModel = (model) => {
   if (!Array.isArray(model.rows)) fail("rows must be an array.");
 
   const columnIds = new Set();
-  let fillColumns = 0;
   let rowHeaders = 0;
 
   model.columns.forEach((column, index) => {
@@ -107,6 +87,7 @@ export const validateDataTableModel = (model) => {
       "id",
       "label",
       "width",
+      "wrap",
       "align",
       "hiddenLabel",
       "rowHeader",
@@ -129,14 +110,13 @@ export const validateDataTableModel = (model) => {
     if (typeof column.label !== "string" || column.label.length === 0) {
       fail(`columns[${index}].label must be a non-empty string.`);
     }
-    if (column.width === "fill") fillColumns += 1;
-    else if (
-      typeof column.width !== "number" ||
-      !Number.isFinite(column.width) ||
-      column.width <= 0
-    ) {
-      fail(`columns[${index}].width must be "fill" or a positive number.`);
-    }
+    if (
+      column.width !== undefined && column.width !== "auto" &&
+      column.width !== "fill" &&
+      (typeof column.width !== "number" || !Number.isFinite(column.width) || column.width <= 0)
+    ) fail(`columns[${index}].width must be auto or a positive pixel preference; legacy fill is also accepted.`);
+    if (column.wrap !== undefined && typeof column.wrap !== "boolean")
+      fail(`columns[${index}].wrap must be boolean.`);
     if (
       column.align !== undefined &&
       !["start", "center", "end"].includes(column.align)
@@ -170,8 +150,6 @@ export const validateDataTableModel = (model) => {
     }
   });
 
-  if (fillColumns !== 1)
-    fail('columns must contain exactly one width: "fill" column.');
   if (rowHeaders > 1)
     fail("columns can contain at most one rowHeader: true column.");
 
@@ -301,10 +279,12 @@ const validateCellRenderers = (renderers) => {
  */
 export class DataTable extends ElementBase {
   #cellRenderers = {};
+  #captionRenderer = null;
   #model = null;
   #previousStateKind = null;
   #scrollObserver;
   #scrollRegion;
+  #scrollFrame;
 
   get model() {
     return this.#model;
@@ -321,6 +301,17 @@ export class DataTable extends ElementBase {
 
   set cellRenderers(value) {
     this.#cellRenderers = validateCellRenderers(value);
+    this.#render();
+  }
+
+  get captionRenderer() {
+    return this.#captionRenderer;
+  }
+
+  set captionRenderer(value) {
+    if (value !== null && typeof value !== "function")
+      throw new TypeError("Data Table captionRenderer must be a function or null.");
+    this.#captionRenderer = value;
     this.#render();
   }
 
@@ -356,11 +347,15 @@ export class DataTable extends ElementBase {
     if (model.state?.kind === "loading")
       scrollRegion.setAttribute("aria-busy", "true");
 
-    caption.textContent = model.caption;
-    table.style.setProperty(
-      "--ds-data-table-min-inline-size",
-      tableMinimumInlineSize(model),
-    );
+    if (this.#captionRenderer) {
+      const content = this.#captionRenderer({ caption: model.caption });
+      if (!(content instanceof Node))
+        throw new TypeError("Data Table captionRenderer must return a DOM Node.");
+      caption.dataset.customCaption = "";
+      caption.append(content);
+      // Keep the concise model name available even if the visual caption is rich.
+      caption.setAttribute("aria-label", model.caption);
+    } else caption.textContent = model.caption;
     table.append(caption);
 
     if (model.selection) {
@@ -408,6 +403,7 @@ export class DataTable extends ElementBase {
       const header = document.createElement("th");
       header.scope = "col";
       if (column.align) header.dataset.align = column.align;
+      if (column.wrap === false) header.dataset.wrap = "false";
       if (model.sort?.column === column.id)
         header.setAttribute("aria-sort", model.sort.direction);
 
@@ -526,12 +522,20 @@ export class DataTable extends ElementBase {
 
     if (typeof ResizeObserver === "undefined") return;
 
-    this.#scrollObserver = new ResizeObserver(synchronize);
+    this.#scrollObserver = new ResizeObserver(() => {
+      if (this.#scrollFrame !== undefined) cancelAnimationFrame(this.#scrollFrame);
+      this.#scrollFrame = requestAnimationFrame(() => {
+        this.#scrollFrame = undefined;
+        synchronize();
+      });
+    });
     this.#scrollObserver.observe(scrollRegion);
     this.#scrollObserver.observe(table);
   }
 
   #stopScrollObservation() {
+    if (this.#scrollFrame !== undefined) cancelAnimationFrame(this.#scrollFrame);
+    this.#scrollFrame = undefined;
     this.#scrollObserver?.disconnect();
     this.#scrollObserver = undefined;
     this.#scrollRegion = undefined;
@@ -543,6 +547,7 @@ export class DataTable extends ElementBase {
 
     if (column.rowHeader) cell.scope = "row";
     if (column.align) cell.dataset.align = column.align;
+    if (column.wrap === false) cell.dataset.wrap = "false";
     content.className = "ds-data-table__cell-content";
     content.append(this.#renderCell(column, row, rowIndex));
     cell.append(content);

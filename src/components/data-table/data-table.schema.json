@@ -5,7 +5,12 @@
   "description": "Serializable data for ds-data-table. Plain cells contain text, finite numbers, booleans, or empty values; rich cell content is supplied separately through cellRenderers.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["caption", "rowKey", "columns", "rows"],
+  "required": [
+    "caption",
+    "rowKey",
+    "columns",
+    "rows"
+  ],
   "properties": {
     "caption": {
       "type": "string",
@@ -19,22 +24,21 @@
     "columns": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/column" },
+      "items": {
+        "$ref": "#/$defs/column"
+      },
       "allOf": [
         {
           "contains": {
             "type": "object",
-            "required": ["width"],
-            "properties": { "width": { "const": "fill" } }
-          },
-          "minContains": 1,
-          "maxContains": 1
-        },
-        {
-          "contains": {
-            "type": "object",
-            "required": ["rowHeader"],
-            "properties": { "rowHeader": { "const": true } }
+            "required": [
+              "rowHeader"
+            ],
+            "properties": {
+              "rowHeader": {
+                "const": true
+              }
+            }
           },
           "minContains": 0,
           "maxContains": 1
@@ -44,43 +48,81 @@
     "rows": {
       "type": "array",
       "description": "Rows may carry arbitrary JSON data for named renderers. Values in columns without a renderer must be plain text, finite numbers, booleans, or empty.",
-      "items": { "type": "object" }
+      "items": {
+        "type": "object"
+      }
     },
     "selection": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["selectedIds"],
+      "required": [
+        "selectedIds"
+      ],
       "properties": {
         "selectedIds": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/rowId" }
+          "items": {
+            "$ref": "#/$defs/rowId"
+          }
         }
       }
     },
     "sort": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["column", "direction"],
+      "required": [
+        "column",
+        "direction"
+      ],
       "properties": {
-        "column": { "type": "string", "minLength": 1 },
-        "direction": { "enum": ["ascending", "descending"] }
+        "column": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "ascending",
+            "descending"
+          ]
+        }
       }
     },
     "state": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "message"],
+      "required": [
+        "kind",
+        "message"
+      ],
       "properties": {
-        "kind": { "enum": ["loading", "empty", "error"] },
-        "message": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": [
+            "loading",
+            "empty",
+            "error"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
         "action": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["id", "label"],
+          "required": [
+            "id",
+            "label"
+          ],
           "properties": {
-            "id": { "type": "string", "minLength": 1 },
-            "label": { "type": "string", "minLength": 1 }
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         }
       }
@@ -88,33 +130,86 @@
   },
   "$defs": {
     "rowId": {
-      "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "number" }]
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "number"
+        }
+      ]
     },
     "column": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "label", "width"],
+      "required": [
+        "id",
+        "label"
+      ],
       "not": {
-        "required": ["hiddenLabel", "sortable"],
+        "required": [
+          "hiddenLabel",
+          "sortable"
+        ],
         "properties": {
-          "hiddenLabel": { "const": true },
-          "sortable": { "const": true }
+          "hiddenLabel": {
+            "const": true
+          },
+          "sortable": {
+            "const": true
+          }
         }
       },
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "label": { "type": "string", "minLength": 1 },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
         "width": {
+          "description": "Optional preferred pixel width. Omitted or auto uses native content-based sizing. Legacy fill is an alias for auto, with no count restriction or minimum. Numeric preferences may grow to fit content.",
           "oneOf": [
-            { "const": "fill" },
-            { "type": "number", "exclusiveMinimum": 0 }
+            {
+              "enum": [
+                "auto",
+                "fill"
+              ]
+            },
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
           ]
         },
-        "align": { "enum": ["start", "center", "end"] },
-        "hiddenLabel": { "type": "boolean" },
-        "rowHeader": { "type": "boolean" },
-        "sortable": { "type": "boolean" },
-        "renderer": { "type": "string", "minLength": 1 }
+        "align": {
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "hiddenLabel": {
+          "type": "boolean"
+        },
+        "rowHeader": {
+          "type": "boolean"
+        },
+        "sortable": {
+          "type": "boolean"
+        },
+        "renderer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "wrap": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow normal text wrapping; false keeps a column\u2019s header and values together."
+        }
       }
     }
   }

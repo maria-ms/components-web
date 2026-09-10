@@ -34,7 +34,14 @@ ds-chart > figure > [data-chart-visual] {
   display: block;
 }
 
-ds-chart [data-chart-visual] > :is(svg, canvas) {
+ds-chart [data-chart-visual] > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  max-inline-size: 100%;
+}
+
+ds-chart [data-chart-visual] > canvas {
   display: block;
   max-inline-size: 100%;
 }

@@ -11,13 +11,7 @@ ds-data-table {
   --ds-data-table-cell-padding: var(--ds-semantic-spacing-xs);
   --ds-data-table-cell-gap: var(--ds-semantic-spacing-2xs);
   --ds-data-table-selection-width: var(--ds-component-table-cell-height);
-  /* Keep the one Fill track usable when the parent becomes narrow. Together
-   * with fixed tracks, this 160px floor makes the native table scroll rather
-   * than compressing its primary Cell into an unusable width. It is internal
-   * component geometry, not a public model option. */
-  --ds-data-table-fill-column-min-inline-size: calc(
-    var(--ds-semantic-spacing-xl) * 5
-  );
+
 
   box-sizing: border-box;
   display: block;
@@ -48,11 +42,10 @@ ds-data-table > .ds-data-table__scroll:focus-visible {
 
 ds-data-table table {
   box-sizing: border-box;
-  inline-size: max(100%, var(--ds-data-table-min-inline-size));
-  min-inline-size: var(--ds-data-table-min-inline-size);
+  inline-size: 100%;
   border-spacing: 0;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
   background: var(--ds-data-table-background);
   color: inherit;
 }
@@ -62,6 +55,11 @@ ds-data-table col.ds-data-table__selection-column {
 }
 
 ds-data-table caption {
+  box-sizing: border-box;
+  text-align: start;
+}
+
+ds-data-table caption:not([data-custom-caption]) {
   box-sizing: border-box;
   min-block-size: calc(
     var(--ds-semantic-typography-body-base-line-height) +
@@ -146,7 +144,7 @@ ds-data-table [data-align="end"] > .ds-data-table__cell-content {
 
 ds-data-table .ds-data-table__value {
   min-inline-size: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 ds-data-table th.ds-data-table__selection-cell,
@@ -248,4 +246,9 @@ ds-data-table .ds-data-table__state-content {
   ds-data-table > .ds-data-table__scroll:focus-visible {
     outline-color: Highlight;
   }
+}
+
+/* Preserve values such as prices as a unit, only when the consumer requests it. */
+ds-data-table [data-wrap="false"] {
+  white-space: nowrap;
 }

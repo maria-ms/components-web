@@ -30,17 +30,17 @@ figma:
     Table / Sortable Header Cell: [Content]
   slot-sizing: "Table, row, and cell slots fill their parent; inserted content may hug its own content unless that composition intentionally needs to stretch."
   geometry: "Data Table, Header Row, and Row are parent-fill in product compositions; the 720px source-master width is a reference only."
-  column-tracks: "Product composition owns matching header/body tracks: keep utility columns Fixed, set one information column to Fill, and use a full-span Fill cell for visual colspan evidence."
+  column-tracks: "Columns size collectively from headers, content, and available width. Figma examples repeat aligned header/body tracks to illustrate that result; their pixel widths are not a required web API. Do not independently Hug each cell. No mandatory Fill count or 160px floor."
   sortable-header-preview: [Sort, State]
 rules:
-  - The public Web Component accepts one JSON-serializable model property (caption, rowKey, columns, rows, optional selection, sort, and state) plus a separate cellRenderers property for arbitrary component composition. Do not encode DOM, callbacks, or component kinds in the JSON model.
+  - The public Web Component accepts one JSON-serializable model property (caption, rowKey, columns, rows, optional selection, sort, and state) plus separate captionRenderer and cellRenderers properties for arbitrary component composition. Do not encode DOM, callbacks, or component kinds in the JSON model.
   - Plain cells contain text, finite numbers, booleans, or empty values. Use a named cellRenderer for every object, array, or rich component composition; a hidden header cannot also be sortable.
   - Selection and sort controls immediately update their serializable UI state and emit an event. The host owns data reordering after ds-sort-change because rich Cell values do not have one universal sort order.
-  - Require exactly one Fill column and fixed numeric widths for the remaining data columns. The component derives its selection-column track, minimum usable table width, and every state-row colspan.
-  - Keep the one Fill column at least 160px wide. When the selection and fixed tracks plus this minimum exceed the parent, the component scrolls its native table horizontally rather than compressing Cells.
+  - Omit column widths by default. Use native automatic table layout at 100% of the parent; headers and all rows share content-based tracks. Optional positive numeric widths are preferences, not guarantees. auto and legacy fill both mean automatic sizing, with no count restriction. The component derives selection geometry and state-row colspan.
+  - There is no arbitrary minimum column width. Allow normal text wrapping by default; optional column wrap=false preserves a header and its values as unbroken units. Rich renderers own their content wrapping and intrinsic size. Scroll only when content or explicit width preferences cannot fit.
   - Keep every standard product table as a native HTML table; do not apply role="grid".
   - Treat Figma Data Table, Row, and Cell as composition APIs, not custom elements rendered inside table markup.
-  - Render a concise Caption for the table’s purpose.
+  - Keep model.caption as a concise non-empty accessible name. By default render it as text in a native caption. Optional captionRenderer({caption}) returns a fresh DOM Node for consumer-owned caption content and token-backed typography; the component owns the native caption and preserves its accessible name. Set captionRenderer=null to restore the default. Callbacks remain outside the JSON model.
   - Render every column header as th[scope="col"].
   - Render a primary body cell as th[scope="row"] only when it identifies that row; render other body cells as td.
   - Put the sort button inside its th and expose aria-sort="ascending" or aria-sort="descending" on exactly one sorted header.
@@ -51,5 +51,5 @@ rules:
   - Let a Row grow to its Cell content; rich Cell content may stack text and existing components without clipping or a second divider.
   - Treat empty, loading, and error as mutually exclusive tbody treatments: retain the Caption and headers, then render one td with colspan equal to the visible column count.
   - The built-in error treatment is one full-span Cell containing a destructive “Load error” Badge, the error message, and an optional outline action Button.
-  - When the table minimum width exceeds its container, wrap it in a horizontal scroll region; expose that wrapper as a labelled, focusable region only while it overflows, and otherwise leave it unfocusable. Preserve native table semantics and column widths.
+  - When the table’s content-driven width exceeds its container, wrap it in a horizontal scroll region; expose that wrapper as a labelled, focusable region only while it overflows, and otherwise leave it unfocusable. Preserve native table semantics and column widths.
   - Defer grouped headers, table footers, spreadsheet-style editing, and ARIA-grid keyboard interaction to explicit future scopes.
