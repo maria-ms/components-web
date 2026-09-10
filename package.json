@@ -29,6 +29,7 @@
     "./checkbox": "./src/components/checkbox/checkbox.mjs",
     "./card": "./src/components/card/card.mjs",
     "./calendar": "./src/components/calendar/calendar.mjs",
+    "./chart": "./src/components/chart/chart.mjs",
     "./choice-field": "./src/components/choice-field/choice-field.mjs",
     "./dialog": "./src/components/dialog/dialog.mjs",
     "./data-table": "./src/components/data-table/data-table.mjs",

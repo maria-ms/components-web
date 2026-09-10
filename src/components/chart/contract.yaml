@@ -1,0 +1,24 @@
+html:
+  element: generic parent-fill composition container (ds-chart)
+  children:
+    - figure
+aria:
+  native: figure with figcaption and renderer-owned visual content
+  rules:
+    - Figure and figcaption provide the chart's native semantic unit and accessible name.
+    - A non-decorative inline SVG has an accessible name from visible text or its own title and description; canvas provides meaningful fallback content.
+    - The renderer owns SVG, canvas, or library-specific keyboard interaction.
+    - A meaningful chart exposes a concise summary and equivalent structured data or a long description; a tooltip alone is not an equivalent alternative.
+figma:
+  masters: [Chart]
+  slots:
+    Caption: exactly one native figcaption wrapper, first in the figure
+    Visual: exactly one renderer-owned data-chart-visual wrapper, after the caption
+  geometry: Parent owns inline size; the visual fills it and owns its height or aspect ratio.
+rules:
+  - Author exactly one native figure as ds-chart's direct child.
+  - Author exactly one figcaption as the figure's first child for the Figma Caption Slot; it may contain a concise title, reporting period, and short summary.
+  - Author exactly one data-chart-visual wrapper after the caption for the Figma Visual Slot.
+  - Chart type, data, legend, annotations, tooltips, and interaction belong to the renderer inside data-chart-visual, not to ds-chart attributes.
+  - Keep filters, actions, export controls, and product chrome outside ds-chart.
+  - Use Data Table when exact values are the primary task rather than visual comparison.

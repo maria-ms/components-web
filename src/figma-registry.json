@@ -17,6 +17,7 @@
     "63d005931b498634e5fb6cf213ca93efba937d65": "checkbox",
     "7ea13cb2e29c71b3af45752d912063a15627e8a8": "progress",
     "841dc08d53a2f8621d79faacd2f31c9ea43b02d7": "card",
+    "8ac18bdec8504c54d61feb3d732d77c90d1c5893": "icon-button",
     "931907e7c0342186d66f1605241fcefcea70b0ff": "link",
     "9f542db2e7160a6d4a79c39672fb1ec734512691": "choice-field",
     "a29f407010350beab4e66698c765620ac7091d43": "dialog",
@@ -29,6 +30,7 @@
     "cee7e2a23215ffc7b84bfc6cfc1bbf58e642f593": "accordion",
     "d7c41a723d9856f5292dbea588d5d127ecdc1e58": "badge",
     "e907b1f7e68da39b230dbd356b879effc487e33a": "field",
+    "f9d7b24d77ded60a020985757fbb682f054270c3": "chart",
     "f520383fc1360f9db199b7b497a203e759ce85e9": "avatar"
   }
 }

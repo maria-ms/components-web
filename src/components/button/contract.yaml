@@ -1,9 +1,15 @@
 html:
-  element: button
-  content: text with optional decorative icon
+  elements:
+    - ds-button > button
+    - ds-icon-button > button
+  content:
+    Button: text with optional decorative icon
+    Icon Button: one decorative icon with an explicit accessible name on its native button
 figma:
+  masters: [Button, Button / Icon-only]
   preview: [State]
 rules:
   - Use Link for navigation, not Button.
   - Visible text names the action; decorative icons are hidden from assistive technology.
+  - Icon Button is a separate public action control; its native button has a non-empty accessible name and its icon is decorative.
   - Set the native button type explicitly: use type="button" for ordinary actions and type="submit" only for form submission.
